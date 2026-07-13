@@ -22,3 +22,6 @@ Thumbs.db
 .vscode/
 .idea/
 .tools/
+
+# Arquivos locais de setup do demo (schema base, seed, etc.) — não vão pro publico
+_setup-local/
