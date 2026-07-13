@@ -3,24 +3,29 @@
 // Preencha os campos abaixo antes de subir a plataforma.
 // Todos os outros arquivos (HTMLs, JS) leem daqui.
 // =============================================
+// Esta é uma instância de DEMONSTRAÇÃO ("Ministério Semente"),
+// mantida pela Resolvix como vitrine pública da plataforma.
+// Se você é uma igreja querendo customizar essa base para você,
+// substitua todos os campos abaixo pelos seus dados reais.
+// =============================================
 
 window.APP_CONFIG = {
   // Nome exibido no site, e-mails, títulos das páginas
-  NOME_IGREJA: 'Sua Igreja',
+  NOME_IGREJA: 'Ministério Semente',
 
   // Slug curto (sem espaços, sem acentos) — usado em identificadores internos
-  SLUG_IGREJA: 'sua-igreja',
+  SLUG_IGREJA: 'ministerio-semente',
 
   // Domínio público da plataforma (sem protocolo)
-  DOMINIO: 'suaigreja.com',
+  DOMINIO: 'igreja-base.vercel.app',
 
   // Slogan/tagline curta (aparece no rodapé)
-  TAGLINE: 'Bíblica, Simples e Contemporânea.',
+  TAGLINE: 'Demo da plataforma Igreja Base — Resolvix',
 
   // Credenciais do projeto Supabase da igreja
   // Encontre em: Dashboard Supabase → Project Settings → API
-  SUPABASE_URL: 'https://SEU_PROJETO.supabase.co',
-  SUPABASE_KEY: 'sua_publishable_key_aqui',
+  SUPABASE_URL: 'https://nwafhurnxwbiyxxhdeuk.supabase.co',
+  SUPABASE_KEY: 'sb_publishable_kFcxEeQY5iu2-xtMqmU7JA_FGLNxIGz',
 
   // Cores da identidade visual (aceita hex ou qualquer valor CSS)
   CORES: {
@@ -31,30 +36,29 @@ window.APP_CONFIG = {
 
   // Contatos institucionais
   CONTATOS: {
-    email_geral:    'contato@suaigreja.com',
-    email_pastoral: 'pastoral@suaigreja.com',
-    whatsapp:       '',   // ex: '5511999999999' (DDI + DDD + número)
-    whatsapp_label: '',   // ex: '(11) 99999-9999'
+    email_geral:    'contato@resolvixsolucoes.com.br',
+    email_pastoral: 'pastoral@ministeriosemente.demo',
+    whatsapp:       '5531991437500',
+    whatsapp_label: '(31) 99143-7500',
   },
 
   // Endereço físico da sede
   ENDERECO: {
-    logradouro: 'Rua Exemplo, 123 — Bairro',
-    cidade:     'Sua Cidade',
-    uf:         'UF',
-    cep:        '00000-000',
-    // Query livre para o link do Google Maps
-    maps_query: 'Rua Exemplo, 123, Bairro, Sua Cidade, UF',
+    logradouro: 'Endereço fictício, 100',
+    cidade:     'Belo Horizonte',
+    uf:         'MG',
+    cep:        '30000-000',
+    maps_query: 'Belo Horizonte, MG',
   },
 
   // Cidade padrão para preencher membros sem endereço explícito (opcional)
-  CIDADE_PADRAO: '',
+  CIDADE_PADRAO: 'Belo Horizonte',
 
   // Redes sociais (deixe vazio '' para ocultar do rodapé)
   REDES_SOCIAIS: {
-    instagram: '',   // ex: 'https://www.instagram.com/suaigreja/'
-    youtube:   '',   // ex: 'https://www.youtube.com/@suaigreja'
-    spotify:   '',   // ex: 'https://open.spotify.com/show/xxxxx'
+    instagram: '',
+    youtube:   '',
+    spotify:   '',
     facebook:  '',
   },
 
@@ -67,10 +71,10 @@ window.APP_CONFIG = {
 
   // PIX para o bloco de generosidade da home (deixe chave vazia pra esconder o bloco)
   PIX: {
-    chave:   '',                    // ex: '12.345.678/0001-90' (CNPJ) ou e-mail/celular
-    titular: 'Sua Igreja',          // nome que aparece no label
-    banco:   '',                    // ex: 'Banco X'
-    tipo:    'CNPJ',                // rótulo do tipo da chave
+    chave:   '',
+    titular: 'Ministério Semente',
+    banco:   '',
+    tipo:    'CNPJ',
   },
 
   // ID do vídeo do YouTube que aparece na home (deixe vazio pra esconder)
