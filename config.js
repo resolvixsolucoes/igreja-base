@@ -71,14 +71,15 @@ window.APP_CONFIG = {
 
   // PIX para o bloco de generosidade da home (deixe chave vazia pra esconder o bloco)
   PIX: {
-    chave:   '',
+    chave:   'contato@ministeriosemente.demo',
     titular: 'Ministério Semente',
-    banco:   '',
-    tipo:    'CNPJ',
+    banco:   'Banco Fictício',
+    tipo:    'E-mail',
   },
 
   // ID do vídeo do YouTube que aparece na home (deixe vazio pra esconder)
-  VIDEO_APRESENTACAO: '',
+  // Placeholder da demo — troque pelo vídeo institucional real da sua igreja
+  VIDEO_APRESENTACAO: 'dQw4w9WgXcQ',
 
   // Assinatura digital do pastor (caminho relativo, opcional)
   ASSINATURA_PASTOR: 'plataforma/assets/assinatura-pastor.png',

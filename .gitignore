@@ -25,3 +25,6 @@ Thumbs.db
 
 # Arquivos locais de setup do demo (schema base, seed, etc.) — não vão pro publico
 _setup-local/
+
+# Config local do Claude Code
+.claude/
