@@ -2,7 +2,7 @@
 
 > Plataforma administrativa completa para igrejas — HTML/JS estático + Supabase.
 
-Este repositório é a **base neutra** de uma plataforma desenvolvida em produção para uma igreja real, extraída aqui como **case público de portfólio** da [Resolvix](https://resolvixsolucoes.com.br). O código está publicado para demonstração — o setup para uma nova igreja está documentado abaixo.
+Este repositório é a **base neutra** de uma plataforma desenvolvida em produção para uma igreja real, extraída aqui como **case público de portfólio** da [Resolvix](https://resolvixsolucoes.com.br).
 
 **Escala em produção:** 36 páginas HTML, ~15 mil linhas de JavaScript, 51 migrations SQL, RLS granular por permissão, PWA offline-friendly, edge functions Supabase, bot WhatsApp para captação de visitantes.
 
@@ -75,42 +75,6 @@ Toda a configuração de uma igreja (nome, credenciais Supabase, cores, contatos
 | Agenda | Membros | LMS de cursos |
 |--------|---------|---------------|
 | _adicione o print aqui_ | _adicione o print aqui_ | _adicione o print aqui_ |
-
----
-
-## Setup de uma nova igreja (~30 min)
-
-### 1. Criar projeto Supabase
-Em https://supabase.com/dashboard → **New project**. Anote:
-- Project URL (`https://abcd1234.supabase.co`)
-- publishable/anon key (**Project Settings → API**)
-
-### 2. Rodar as migrations SQL
-No SQL Editor do Supabase, execute em ordem:
-1. `supabase/schema-*.sql` (todos os arquivos, ordem alfabética)
-2. `plataforma/schema*.sql` (schemas do LMS, se for usar cursos)
-
-> As migrations foram criadas incrementalmente durante o desenvolvimento em produção. Para uma nova igreja rodando do zero, é possível consolidá-las em um único `schema.sql` — está no roadmap.
-
-### 3. Preencher `config.js`
-Abra `config.js` na raiz e substitua os placeholders:
-- `NOME_IGREJA`, `SLUG_IGREJA`, `DOMINIO`, `TAGLINE`
-- `SUPABASE_URL` e `SUPABASE_KEY` (etapa 1)
-- `CORES` (identidade visual)
-- `CONTATOS`, `ENDERECO`, `REDES_SOCIAIS`, `CULTO_PRINCIPAL`, `PIX`
-- `VIDEO_APRESENTACAO` (opcional — ID do YouTube pra home)
-
-### 4. Substituir os assets visuais
-Veja [ASSETS_A_SUBSTITUIR.md](ASSETS_A_SUBSTITUIR.md). Todos os PNGs de branding são placeholders 1x1 transparentes.
-
-### 5. (Opcional) Configurar o bot WhatsApp
-Se for usar cadastro de visitantes via WhatsApp:
-1. Copie `whatsapp-bot/.env.example` para `whatsapp-bot/.env`
-2. Preencha Supabase service role, Evolution API, Redis
-3. Deploy no Railway (`whatsapp-bot/railway.toml`)
-
-### 6. Deploy
-Estático — sobe em qualquer hosting: Hostinger, Vercel, Netlify, GitHub Pages. Suba a raiz **excluindo** `whatsapp-bot/` e `supabase/`. Domínio recomendado: `plataforma.suaigreja.com` (subdomínio).
 
 ---
 
