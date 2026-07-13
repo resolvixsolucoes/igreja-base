@@ -287,6 +287,9 @@ CREATE TABLE IF NOT EXISTS public.financeiro_formas_pgto (
   criado_em timestamp with time zone NOT NULL DEFAULT now()
 );
 
+-- Sequence precisa existir antes do default abaixo referenciar
+CREATE SEQUENCE IF NOT EXISTS public.financeiro_log_id_seq;
+
 CREATE TABLE IF NOT EXISTS public.financeiro_log (
   id bigint NOT NULL DEFAULT nextval('financeiro_log_id_seq'::regclass),
   financeiro_id uuid NOT NULL,
@@ -771,9 +774,7 @@ CREATE TABLE IF NOT EXISTS public.voluntarios (
   habilidades text[] DEFAULT '{}'::text[]
 );
 
--- Sequence for financeiro_log (referenced by default nextval)
-CREATE SEQUENCE IF NOT EXISTS public.financeiro_log_id_seq;
-ALTER TABLE public.financeiro_log ALTER COLUMN id SET DEFAULT nextval('financeiro_log_id_seq'::regclass);
+-- Faz a sequence "pertencer" à coluna (dropar a tabela dropa a sequence)
 ALTER SEQUENCE public.financeiro_log_id_seq OWNED BY public.financeiro_log.id;
 
 
