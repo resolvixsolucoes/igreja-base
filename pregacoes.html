@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pregações — Sua Igreja</title>
-  <meta name="description" content="Assista às pregações da Sua Igreja. Séries bíblicas, mensagens e ensinamentos para a sua vida." />
-  <meta name="theme-color" content="#2BBFB3" />
+  <title>Pregações — Ministério Semente</title>
+  <meta name="description" content="Assista às pregações da Ministério Semente. Séries bíblicas, mensagens e ensinamentos para a sua vida." />
+  <meta name="theme-color" content="#6b8e4e" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
@@ -14,17 +14,17 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --brand:       #2BBFB3;
-      --brand-dark:  #1a9e93;
-      --brand-deep:  #0f6b64;
-      --brand-light: #e8faf9;
-      --brand-mid:   #b2e8e4;
-      --text:        #1a2e2d;
-      --muted:       #6b8b89;
+      --brand:       #6b8e4e;
+      --brand-dark:  #4a6a35;
+      --brand-deep:  #2f4a1e;
+      --brand-light: #eef5e2;
+      --brand-mid:   #c1d8a4;
+      --text:        #242e1a;
+      --muted:       #6e806b;
       --bg:          #ffffff;
       --bg-soft:     #f4fdfc;
       --radius:      16px;
-      --dropdown-bg: #071a18;
+      --dropdown-bg: #161f0f;
     }
 
     html { scroll-behavior: smooth; }
@@ -43,7 +43,7 @@
       width: 100%; padding: 12px 48px;
       display: flex; align-items: center; justify-content: space-between;
       background: var(--brand);
-      box-shadow: 0 2px 16px rgba(43,191,179,0.30);
+      box-shadow: 0 2px 16px rgba(107,142,78,0.30);
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       transition: background 0.3s, box-shadow 0.3s;
     }
@@ -92,7 +92,7 @@
       text-decoration: none; transition: background 0.15s, color 0.15s;
       white-space: nowrap;
     }
-    .dropdown-item:hover { background: rgba(43,191,179,0.18); color: #ffffff; }
+    .dropdown-item:hover { background: rgba(107,142,78,0.18); color: #ffffff; }
     .dropdown-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 3px 6px; }
 
     /* ── BOTÃO MEMBROS ────────────────────────────────────────────── */
@@ -197,7 +197,7 @@
       position: absolute; inset: 0;
       background:
         radial-gradient(ellipse 80% 60% at 20% 50%, rgba(255,255,255,0.04) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 80% at 80% 30%, rgba(43,191,179,0.12) 0%, transparent 60%);
+        radial-gradient(ellipse 60% 80% at 80% 30%, rgba(107,142,78,0.12) 0%, transparent 60%);
       pointer-events: none;
     }
     .hero-content {
@@ -284,7 +284,7 @@
       white-space: nowrap; border: none; background: none;
       width: 100%; text-align: left; font-family: inherit;
     }
-    .filtro-option:hover { background: rgba(43,191,179,0.18); color: #fff; }
+    .filtro-option:hover { background: rgba(107,142,78,0.18); color: #fff; }
     .filtro-option.ativo { color: var(--brand); }
     .filtro-option.ativo::after { content: '✓'; margin-left: auto; font-size: 12px; }
     .filtro-option .opt-thumb {
@@ -387,7 +387,7 @@
     .cf-scroll-play svg { width: 16px; height: 16px; margin-left: 2px; }
     .cf-thumb {
       width: 100%; aspect-ratio: 16/9;
-      background: linear-gradient(135deg, #0d1f1e 0%, #1a9e93 100%);
+      background: linear-gradient(135deg, #1f2a15 0%, #4a6a35 100%);
       display: flex; align-items: center; justify-content: center;
       position: relative; overflow: visible;
       border-radius: 14px;
@@ -425,7 +425,7 @@
     }
     .modal-overlay.ativo { opacity: 1; pointer-events: all; }
     .modal-box {
-      background: #0d1f1e;
+      background: #1f2a15;
       border-radius: 20px; overflow: hidden;
       width: 100%; max-width: 860px;
       box-shadow: 0 32px 80px rgba(0,0,0,0.55);
@@ -509,8 +509,8 @@
     .drawer-field textarea { min-height:120px; resize:vertical; }
     .drawer-hint { font-size:11px; color:#aaa; line-height:1.5; margin-top:-8px; }
     .drawer-divider { width:100%; height:1px; background:#f0f0f0; }
-    .btn-enviar-oracao { width:100%; padding:14px; background:linear-gradient(135deg, var(--brand), var(--brand-dark)); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; box-shadow:0 4px 16px rgba(43,191,179,0.35); }
-    .btn-enviar-oracao:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(43,191,179,0.45); }
+    .btn-enviar-oracao { width:100%; padding:14px; background:linear-gradient(135deg, var(--brand), var(--brand-dark)); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; box-shadow:0 4px 16px rgba(107,142,78,0.35); }
+    .btn-enviar-oracao:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(107,142,78,0.45); }
     .btn-enviar-oracao:disabled { opacity:0.65; cursor:not-allowed; transform:none; }
     .drawer-sucesso { display:none; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; padding:40px 20px; flex:1; }
     .drawer-sucesso.show { display:flex; }
@@ -557,7 +557,7 @@
   <!-- ── HEADER ──────────────────────────────────────────────────────── -->
   <header id="main-header">
     <div class="header-logo">
-      <a href="index.html"><img src="logo.png" alt="Sua Igreja" /></a>
+      <a href="index.html"><img src="logo.png" alt="Ministério Semente" /></a>
     </div>
     <div class="header-right">
       <ul class="main-nav" id="main-nav">
@@ -608,7 +608,7 @@
   <div class="mobile-menu-overlay" id="mobile-overlay" onclick="fecharMobileMenu()"></div>
   <nav class="mobile-menu" id="mobile-menu">
     <div class="mobile-menu-header">
-      <img src="logo.png" alt="Sua Igreja" />
+      <img src="logo.png" alt="Ministério Semente" />
       <button class="btn-fechar-mobile" onclick="fecharMobileMenu()">✕</button>
     </div>
     <div class="mobile-nav">
@@ -652,7 +652,7 @@
   <!-- ── HERO ────────────────────────────────────────────────────────── -->
   <section class="hero">
     <div class="hero-content">
-      <h1>Pregações da<br/><em>Sua Igreja</em></h1>
+      <h1>Pregações da<br/><em>Ministério Semente</em></h1>
       <p>Séries bíblicas e mensagens que trazem leveza e vida para o seu dia a dia.</p>
     </div>
   </section>
@@ -911,7 +911,7 @@
             ${thumb ? `<img src="${esc(thumb)}" alt="" loading="lazy">` : ''}
             <div class="cf-overlay"></div>
             <div class="cf-play" style="width:${sz};height:${sz};">
-              <svg viewBox="0 0 24 24" fill="#0f6b64" style="width:${svgSz};height:${svgSz};margin-left:2px"><path d="M8 5v14l11-7z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#2f4a1e" style="width:${svgSz};height:${svgSz};margin-left:2px"><path d="M8 5v14l11-7z"/></svg>
             </div>
           </div>`
           card.addEventListener('click', () => {
@@ -930,9 +930,9 @@
           const card  = document.createElement('div')
           card.className = 'cf-scroll-card'
           card.innerHTML = `
-            ${thumb ? `<img src="${esc(thumb)}" alt="${esc(v.titulo)}" loading="lazy">` : '<div style="aspect-ratio:16/9;background:#0d1f1e;"></div>'}
+            ${thumb ? `<img src="${esc(thumb)}" alt="${esc(v.titulo)}" loading="lazy">` : '<div style="aspect-ratio:16/9;background:#1f2a15;"></div>'}
             <div class="cf-scroll-play">
-              <div><svg viewBox="0 0 24 24" fill="#0f6b64"><path d="M8 5v14l11-7z"/></svg></div>
+              <div><svg viewBox="0 0 24 24" fill="#2f4a1e"><path d="M8 5v14l11-7z"/></svg></div>
             </div>`
           card.addEventListener('click', () => abrirVideoModal(v.id, plId))
           scroll.appendChild(card)
@@ -1086,7 +1086,7 @@
           renderSeries()
         }
       } catch (err) {
-        console.error('[Sua Igreja]', err)
+        console.error('[Ministério Semente]', err)
         document.getElementById('estado-carregando').classList.remove('visivel')
         document.getElementById('estado-vazio').classList.add('visivel')
         document.querySelector('#estado-vazio .estado-titulo').textContent = 'Erro ao carregar'

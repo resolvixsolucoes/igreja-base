@@ -1,23 +1,23 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>O Que Cremos — Sua Igreja</title>
+  <title>O Que Cremos — Ministério Semente</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --brand:       #2BBFB3;
-      --brand-dark:  #1a9e93;
-      --brand-deep:  #0f6b64;
-      --brand-light: #e8faf9;
-      --brand-mid:   #b2e8e4;
-      --text:        #1a2e2d;
-      --muted:       #6b8b89;
+      --brand:       #6b8e4e;
+      --brand-dark:  #4a6a35;
+      --brand-deep:  #2f4a1e;
+      --brand-light: #eef5e2;
+      --brand-mid:   #c1d8a4;
+      --text:        #242e1a;
+      --muted:       #6e806b;
       --bg:          #ffffff;
       --radius:      16px;
-      --dropdown-bg: #071a18;
+      --dropdown-bg: #161f0f;
     }
 
     html { scroll-behavior: smooth; }
@@ -35,7 +35,7 @@
       width: 100%; padding: 12px 48px;
       display: flex; align-items: center; justify-content: space-between;
       background: var(--brand);
-      box-shadow: 0 2px 16px rgba(43,191,179,0.30);
+      box-shadow: 0 2px 16px rgba(107,142,78,0.30);
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       transition: background 0.3s, box-shadow 0.3s;
     }
@@ -89,7 +89,7 @@
       text-decoration: none; transition: background 0.15s, color 0.15s;
       white-space: nowrap;
     }
-    .dropdown-item:hover { background: rgba(43,191,179,0.18); color: #ffffff; }
+    .dropdown-item:hover { background: rgba(107,142,78,0.18); color: #ffffff; }
     .dropdown-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 3px 6px; }
 
     .btn-membros {
@@ -233,7 +233,7 @@
 
     .crenca-card {
       background: rgba(255,255,255,0.06);
-      border: 1.5px solid rgba(43,191,179,0.25);
+      border: 1.5px solid rgba(107,142,78,0.25);
       border-top: 4px solid var(--brand);
       border-radius: var(--radius);
       padding: 28px 26px;
@@ -249,7 +249,7 @@
 
     .crenca-badge {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(43,191,179,0.18); border: 1px solid rgba(43,191,179,0.45);
+      background: rgba(107,142,78,0.18); border: 1px solid rgba(107,142,78,0.45);
       border-radius: 50px; padding: 5px 14px;
       font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
       color: var(--brand); width: fit-content;
@@ -339,10 +339,10 @@
       background:linear-gradient(135deg, var(--brand), var(--brand-dark));
       color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:800;
       cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
-      transition:all 0.2s; box-shadow:0 4px 16px rgba(43,191,179,0.35);
+      transition:all 0.2s; box-shadow:0 4px 16px rgba(107,142,78,0.35);
       touch-action:manipulation; -webkit-tap-highlight-color:transparent;
     }
-    .btn-enviar-oracao:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(43,191,179,0.45); }
+    .btn-enviar-oracao:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(107,142,78,0.45); }
     .btn-enviar-oracao:disabled { opacity:0.65; cursor:not-allowed; transform:none; }
     .drawer-sucesso {
       display:none; flex-direction:column; align-items:center; justify-content:center;
@@ -379,7 +379,7 @@
     }
     @media (max-width: 580px) { .drawer { max-width: 100%; } }
   </style>
-  <meta name="theme-color" content="#2BBFB3"/>
+  <meta name="theme-color" content="#6b8e4e"/>
   <link rel="manifest" href="/manifest.json"/>
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/>
@@ -391,7 +391,7 @@
 ══════════════════════════════════════════════════════════════════ -->
 <header id="main-header">
   <div class="header-logo">
-    <a href="index.html"><img src="logo.png" alt="Sua Igreja"/></a>
+    <a href="index.html"><img src="logo.png" alt="Ministério Semente"/></a>
   </div>
   <div class="header-right">
     <ul class="main-nav" id="main-nav">
@@ -448,7 +448,7 @@
 <div class="mobile-menu-overlay" id="mobile-overlay" onclick="fecharMobileMenu()"></div>
 <nav class="mobile-menu" id="mobile-menu">
   <div class="mobile-menu-header">
-    <img src="logo.png" alt="Sua Igreja"/>
+    <img src="logo.png" alt="Ministério Semente"/>
     <button class="btn-fechar-mobile" onclick="fecharMobileMenu()">✕</button>
   </div>
   <div class="mobile-nav">

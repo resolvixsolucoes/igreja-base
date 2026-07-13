@@ -1,13 +1,13 @@
-﻿{
-  "name": "Sua Igreja",
-  "short_name": "Sua Igreja",
-  "description": "Sistema da Sua Igreja",
+{
+  "name": "Ministério Semente",
+  "short_name": "Ministério Semente",
+  "description": "Sistema administrativo do Ministério Semente",
   "start_url": "/dashboard.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#2BBFB3",
-  "theme_color": "#2BBFB3",
+  "background_color": "#6b8e4e",
+  "theme_color": "#6b8e4e",
   "lang": "pt-BR",
   "categories": ["productivity", "utilities"],
   "icons": [

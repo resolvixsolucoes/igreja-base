@@ -90,7 +90,7 @@
         transition:background .15s;
       }
       #aba-mensagens-com .com-item:hover{ background:#e8f4f2; }
-      #aba-mensagens-com .com-item.ativo{ background:#2BBFB3; color:#fff; }
+      #aba-mensagens-com .com-item.ativo{ background:#6b8e4e; color:#fff; }
       #aba-mensagens-com .com-item.ativo .com-item-prev{ color:rgba(255,255,255,.85); }
       #aba-mensagens-com .com-item-icon{ font-size:22px; }
       #aba-mensagens-com .com-item-info{ flex:1; min-width:0; }
@@ -106,7 +106,7 @@
         background:#e74c3c; color:#fff; font-size:11px; font-weight:700;
         border-radius:10px; padding:2px 7px; min-width:18px; text-align:center;
       }
-      #aba-mensagens-com .com-item.ativo .com-badge{ background:#fff; color:#2BBFB3; }
+      #aba-mensagens-com .com-item.ativo .com-badge{ background:#fff; color:#6b8e4e; }
       #aba-mensagens-com .com-chat{
         display:flex; flex-direction:column;
         background:#fff; border:1px solid #eee; border-radius:12px;
@@ -119,7 +119,7 @@
       }
       #aba-mensagens-com .com-chat-back{
         display:none; background:transparent; border:0; font-size:18px;
-        cursor:pointer; color:#2BBFB3;
+        cursor:pointer; color:#6b8e4e;
       }
       @media (max-width:768px){ #aba-mensagens-com .com-chat-back{ display:inline; } }
       #aba-mensagens-com .com-chat-msgs{
@@ -135,7 +135,7 @@
         font-size:11px; color:#888; margin-top:3px;
       }
       #aba-mensagens-com .com-msg.eu{
-        align-self:flex-end; background:#2BBFB3; color:#fff;
+        align-self:flex-end; background:#6b8e4e; color:#fff;
       }
       #aba-mensagens-com .com-msg.eu .com-msg-meta{ color:rgba(255,255,255,.85); }
       #aba-mensagens-com .com-msg.outro{
@@ -151,7 +151,7 @@
         max-height:120px;
       }
       #aba-mensagens-com .com-chat-form button{
-        background:#2BBFB3; color:#fff; border:0; border-radius:10px;
+        background:#6b8e4e; color:#fff; border:0; border-radius:10px;
         padding:0 18px; cursor:pointer; font-weight:600;
       }
       #aba-mensagens-com .com-chat-form button:disabled{ opacity:.5; cursor:default; }

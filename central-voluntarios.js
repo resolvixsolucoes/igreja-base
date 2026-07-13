@@ -365,15 +365,15 @@ window.renderMateriais = async function() {
   }
 
   // Render: tabela voluntários × materiais
-  const cabec = '<th style="text-align:left;padding:8px;background:#f0fffe;color:#1a9e93;font-size:12px;border-bottom:2px solid #d0f0ee;">Voluntário</th>' +
+  const cabec = '<th style="text-align:left;padding:8px;background:#f7faee;color:#4a6a35;font-size:12px;border-bottom:2px solid #d0f0ee;">Voluntário</th>' +
     _matLista.map(m => {
       const ico = m.tipo === 'arquivo' ? '📎' : '📝'
       const minTag = m.ministerio_id && _ministeriosMap[m.ministerio_id]
-        ? `<div style="font-size:9px;color:#1a9e93;">${_ministeriosMap[m.ministerio_id].icone || ''} ${escapeHtml(_ministeriosMap[m.ministerio_id].nome)}</div>` : ''
+        ? `<div style="font-size:9px;color:#4a6a35;">${_ministeriosMap[m.ministerio_id].icone || ''} ${escapeHtml(_ministeriosMap[m.ministerio_id].nome)}</div>` : ''
       const linkArq = m.tipo === 'arquivo' && m.arquivo_url
-        ? `<a href="${m.arquivo_url}" target="_blank" rel="noopener" style="color:#1a9e93;font-size:10px;text-decoration:underline;">baixar</a>` : ''
+        ? `<a href="${m.arquivo_url}" target="_blank" rel="noopener" style="color:#4a6a35;font-size:10px;text-decoration:underline;">baixar</a>` : ''
       const btnExcluir = `<button onclick="excluirMaterial('${m.id}')" title="Remover" style="background:none;border:none;color:#c00;cursor:pointer;font-size:11px;">✕</button>`
-      return `<th style="text-align:center;padding:8px;background:#f0fffe;color:#1a9e93;font-size:11px;border-bottom:2px solid #d0f0ee;min-width:100px;">
+      return `<th style="text-align:center;padding:8px;background:#f7faee;color:#4a6a35;font-size:11px;border-bottom:2px solid #d0f0ee;min-width:100px;">
         <div>${ico} ${escapeHtml(m.titulo)} ${btnExcluir}</div>
         ${minTag}
         ${linkArq}
@@ -403,7 +403,7 @@ window.renderMateriais = async function() {
       return `<td style="text-align:center;padding:6px;">
         <button onclick="marcarEntregaMaterial('${m.id}','${vol.id}',this)"
           title="Marcar como entregue"
-          style="background:#fff;color:#1a9e93;border:1px solid #2BBFB3;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;">
+          style="background:#fff;color:#4a6a35;border:1px solid #6b8e4e;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;">
           Entregar</button>
       </td>`
     }).join('')

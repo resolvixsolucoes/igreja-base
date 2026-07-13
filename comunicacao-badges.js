@@ -36,9 +36,9 @@
       /* Card do dashboard */
       #com-dashboard-card{
         margin: 16px 0; padding: 16px 18px;
-        background: linear-gradient(135deg,#2BBFB3,#1a9e93); color:#fff;
+        background: linear-gradient(135deg,#6b8e4e,#4a6a35); color:#fff;
         border-radius: 14px; display:none; gap:14px; align-items:center;
-        box-shadow: 0 4px 18px rgba(43,191,179,.25);
+        box-shadow: 0 4px 18px rgba(107,142,78,.25);
       }
       #com-dashboard-card.has-unread{ display:flex; }
       #com-dashboard-card .com-card-icon{

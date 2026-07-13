@@ -254,7 +254,7 @@ function abrirModalHabilidades(volId) {
       background:${selecionadas.includes(h.id) ? h.cor + '12' : '#fff'}">
       <input type="checkbox" value="${h.id}" ${selecionadas.includes(h.id) ? 'checked' : ''}
         style="accent-color:${h.cor};width:16px;height:16px;">
-      <span style="font-weight:600;color:#1a2e2d;">${h.label}</span>
+      <span style="font-weight:600;color:#242e1a;">${h.label}</span>
     </label>`).join('')
   document.getElementById('modal-habilidades').classList.add('active')
 }
@@ -563,8 +563,8 @@ function _buildRepertorioHtml(repertorio) {
   if (!repertorio || !repertorio.length) return ''
   return `
     <div style="margin-top:12px;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;">
-      <div style="background:#f0fffe;padding:8px 12px;font-size:12px;font-weight:800;
-                  color:#1a9e93;border-bottom:1px solid #d0f0ee;display:flex;
+      <div style="background:#f7faee;padding:8px 12px;font-size:12px;font-weight:800;
+                  color:#4a6a35;border-bottom:1px solid #d0f0ee;display:flex;
                   align-items:center;gap:6px;">
         🎵 Repertório de Música
         <span style="font-size:10px;font-weight:400;color:#aaa;margin-left:4px;">
@@ -578,7 +578,7 @@ function _buildRepertorioHtml(repertorio) {
             <span style="font-size:11px;color:#ccc;font-weight:700;min-width:18px;text-align:right;">
               ${m.ordem || i + 1}.
             </span>
-            <span style="font-size:13px;font-weight:600;color:#1a2e2d;flex:1;
+            <span style="font-size:13px;font-weight:600;color:#242e1a;flex:1;
                          white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
               ${m.titulo || '—'}
             </span>
@@ -587,7 +587,7 @@ function _buildRepertorioHtml(repertorio) {
                 ${m.artista}
               </span>` : ''}
             ${m.tonalidade ? `
-              <span style="font-size:10px;background:#e8faf9;color:#1a9e93;
+              <span style="font-size:10px;background:#eef5e2;color:#4a6a35;
                             border-radius:20px;padding:1px 7px;font-weight:700;
                             white-space:nowrap;">
                 ${m.tonalidade}
@@ -674,8 +674,8 @@ function buildEventoCard(ev, esc, showDate = false, pode = false, repertorio = [
                   border-radius:6px;text-decoration:none;white-space:nowrap;">📱</a>
               <button onclick="copiarTextoGeral('${_url}', this)"
                 title="Copiar link de confirmação"
-                style="padding:3px 8px;font-size:11px;background:#f0fffe;
-                  border:1px solid #2BBFB3;color:#2BBFB3;border-radius:6px;cursor:pointer;">🔗</button>` : ''
+                style="padding:3px 8px;font-size:11px;background:#f7faee;
+                  border:1px solid #6b8e4e;color:#6b8e4e;border-radius:6px;cursor:pointer;">🔗</button>` : ''
           escalaFuncoesCache[e.id] = e.funcoes || []
           const funcoesHtml = habChips(e.funcoes)
           return `
@@ -910,7 +910,7 @@ function abrirModalStatus(escalaId, eventoNome, eventoData, volNome, ehMeu = fal
         <input type="checkbox" class="chk-mse-funcao" value="${h.id}"
           ${atuais.includes(h.id) ? 'checked' : ''}
           style="accent-color:${h.cor};width:15px;height:15px;">
-        <span style="font-size:13px;font-weight:600;color:#1a2e2d;">${h.label}</span>
+        <span style="font-size:13px;font-weight:600;color:#242e1a;">${h.label}</span>
       </label>`).join('')
     funcoesWrap.style.display = 'block'
   } else if (funcoesWrap) {
@@ -1106,8 +1106,8 @@ async function renderDisponibilidadesDia(dataStr) {
     const bloco  = document.createElement('div')
     bloco.style.cssText = 'margin-bottom:10px;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;'
     bloco.innerHTML =
-      '<div style="background:#f8f8f8;padding:7px 12px;font-size:12px;font-weight:800;color:#1a2e2d;border-bottom:1px solid #eee;">' +
-        '📋 ' + evNome + '<span style="color:#2BBFB3;font-weight:400;">' + evHora + '</span>' +
+      '<div style="background:#f8f8f8;padding:7px 12px;font-size:12px;font-weight:800;color:#242e1a;border-bottom:1px solid #eee;">' +
+        '📋 ' + evNome + '<span style="color:#6b8e4e;font-weight:400;">' + evHora + '</span>' +
       '</div>' +
       '<div style="padding:8px 12px;display:flex;flex-wrap:wrap;gap:6px;">' +
         vols.map(d => {
@@ -1123,18 +1123,18 @@ async function renderDisponibilidadesDia(dataStr) {
               btnEscalar = '<button data-acao-lider onclick="aceitarDisponibilidade(\'' + d.id + '\',\'' +
                 d.voluntario_id + '\',\'' + evId + '\', this)"' +
                 ' style="font-size:11px;padding:2px 10px;border-radius:20px;cursor:pointer;' +
-                'background:#f0fffe;color:#1a9e93;border:1px solid #2BBFB3;font-weight:600;">✅ Escalar</button>'
+                'background:#f7faee;color:#4a6a35;border:1px solid #6b8e4e;font-weight:600;">✅ Escalar</button>'
             }
           }
           const btnsMeus = ehMeu
             ? '<button title="Editar minha disponibilidade" onclick="abrirModalDisponibilidade(\'' + d.data + '\')" ' +
-              'style="font-size:11px;padding:2px 7px;border-radius:6px;cursor:pointer;background:#fff;border:1px solid #2BBFB3;color:#1a9e93;">✏️</button>' +
+              'style="font-size:11px;padding:2px 7px;border-radius:6px;cursor:pointer;background:#fff;border:1px solid #6b8e4e;color:#4a6a35;">✏️</button>' +
               '<button title="Excluir minha disponibilidade" onclick="excluirDisponibilidade(\'' + d.id + '\')" ' +
               'style="font-size:11px;padding:2px 7px;border-radius:6px;cursor:pointer;background:#fff;border:1px solid #ef4444;color:#ef4444;">🗑️</button>'
             : ''
           return '<div style="display:flex;align-items:center;gap:6px;">' +
             '<span style="font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;' +
-            'background:' + (ehMeu ? '#e8faf9' : '#f5f5f5') + ';color:' + (ehMeu ? '#1a9e93' : '#555') + ';">' +
+            'background:' + (ehMeu ? '#eef5e2' : '#f5f5f5') + ';color:' + (ehMeu ? '#4a6a35' : '#555') + ';">' +
             (d.voluntarios?.nome || '—') +
             (ehMeu ? ' <span style="font-size:10px;">✓ eu</span>' : '') +
             '</span>' + btnEscalar + btnsMeus + '</div>'
@@ -1172,18 +1172,18 @@ function abrirModalDisponibilidade(data) {
       const jaMarc  = jaConfirmados.has(ev.id)
       const item    = document.createElement('label')
       item.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px 14px;' +
-        'border:2px solid ' + (jaMarc ? '#2BBFB3' : '#e8e8e8') + ';border-radius:10px;cursor:pointer;' +
-        'background:' + (jaMarc ? '#f0fffe' : 'white') + ';transition:all .2s;'
+        'border:2px solid ' + (jaMarc ? '#6b8e4e' : '#e8e8e8') + ';border-radius:10px;cursor:pointer;' +
+        'background:' + (jaMarc ? '#f7faee' : 'white') + ';transition:all .2s;'
       item.innerHTML =
         '<input type="checkbox" class="chk-disp-ev" value="' + ev.id + '"' +
         (jaMarc ? ' checked' : '') +
-        ' style="accent-color:#2BBFB3;width:18px;height:18px;flex-shrink:0;" />' +
-        '<div style="flex:1;"><strong style="font-size:14px;color:#1a2e2d;">' + ev.nome + '</strong>' +
-        (horaFmt ? '<span style="font-size:12px;color:#2BBFB3;margin-left:8px;">⏰ ' + horaFmt + '</span>' : '') +
+        ' style="accent-color:#6b8e4e;width:18px;height:18px;flex-shrink:0;" />' +
+        '<div style="flex:1;"><strong style="font-size:14px;color:#242e1a;">' + ev.nome + '</strong>' +
+        (horaFmt ? '<span style="font-size:12px;color:#6b8e4e;margin-left:8px;">⏰ ' + horaFmt + '</span>' : '') +
         '</div>'
       item.addEventListener('change', () => {
-        item.style.borderColor = item.querySelector('input').checked ? '#2BBFB3' : '#e8e8e8'
-        item.style.background  = item.querySelector('input').checked ? '#f0fffe' : 'white'
+        item.style.borderColor = item.querySelector('input').checked ? '#6b8e4e' : '#e8e8e8'
+        item.style.background  = item.querySelector('input').checked ? '#f7faee' : 'white'
       })
       wrap.appendChild(item)
     })
@@ -1587,7 +1587,7 @@ function renderPlaylist() {
         <button class="btn-excluir-musica" data-acao="excluir" onclick="excluirMusica('${m.id}','${(m.titulo||'').replace(/'/g,"\\'")}')">🗑️</button>
         <button title="Adicionar ao repertório do culto"
           onclick="adicionarAoCulto('${m.id}','${(m.titulo||'').replace(/'/g,"\\'")}','${(m.artista||'').replace(/'/g,"\\'")}','${m.spotify_url||''}')"
-          style="background:#f0fffe;border:1px solid #2BBFB3;color:#1a9e93;
+          style="background:#f7faee;border:1px solid #6b8e4e;color:#4a6a35;
                  border-radius:7px;padding:5px 8px;cursor:pointer;font-size:12px;">
           ➕
         </button>

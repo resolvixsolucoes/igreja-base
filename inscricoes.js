@@ -1,4 +1,4 @@
-﻿// ================================================================
+// ================================================================
 //  inscricoes.js — Gestão de inscrições de eventos públicos
 // ================================================================
 const _db = db
@@ -297,7 +297,7 @@ window.imprimirInscricoes = function() {
   document.getElementById('print-area').innerHTML = `
     <div class="print-topo">
       <div class="print-logo-bloco">
-        <img src="logo-escura.png" alt="Sua Igreja" class="print-logo" />
+        <img src="logo-escura.png" alt="Ministério Semente" class="print-logo" />
       </div>
       <div class="print-evento-info">
         <h1>${eventoSelecionado.nome}</h1>
@@ -325,7 +325,7 @@ window.imprimirInscricoes = function() {
       </tbody>
     </table>
     <div class="print-rodape">
-      Sua Igreja &nbsp;·&nbsp; Lista de Inscrições &nbsp;·&nbsp; ${eventoSelecionado.nome}
+      Ministério Semente &nbsp;·&nbsp; Lista de Inscrições &nbsp;·&nbsp; ${eventoSelecionado.nome}
     </div>
   `
 

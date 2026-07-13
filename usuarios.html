@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Usuários — Sua Igreja</title>
+  <title>Usuários — Ministério Semente</title>
   <link rel="stylesheet" href="style.css" />
   <style>
 
@@ -30,11 +30,11 @@
       border-radius: 4px 4px 0 0;
     }
 
-    .tab-btn:hover { color: #2BBFB3; }
+    .tab-btn:hover { color: #6b8e4e; }
 
     .tab-btn.active {
-      color: #2BBFB3;
-      border-bottom-color: #2BBFB3;
+      color: #6b8e4e;
+      border-bottom-color: #6b8e4e;
       background: #f0faf9;
     }
 
@@ -54,7 +54,7 @@
       border-radius: 14px;
       padding: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      border-left: 4px solid #2BBFB3;
+      border-left: 4px solid #6b8e4e;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -75,7 +75,7 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #2BBFB3, #1a9e93);
+      background: linear-gradient(135deg, #6b8e4e, #4a6a35);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -90,7 +90,7 @@
     .usuario-nome {
       font-size: 15px;
       font-weight: 700;
-      color: #1a2e2d;
+      color: #242e1a;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -113,7 +113,7 @@
       border-radius: 8px;
       padding: 6px 10px;
       font-size: 12px;
-      color: #1a9e93;
+      color: #4a6a35;
     }
     .usuario-membro-vinculo.sem-vinculo {
       background: #fafafa;
@@ -132,7 +132,7 @@
     }
 
     .role-admin    { background: #fff3cd; color: #856404; }
-    .role-consulta { background: #e8faf9; color: #1a9e93; }
+    .role-consulta { background: #eef5e2; color: #4a6a35; }
     .role-parcial  { background: #e8eaf9; color: #3949ab; }
 
     .usuario-acoes {
@@ -153,9 +153,9 @@
     }
 
     .btn-perm {
-      background: #e8faf9;
-      color: #1a9e93;
-      border: 1px solid #b2e8e4 !important;
+      background: #eef5e2;
+      color: #4a6a35;
+      border: 1px solid #c1d8a4 !important;
     }
     .btn-perm:hover { background: #c8f0ec; }
 
@@ -195,7 +195,7 @@
       max-height: 90vh;
       overflow-y: auto;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      border-top: 5px solid #2BBFB3;
+      border-top: 5px solid #6b8e4e;
     }
 
     .perm-box-header {
@@ -209,7 +209,7 @@
 
     .perm-box-header h2 {
       font-size: 18px;
-      color: #1a2e2d;
+      color: #242e1a;
       margin-bottom: 4px;
     }
 
@@ -256,7 +256,7 @@
     .perm-table input[type="checkbox"] {
       width: 17px;
       height: 17px;
-      accent-color: #2BBFB3;
+      accent-color: #6b8e4e;
       cursor: pointer;
     }
 
@@ -294,13 +294,13 @@
       max-height: 90vh;
       overflow-y: auto;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      border-top: 5px solid #2BBFB3;
+      border-top: 5px solid #6b8e4e;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    .modal h2 { font-size: 20px; color: #1a2e2d; margin-bottom: 4px; }
+    .modal h2 { font-size: 20px; color: #242e1a; margin-bottom: 4px; }
 
     .modal label {
       font-size: 13px;
@@ -323,7 +323,7 @@
 
     .modal input:focus,
     .modal select:focus {
-      border-color: #2BBFB3;
+      border-color: #6b8e4e;
       background: white;
     }
 
@@ -357,9 +357,9 @@
     }
 
     .tipo-btn.active {
-      border-color: #2BBFB3;
-      background: #e8faf9;
-      color: #1a9e93;
+      border-color: #6b8e4e;
+      background: #eef5e2;
+      color: #4a6a35;
     }
 
     .info-box {
@@ -368,7 +368,7 @@
       border-radius: 8px;
       padding: 10px 14px;
       font-size: 12px;
-      color: #1a9e93;
+      color: #4a6a35;
       line-height: 1.5;
     }
 
@@ -400,7 +400,7 @@
       color: #aaa;
     }
 
-    .btn-olho-modal:hover { color: #2BBFB3; }
+    .btn-olho-modal:hover { color: #6b8e4e; }
 
     /* ===== AUTOCOMPLETE MEMBRO ===== */
     .autocomplete-membro-wrap {
@@ -434,7 +434,7 @@
     }
 
     .autocomplete-membro-item:last-child { border-bottom: none; }
-    .autocomplete-membro-item:hover { background: #f0fffe; }
+    .autocomplete-membro-item:hover { background: #f7faee; }
 
     .autocomplete-membro-item span { color: #222; font-weight: 600; }
     .autocomplete-membro-item small { color: #aaa; font-size: 11px; }
@@ -443,12 +443,12 @@
       display: none;
       align-items: center;
       gap: 8px;
-      background: #e8faf9;
-      border: 1px solid #b2e8e4;
+      background: #eef5e2;
+      border: 1px solid #c1d8a4;
       border-radius: 8px;
       padding: 8px 12px;
       font-size: 13px;
-      color: #1a9e93;
+      color: #4a6a35;
       font-weight: 600;
     }
 
@@ -543,11 +543,11 @@
 
     .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
 </style>
-  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="theme-color" content="#6b8e4e" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <meta name="apple-mobile-web-app-title" content="Ministério Semente" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
@@ -557,7 +557,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="logo.png" alt="Sua Igreja" />
+      <img src="logo.png" alt="Ministério Semente" />
     </div>
     <nav id="sidebar-nav">
       <a href="dashboard.html">🏠 Dashboard</a>

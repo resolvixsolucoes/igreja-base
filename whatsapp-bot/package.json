@@ -1,7 +1,7 @@
-﻿{
+{
   "name": "sua-igreja-whatsapp-bot",
   "version": "1.0.0",
-  "description": "Bot WhatsApp para registro de visitantes - Sua Igreja",
+  "description": "Bot WhatsApp para registro de visitantes - Ministério Semente",
   "main": "src/index.js",
   "engines": {
     "node": ">=20"

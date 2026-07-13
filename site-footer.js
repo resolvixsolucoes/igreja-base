@@ -5,7 +5,7 @@
 // IMPORTANTE: config.js deve ser carregado ANTES deste script.
 (function () {
   const cfg = window.APP_CONFIG || {}
-  const nome     = cfg.NOME_IGREJA || 'Sua Igreja'
+  const nome     = cfg.NOME_IGREJA || 'Ministério Semente'
   const tagline  = cfg.TAGLINE || ''
   const redes    = cfg.REDES_SOCIAIS || {}
   const endereco = cfg.ENDERECO || {}
@@ -13,7 +13,7 @@
   const culto    = cfg.CULTO_PRINCIPAL || {}
 
   const css = `
-    footer { background: var(--brand-dark, #0E5F5F); padding: 20px 0 12px; display: flex; flex-direction: column; gap: 14px; }
+    footer { background: var(--brand-dark, #4a6a35); padding: 20px 0 12px; display: flex; flex-direction: column; gap: 14px; }
     .footer-top { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; width: 100%; padding: 0 80px; gap: 24px; }
     .footer-left { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
     .footer-logo img { height: 28px; object-fit: contain; }

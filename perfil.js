@@ -1,5 +1,5 @@
-﻿// ================================================================
-//  perfil.js — Meu Perfil · Sua Igreja
+// ================================================================
+//  perfil.js — Meu Perfil · Ministério Semente
 // ================================================================
 
 const BUCKET_AVATARES = 'avatares'
@@ -367,7 +367,7 @@ async function alterarSenha() {
 // ================================================================
 //  TOAST
 // ================================================================
-function toast(msg, cor = '#2BBFB3') {
+function toast(msg, cor = '#6b8e4e') {
   const el = document.getElementById('perfil-toast')
   el.textContent   = msg
   el.style.background = cor

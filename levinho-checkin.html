@@ -1,18 +1,18 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Check-in Levinho — Sua Igreja</title>
+<title>Check-in Levinho — Ministério Semente</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --brand:       #2BBFB3;
-    --brand-dark:  #1a9e93;
-    --brand-light: #e8faf9;
-    --text:        #1a2e2d;
-    --muted:       #6b8b89;
+    --brand:       #6b8e4e;
+    --brand-dark:  #4a6a35;
+    --brand-light: #eef5e2;
+    --text:        #242e1a;
+    --muted:       #6e806b;
     --bg:          #f7fbfb;
     --radius:      14px;
   }
@@ -49,7 +49,7 @@
   .resultados { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
   .res-item {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 12px; background: #f0fffe; border: 1px solid #c0e8e6;
+    padding: 10px 12px; background: #f7faee; border: 1px solid #c0e8e6;
     border-radius: 10px; cursor: pointer; transition: background .15s;
   }
   .res-item:hover { background: var(--brand-light); }
@@ -62,7 +62,7 @@
   }
   .btn-primary  { background: linear-gradient(135deg, var(--brand), var(--brand-dark)); color: white; }
   .btn-primary:hover  { opacity: .9; }
-  .btn-secondary { background: #f0fffe; color: var(--brand-dark); border: 1px solid #c0e8e6; }
+  .btn-secondary { background: #f7faee; color: var(--brand-dark); border: 1px solid #c0e8e6; }
   .btn-link {
     background: transparent; color: var(--brand-dark); border: none;
     font-size: 14px; font-weight: 600; cursor: pointer;
@@ -84,7 +84,7 @@
 
   .sucesso {
     background: white; border-radius: 16px; padding: 28px 24px;
-    text-align: center; box-shadow: 0 4px 20px rgba(43,191,179,.18);
+    text-align: center; box-shadow: 0 4px 20px rgba(107,142,78,.18);
     border-top: 5px solid var(--brand);
   }
   .sucesso .check-icon { font-size: 56px; }
@@ -140,15 +140,15 @@
       box-sizing: border-box;
     }
     .etiq-logo-linha {
-      font-size: 7pt; color: #1a9e93; font-weight: 700;
+      font-size: 7pt; color: #4a6a35; font-weight: 700;
       text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1mm;
     }
     .etiq-nome {
-      font-size: 18pt; font-weight: 800; color: #1a2e2d;
+      font-size: 18pt; font-weight: 800; color: #242e1a;
       line-height: 1.1; margin-bottom: 1.5mm;
     }
     .etiq-sala {
-      font-size: 11pt; font-weight: 700; color: #1a9e93; margin-bottom: 1mm;
+      font-size: 11pt; font-weight: 700; color: #4a6a35; margin-bottom: 1mm;
     }
     .etiq-codigo-inline {
       font-size: 13pt; font-weight: 800; font-family: 'Courier New', monospace;
@@ -212,7 +212,7 @@
 
   <!-- ETAPA 1: BUSCAR / ESCOLHER -->
   <div id="etapa-busca" class="card" style="display:none;">
-    <div id="evento-resumo" style="font-size:13px;color:#1a9e93;font-weight:700;margin-bottom:8px;"></div>
+    <div id="evento-resumo" style="font-size:13px;color:#4a6a35;font-weight:700;margin-bottom:8px;"></div>
     <h2>1. Quem é a criança?</h2>
     <div class="form-row">
       <div>
@@ -287,7 +287,7 @@
 <!-- Etiqueta de impressão (oculta na tela, visível só ao imprimir) -->
 <div id="etiqueta-print">
   <div class="etiq-crianca">
-    <div class="etiq-logo-linha">🧒 Sua Igreja · Levinho</div>
+    <div class="etiq-logo-linha">🧒 Ministério Semente · Levinho</div>
     <div class="etiq-nome" id="etiq-nome"></div>
     <div class="etiq-sala" id="etiq-sala"></div>
     <div class="etiq-codigo-inline" id="etiq-codigo"></div>
@@ -298,7 +298,7 @@
     <div class="etiq-canhoto-esq">
       <div id="etiq-canhoto-nome" style="font-weight:700;font-size:8pt;"></div>
       <div>Código de retirada</div>
-      <div>Levinho · Sua Igreja</div>
+      <div>Levinho · Ministério Semente</div>
     </div>
     <div class="etiq-canhoto-codigo" id="etiq-canhoto-codigo"></div>
   </div>

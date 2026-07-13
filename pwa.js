@@ -1,5 +1,5 @@
-﻿// ================================================================
-//  Sua Igreja — PWA Registration & Install Prompt
+// ================================================================
+//  Ministério Semente — PWA Registration & Install Prompt
 // ================================================================
 
 if ('serviceWorker' in navigator) {
@@ -24,12 +24,12 @@ function mostrarToastUpdate() {
   const toast = document.createElement('div')
   toast.innerHTML = `<span>🔄 Nova versão disponível!</span>
     <button onclick="navigator.serviceWorker.controller.postMessage('SKIP_WAITING')"
-      style="margin-left:12px;background:white;color:#2BBFB3;border:none;border-radius:8px;
+      style="margin-left:12px;background:white;color:#6b8e4e;border:none;border-radius:8px;
              padding:5px 12px;font-weight:700;cursor:pointer;font-size:13px;">Atualizar</button>
     <button onclick="this.parentElement.remove()"
       style="margin-left:6px;background:transparent;color:rgba(255,255,255,0.7);border:none;
              cursor:pointer;font-size:16px;padding:0 4px;">✕</button>`
-  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2BBFB3;color:white;padding:12px 20px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.2);display:flex;align-items:center;z-index:99999;font-size:14px;font-weight:600;white-space:nowrap;'
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#6b8e4e;color:white;padding:12px 20px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.2);display:flex;align-items:center;z-index:99999;font-size:14px;font-weight:600;white-space:nowrap;'
   document.body.appendChild(toast)
 }
 
@@ -41,7 +41,7 @@ window.addEventListener('beforeinstallprompt', e => {
     const btn = document.createElement('button')
     btn.id = 'pwa-install-btn'
     btn.innerHTML = '📲 Instalar app'
-    btn.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#2BBFB3;color:white;border:none;border-radius:12px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(43,191,179,.4);z-index:9998;'
+    btn.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#6b8e4e;color:white;border:none;border-radius:12px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(107,142,78,.4);z-index:9998;'
     btn.onclick = async () => {
       _deferredPrompt.prompt()
       await _deferredPrompt.userChoice
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
     'z-index:400',
     'width:42px',
     'height:42px',
-    'background:#2BBFB3',
+    'background:#6b8e4e',
     'border:none',
     'border-radius:10px',
     'cursor:pointer',

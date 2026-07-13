@@ -495,8 +495,8 @@ function criarMarkerMembroMesa(membro) {
   const svgPin = `
     <svg xmlns="http://www.w3.org/2000/svg" width="36" height="48" viewBox="0 0 36 48">
       <path d="M18 2 C9.163 2 2 9.163 2 18 C2 30.5 18 46 18 46 C18 46 34 30.5 34 18 C34 9.163 26.837 2 18 2 Z"
-        fill="white" stroke="#2BBFB3" stroke-width="3"/>
-      <circle cx="18" cy="17" r="8" fill="white" stroke="#2BBFB3" stroke-width="3"/>
+        fill="white" stroke="#6b8e4e" stroke-width="3"/>
+      <circle cx="18" cy="17" r="8" fill="white" stroke="#6b8e4e" stroke-width="3"/>
     </svg>
   `.trim();
 

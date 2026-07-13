@@ -1,4 +1,4 @@
-﻿const { getSession, setSession, deleteSession } = require('./session')
+const { getSession, setSession, deleteSession } = require('./session')
 const { salvarVisitante } = require('./supabase')
 const { enviarMensagem } = require('./whatsapp')
 
@@ -50,7 +50,7 @@ async function processar(telefone, textoRaw) {
     case ESTADOS.INICIO: {
       await enviarMensagem(
         telefone,
-        `Olá! Seja bem-vindo(a) à *Sua Igreja* 🙏\n\nFicamos felizes com sua visita! Para que possamos te conhecer melhor, vou fazer algumas perguntas rápidas.\n\nQual é o seu *nome completo*?`
+        `Olá! Seja bem-vindo(a) à *Ministério Semente* 🙏\n\nFicamos felizes com sua visita! Para que possamos te conhecer melhor, vou fazer algumas perguntas rápidas.\n\nQual é o seu *nome completo*?`
       )
       sessao.estado = ESTADOS.AGUARDANDO_NOME
       await setSession(telefone, sessao)
@@ -115,7 +115,7 @@ async function processar(telefone, textoRaw) {
       sessao.dados.bairro = texto
       await enviarMensagem(
         telefone,
-        `Como você *conheceu a Sua Igreja*? Responda com o número:\n\n1️⃣ Indicação de amigo ou familiar\n2️⃣ Instagram / redes sociais\n3️⃣ Passando pela rua\n4️⃣ Outro`
+        `Como você *conheceu a Ministério Semente*? Responda com o número:\n\n1️⃣ Indicação de amigo ou familiar\n2️⃣ Instagram / redes sociais\n3️⃣ Passando pela rua\n4️⃣ Outro`
       )
       sessao.estado = ESTADOS.AGUARDANDO_COMO_CONHECEU
       await setSession(telefone, sessao)
@@ -134,7 +134,7 @@ async function processar(telefone, textoRaw) {
       sessao.dados.comoConheceu = opcao
       await enviarMensagem(
         telefone,
-        `Deseja receber informações sobre as *programações da Sua Igreja* pelo WhatsApp?\n\n1️⃣ Sim, quero receber\n2️⃣ Não, obrigado`
+        `Deseja receber informações sobre as *programações da Ministério Semente* pelo WhatsApp?\n\n1️⃣ Sim, quero receber\n2️⃣ Não, obrigado`
       )
       sessao.estado = ESTADOS.AGUARDANDO_PROGRAMACOES
       await setSession(telefone, sessao)

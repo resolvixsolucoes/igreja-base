@@ -1,4 +1,4 @@
-﻿// ===== DETECTA SE É FLUXO DE CONVITE / RESET / CONFIRMACAO =====
+// ===== DETECTA SE É FLUXO DE CONVITE / RESET / CONFIRMACAO =====
 window.addEventListener('load', async () => {
   const hash   = window.location.hash
   const params = new URLSearchParams(hash.replace('#', '?'))
@@ -46,7 +46,7 @@ window.addEventListener('load', async () => {
     history.replaceState(null, '', window.location.pathname)
     const msg = tipo === 'email_change'
       ? '✅ E-mail alterado com sucesso!'
-      : '✅ E-mail confirmado com sucesso! Bem-vindo(a) à Sua Igreja.'
+      : '✅ E-mail confirmado com sucesso! Bem-vindo(a) à Ministério Semente.'
     mostrarMsg('login-erro', msg, 'sucesso')
 
     // Se o hash trouxe access_token, a sessão já está ativa → redireciona.

@@ -1,5 +1,5 @@
-﻿// ================================================================
-//  Sua Igreja — Service Worker (Network First)
+// ================================================================
+//  Ministério Semente — Service Worker (Network First)
 //  Sempre busca versão mais nova da internet.
 //  Usa cache apenas se estiver offline.
 // ================================================================

@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="pagina-slug"  content="agenda">
   <meta name="pagina-label" content="📅 Agenda">
-  <title>Agenda — Sua Igreja</title>
+  <title>Agenda — Ministério Semente</title>
   <link rel="stylesheet" href="style.css" />
   <style>
 
@@ -29,8 +29,8 @@
       margin-bottom: -2px;
       transition: all .2s;
     }
-    .aba-btn:hover  { color: #2BBFB3; }
-    .aba-btn.active { color: #2BBFB3; border-bottom-color: #2BBFB3; }
+    .aba-btn:hover  { color: #6b8e4e; }
+    .aba-btn.active { color: #6b8e4e; border-bottom-color: #6b8e4e; }
     .aba-badge {
       display: none;
       background: #dc2626;
@@ -69,13 +69,13 @@
       border-radius: 14px;
       padding: 20px 22px;
       box-shadow: 0 2px 8px rgba(0,0,0,.07);
-      border-left: 5px solid #2BBFB3;
+      border-left: 5px solid #6b8e4e;
       display: flex;
       flex-direction: column;
       gap: 8px;
       transition: box-shadow .2s;
     }
-    .evento-card:hover { box-shadow: 0 4px 16px rgba(43,191,179,.2); }
+    .evento-card:hover { box-shadow: 0 4px 16px rgba(107,142,78,.2); }
     .evento-card.ministerio { border-left-color: #7c5cbf; }
     .evento-card-header {
       display: flex;
@@ -86,7 +86,7 @@
     .evento-card h3 {
       font-size: 15px;
       font-weight: 700;
-      color: #1a2e2d;
+      color: #242e1a;
       margin: 0;
     }
     .evento-tipo-badge {
@@ -97,7 +97,7 @@
       white-space: nowrap;
       flex-shrink: 0;
     }
-    .badge-geral      { background: #e8faf9; color: #1a9e93; }
+    .badge-geral      { background: #eef5e2; color: #4a6a35; }
     .badge-ministerio { background: #f0ecff; color: #7c5cbf; }
     .evento-meta {
       font-size: 13px;
@@ -157,7 +157,7 @@
       outline: none;
     }
     .filtros-linha input:focus,
-    .filtros-linha select:focus { border-color: #2BBFB3; }
+    .filtros-linha select:focus { border-color: #6b8e4e; }
 
     /* ── CONSELHEIROS ────────────────────────────── */
     .conselheiros-grid {
@@ -176,15 +176,15 @@
       align-items: center;
       text-align: center;
       gap: 10px;
-      border-top: 4px solid #2BBFB3;
+      border-top: 4px solid #6b8e4e;
       transition: box-shadow .2s;
     }
-    .conselheiro-card:hover { box-shadow: 0 4px 16px rgba(43,191,179,.2); }
+    .conselheiro-card:hover { box-shadow: 0 4px 16px rgba(107,142,78,.2); }
     .conselheiro-avatar {
       width: 64px;
       height: 64px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #2BBFB3, #1a9e93);
+      background: linear-gradient(135deg, #6b8e4e, #4a6a35);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -198,7 +198,7 @@
       border-radius: 50%;
       object-fit: cover;
     }
-    .conselheiro-nome { font-size: 15px; font-weight: 700; color: #1a2e2d; }
+    .conselheiro-nome { font-size: 15px; font-weight: 700; color: #242e1a; }
     .conselheiro-desc { font-size: 12px; color: #999; }
     .conselheiro-status {
       font-size: 11px;
@@ -219,10 +219,10 @@
     .section-title {
       font-size: 17px;
       font-weight: 700;
-      color: #1a2e2d;
+      color: #242e1a;
       margin: 28px 0 16px;
       padding-bottom: 8px;
-      border-bottom: 2px solid #e8faf9;
+      border-bottom: 2px solid #eef5e2;
     }
     .disp-grid {
       display: grid;
@@ -235,7 +235,7 @@
       border-radius: 12px;
       padding: 16px 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,.06);
-      border-left: 4px solid #2BBFB3;
+      border-left: 4px solid #6b8e4e;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -245,7 +245,7 @@
       justify-content: space-between;
       align-items: center;
     }
-    .disp-card h4 { font-size: 14px; font-weight: 700; color: #1a2e2d; margin: 0; }
+    .disp-card h4 { font-size: 14px; font-weight: 700; color: #242e1a; margin: 0; }
     .disp-meta { font-size: 12px; color: #888; }
     .disp-slots {
       display: flex;
@@ -258,8 +258,8 @@
       font-weight: 600;
       padding: 3px 10px;
       border-radius: 20px;
-      background: #e8faf9;
-      color: #1a9e93;
+      background: #eef5e2;
+      color: #4a6a35;
     }
     .slot-pill.ocupado {
       background: #ffeaea;
@@ -276,7 +276,7 @@
       gap: 8px;
       font-size: 13px;
       font-weight: 700;
-      color: #1a9e93;
+      color: #4a6a35;
       text-transform: capitalize;
       padding: 10px 4px 6px;
       margin-top: 8px;
@@ -285,8 +285,8 @@
     }
     .agend-data-header:first-child { margin-top: 0; }
     .agend-data-count {
-      background: #e8faf9;
-      color: #1a9e93;
+      background: #eef5e2;
+      color: #4a6a35;
       font-size: 11px;
       font-weight: 700;
       padding: 2px 8px;
@@ -306,11 +306,11 @@
     .agend-hora {
       font-size: 20px;
       font-weight: 800;
-      color: #2BBFB3;
+      color: #6b8e4e;
       min-width: 54px;
     }
     .agend-info { flex: 1; }
-    .agend-info strong { display: block; font-size: 14px; color: #1a2e2d; }
+    .agend-info strong { display: block; font-size: 14px; color: #242e1a; }
     .agend-info span   { font-size: 12px; color: #888; }
     .agend-status {
       font-size: 11px;
@@ -392,7 +392,7 @@
     .cal-header h3 {
       font-size: 18px;
       font-weight: 800;
-      color: #1a2e2d;
+      color: #242e1a;
       margin: 0;
       text-transform: capitalize;
     }
@@ -402,17 +402,17 @@
       align-items: center;
     }
     .cal-nav-btn {
-      background: #f0fffe;
+      background: #f7faee;
       border: 1px solid #c0e8e6;
       border-radius: 8px;
       padding: 5px 12px;
       cursor: pointer;
       font-size: 16px;
-      color: #1a9e93;
+      color: #4a6a35;
       transition: all .2s;
       line-height: 1;
     }
-    .cal-nav-btn:hover { background: #2BBFB3; color: white; border-color: #2BBFB3; }
+    .cal-nav-btn:hover { background: #6b8e4e; color: white; border-color: #6b8e4e; }
     .cal-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -438,11 +438,11 @@
       position: relative;
       gap: 3px;
     }
-    .cal-day:hover:not(.vazio) { background: #f0fffe; }
+    .cal-day:hover:not(.vazio) { background: #f7faee; }
     .cal-day.vazio { cursor: default; pointer-events: none; }
-    .cal-day.hoje .cal-num { background: #2BBFB3; color: white; }
-    .cal-day.selecionado { background: #e8faf9; outline: 2px solid #2BBFB3; }
-    .cal-day.selecionado .cal-num { color: #1a9e93; font-weight: 800; }
+    .cal-day.hoje .cal-num { background: #6b8e4e; color: white; }
+    .cal-day.selecionado { background: #eef5e2; outline: 2px solid #6b8e4e; }
+    .cal-day.selecionado .cal-num { color: #4a6a35; font-weight: 800; }
     .cal-num {
       font-size: 13px;
       font-weight: 600;
@@ -469,7 +469,7 @@
     }
     .cal-limpar {
       font-size: 12px;
-      color: #2BBFB3;
+      color: #6b8e4e;
       cursor: pointer;
       background: none;
       border: none;
@@ -488,10 +488,10 @@
       gap: 8px;
     }
     .esc-grupo {
-      background: #f0fffe;
+      background: #f7faee;
       border-radius: 8px;
       padding: 8px 12px;
-      border-left: 3px solid #2BBFB3;
+      border-left: 3px solid #6b8e4e;
     }
     .esc-grupo-pend { background: #fffbeb; border-left-color: #f59e0b; }
     .esc-grupo-rec  { background: #fef2f2; border-left-color: #ef4444; }
@@ -507,7 +507,7 @@
     .esc-vol-nome {
       display: block;
       font-size: 13px;
-      color: #1a2e2d;
+      color: #242e1a;
       padding: 2px 0;
       font-weight: 500;
     }
@@ -539,7 +539,7 @@
       background: #f8f8f8;
       font-size: 12px;
       font-weight: 800;
-      color: #1a2e2d;
+      color: #242e1a;
       padding: 7px 12px;
       border-bottom: 1px solid #e8e8e8;
       letter-spacing: .2px;
@@ -600,7 +600,7 @@
       box-shadow: 0 2px 10px rgba(0,0,0,.07);
       padding: 18px 22px;
       margin-bottom: 20px;
-      border-left: 4px solid #2BBFB3;
+      border-left: 4px solid #6b8e4e;
       max-width: 100%;
     }
     .dia-eventos-header {
@@ -612,7 +612,7 @@
     .dia-eventos-header h3 {
       font-size: 15px;
       font-weight: 700;
-      color: #1a2e2d;
+      color: #242e1a;
       margin: 0;
     }
     .dia-ev-item {
@@ -629,12 +629,12 @@
       border-radius: 4px;
       flex-shrink: 0;
     }
-    .dia-ev-info strong { display: block; font-size: 14px; color: #1a2e2d; }
+    .dia-ev-info strong { display: block; font-size: 14px; color: #242e1a; }
     .dia-ev-info span   { font-size: 12px; color: #888; }
     .dia-ev-hora {
       font-size: 16px;
       font-weight: 800;
-      color: #2BBFB3;
+      color: #6b8e4e;
       min-width: 46px;
       text-align: right;
     }
@@ -666,12 +666,12 @@
       transition: box-shadow .2s, border-color .2s;
       border: 2px solid transparent;
     }
-    .mini-mes:hover { box-shadow: 0 3px 12px rgba(43,191,179,.2); border-color: #b2e8e4; }
-    .mini-mes.ativo { border-color: #2BBFB3; }
+    .mini-mes:hover { box-shadow: 0 3px 12px rgba(107,142,78,.2); border-color: #c1d8a4; }
+    .mini-mes.ativo { border-color: #6b8e4e; }
     .mini-mes-titulo {
       font-size: 12px;
       font-weight: 800;
-      color: #1a2e2d;
+      color: #242e1a;
       margin-bottom: 8px;
       text-transform: capitalize;
     }
@@ -698,13 +698,13 @@
       border-radius: 50%;
       position: relative;
     }
-    .mini-dia.hoje-mini { background: #2BBFB3; color: white; border-radius: 50%; }
-    .mini-dia.tem-evento { font-weight: 800; color: #1a2e2d; }
+    .mini-dia.hoje-mini { background: #6b8e4e; color: white; border-radius: 50%; }
+    .mini-dia.tem-evento { font-weight: 800; color: #242e1a; }
     .mini-dia.tem-evento::after {
       content: '';
       width: 3px; height: 3px;
       border-radius: 50%;
-      background: #2BBFB3;
+      background: #6b8e4e;
       position: absolute;
       bottom: 0; left: 50%;
       transform: translateX(-50%);
@@ -712,7 +712,7 @@
 
     /* ── REPETIÇÃO — bloco e preview ────────────── */
     .repeticao-bloco {
-      background: #f8fffe;
+      background: #f7faee;
       border: 1px solid #d0f0ee;
       border-radius: 10px;
       padding: 14px 16px;
@@ -722,12 +722,12 @@
       gap: 10px;
     }
     .repeticao-preview {
-      background: #f0fffe;
-      border: 1px solid #2BBFB3;
+      background: #f7faee;
+      border: 1px solid #6b8e4e;
       border-radius: 8px;
       padding: 10px 14px;
       font-size: 13px;
-      color: #1a9e93;
+      color: #4a6a35;
       display: none;
     }
     .repeticao-preview.erro {
@@ -910,11 +910,11 @@
     }
 
 </style>
-  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="theme-color" content="#6b8e4e" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <meta name="apple-mobile-web-app-title" content="Ministério Semente" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
@@ -924,7 +924,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="logo.png" alt="Sua Igreja" />
+      <img src="logo.png" alt="Ministério Semente" />
     </div>
   <nav id="sidebar-nav">
     <a href="dashboard.html">🏠 Dashboard</a>
@@ -1051,7 +1051,7 @@
 
       <div id="secao-conselheiros-admin">
         <div class="toolbar">
-          <h2 style="font-size:17px; color:#1a2e2d; margin:0;">👥 Conselheiros</h2>
+          <h2 style="font-size:17px; color:#242e1a; margin:0;">👥 Conselheiros</h2>
           <button class="btn btn-primary" id="btn-novo-conselheiro" data-acao="adicionar" onclick="abrirModalConselheiro()">
             + Novo Conselheiro
           </button>
@@ -1180,7 +1180,7 @@
       <!-- ── VISIBILIDADE NO SITE ── -->
       <div style="border-top:1px solid #eee;margin-top:14px;padding-top:14px;">
         <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:700;color:#333;">
-          <input type="checkbox" id="inp-ev-publico" onchange="togglePublico()" style="width:18px;height:18px;accent-color:#2BBFB3;cursor:pointer;" />
+          <input type="checkbox" id="inp-ev-publico" onchange="togglePublico()" style="width:18px;height:18px;accent-color:#6b8e4e;cursor:pointer;" />
           🌐 Visível no site público
         </label>
         <p style="font-size:12px;color:#888;margin-top:4px;margin-left:28px;">
@@ -1188,7 +1188,7 @@
         </p>
       </div>
 
-      <div id="bloco-publico" style="display:none;background:#f8fffe;border:1.5px solid #b2e8e4;border-radius:12px;padding:16px;margin-top:10px;display:none;flex-direction:column;gap:12px;">
+      <div id="bloco-publico" style="display:none;background:#f7faee;border:1.5px solid #c1d8a4;border-radius:12px;padding:16px;margin-top:10px;display:none;flex-direction:column;gap:12px;">
         <div>
           <label style="font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:4px;">Descrição curta (para o card do site)</label>
           <textarea id="inp-ev-descricao" rows="3" placeholder="Ex: Venha participar desta conferência especial para toda a família!" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid #d0e8e6;border-radius:8px;font-family:inherit;font-size:13px;resize:vertical;"></textarea>
@@ -1310,7 +1310,7 @@
     <div class="modal" style="max-width:560px;">
       <div style="text-align:center;">
         <div style="font-size:48px; margin-bottom:10px;">🤝</div>
-        <h2 id="agend-modal-nome" style="font-size:18px; color:#1a2e2d;"></h2>
+        <h2 id="agend-modal-nome" style="font-size:18px; color:#242e1a;"></h2>
         <p id="agend-modal-info" style="color:#888; font-size:13px; margin:8px 0 20px;"></p>
       </div>
 
@@ -1325,17 +1325,17 @@
 
       <!-- HISTÓRICO DE RELATÓRIOS DESTA PESSOA -->
       <div id="hist-relatorios-wrap" style="display:none; margin-bottom:14px;">
-        <div style="font-weight:700; color:#1a2e2d; font-size:14px; margin-bottom:8px;">
+        <div style="font-weight:700; color:#242e1a; font-size:14px; margin-bottom:8px;">
           📚 Histórico desta pessoa
         </div>
         <div id="hist-relatorios-lista"
           style="max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;
-                 background:#f8fffe; border:1px solid #d0f0ee; border-radius:10px; padding:10px;">
+                 background:#f7faee; border:1px solid #d0f0ee; border-radius:10px; padding:10px;">
         </div>
       </div>
 
       <!-- RELATÓRIO DESTE ATENDIMENTO -->
-      <label style="font-weight:600; color:#1a2e2d; font-size:14px; display:block; margin-bottom:6px;">
+      <label style="font-weight:600; color:#242e1a; font-size:14px; display:block; margin-bottom:6px;">
         📝 Relatório deste atendimento
       </label>
       <textarea id="inp-relatorio" rows="6"
@@ -1356,7 +1356,7 @@
     <div class="modal" style="max-width:780px;width:95%;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;">
         <div>
-          <h2 id="modal-inscricoes-titulo" style="font-size:17px;color:#1a2e2d;margin:0;">Inscrições</h2>
+          <h2 id="modal-inscricoes-titulo" style="font-size:17px;color:#242e1a;margin:0;">Inscrições</h2>
           <p id="modal-inscricoes-total" style="font-size:13px;color:#888;margin:4px 0 0;"></p>
         </div>
         <button class="btn btn-secondary" onclick="fecharModalInscricoes()" style="flex-shrink:0;">✕ Fechar</button>
@@ -1393,7 +1393,7 @@
   <!-- ══ MODAL: CONFIRMAR ══ -->
   <div class="modal-overlay" id="modal-confirm">
     <div class="modal" style="max-width:420px;">
-      <h2 id="confirm-titulo" style="font-size:17px; color:#1a2e2d; margin-bottom:8px;">
+      <h2 id="confirm-titulo" style="font-size:17px; color:#242e1a; margin-bottom:8px;">
         Confirmar
       </h2>
       <p id="confirm-msg" style="color:#444; font-size:14px; line-height:1.5; white-space:pre-line;"></p>

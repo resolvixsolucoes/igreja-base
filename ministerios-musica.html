@@ -1,16 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="pagina-slug"  content="ministerios_musica">
   <meta name="pagina-label" content="🎵 Ministério — Música">
-  <title>Música — Sua Igreja</title>
+  <title>Música — Ministério Semente</title>
   <link rel="stylesheet" href="style.css" />
   <style>
 
     .ministerio-hero {
-      background: linear-gradient(135deg, #2BBFB3, #1a9e93);
+      background: linear-gradient(135deg, #6b8e4e, #4a6a35);
       border-radius: 16px;
       padding: 28px 32px;
       color: white;
@@ -80,8 +80,8 @@
       transition: all .2s;
       border-radius: 0;
     }
-    .aba-btn:hover  { color: #2BBFB3; }
-    .aba-btn.active { color: #2BBFB3; border-bottom-color: #2BBFB3; }
+    .aba-btn:hover  { color: #6b8e4e; }
+    .aba-btn.active { color: #6b8e4e; border-bottom-color: #6b8e4e; }
     .aba-content        { display: none; }
     .aba-content.active { display: block; }
 
@@ -101,7 +101,7 @@
       margin-top: 8px;
     }
     .lider-card {
-      background: linear-gradient(135deg, #2BBFB3, #1a9e93);
+      background: linear-gradient(135deg, #6b8e4e, #4a6a35);
       color: white;
       border-radius: 14px;
       padding: 20px 24px;
@@ -128,7 +128,7 @@
     .btn-rm-lider:hover { color: white; }
 
     .lider-form-inline {
-      background: #f8fffe;
+      background: #f7faee;
       border: 1px solid #d0f0ee;
       border-radius: 14px;
       padding: 20px 24px;
@@ -136,7 +136,7 @@
       display: none;
     }
     .lider-form-inline.open { display: block; }
-    .lider-form-inline h3 { font-size: 15px; margin: 0 0 16px; color: #1a9e93; }
+    .lider-form-inline h3 { font-size: 15px; margin: 0 0 16px; color: #4a6a35; }
     .lider-form-row {
       display: flex;
       gap: 12px;
@@ -154,7 +154,7 @@
       min-width: 220px;
     }
     .lider-form-row select:focus,
-    .lider-form-row input:focus { border-color: #2BBFB3; outline: none; }
+    .lider-form-row input:focus { border-color: #6b8e4e; outline: none; }
 
     .cal-wrap {
       background: white;
@@ -170,18 +170,18 @@
       justify-content: space-between;
       margin-bottom: 16px;
     }
-    .cal-header h3 { font-size: 16px; margin: 0; color: #1a2e2d; }
+    .cal-header h3 { font-size: 16px; margin: 0; color: #242e1a; }
     .cal-nav-btn {
-      background: #f0fffe;
+      background: #f7faee;
       border: 1px solid #c0e8e6;
       border-radius: 8px;
       padding: 6px 14px;
       cursor: pointer;
       font-size: 18px;
-      color: #1a9e93;
+      color: #4a6a35;
       transition: background .2s;
     }
-    .cal-nav-btn:hover { background: #2BBFB3; color: white; }
+    .cal-nav-btn:hover { background: #6b8e4e; color: white; }
     .cal-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -210,23 +210,23 @@
       padding: 6px 4px;
       gap: 3px;
     }
-    .cal-day:hover { background: #f0fffe; }
+    .cal-day:hover { background: #f7faee; }
     .cal-day.vazio { cursor: default; background: transparent !important; }
-    .cal-day.hoje  { background: #e8faf9; color: #1a9e93; }
-    .cal-day.selecionado { background: #2BBFB3 !important; color: white !important; }
+    .cal-day.hoje  { background: #eef5e2; color: #4a6a35; }
+    .cal-day.selecionado { background: #6b8e4e !important; color: white !important; }
     .cal-day.tem-evento::after {
       content: '';
       display: block;
       width: 6px; height: 6px;
-      background: #2BBFB3;
+      background: #6b8e4e;
       border-radius: 50%;
       margin-top: 2px;
     }
     .cal-day.selecionado.tem-evento::after { background: white; }
     .cal-day-num { font-size: 13px; font-weight: 700; }
     .cal-ev-mini {
-      background: rgba(43,191,179,.15);
-      color: #1a9e93;
+      background: rgba(107,142,78,.15);
+      color: #4a6a35;
       border-radius: 4px;
       font-size: 9px;
       font-weight: 700;
@@ -257,7 +257,7 @@
       gap: 10px;
       margin-bottom: 16px;
     }
-    .dia-painel-header h4 { font-size: 15px; margin: 0; color: #1a2e2d; }
+    .dia-painel-header h4 { font-size: 15px; margin: 0; color: #242e1a; }
 
     .evento-card {
       background: white;
@@ -273,10 +273,10 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-    .evento-head h3 { margin: 0; font-size: 16px; color: #1a2e2d; }
+    .evento-head h3 { margin: 0; font-size: 16px; color: #242e1a; }
     .evento-data-badge {
-      background: #e8faf9;
-      color: #1a9e93;
+      background: #eef5e2;
+      color: #4a6a35;
       border-radius: 20px;
       padding: 4px 12px;
       font-size: 13px;
@@ -309,7 +309,7 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-    .escala-item-nome { font-weight: 600; color: #1a2e2d; }
+    .escala-item-nome { font-weight: 600; color: #242e1a; }
     .escala-item-tel  { font-size: 12px; color: #aaa; margin-left: 8px; }
 
     .disp-section {
@@ -327,12 +327,12 @@
       gap: 10px;
       margin-bottom: 16px;
     }
-    .disp-section-header h4 { font-size: 15px; margin: 0; color: #1a2e2d; }
+    .disp-section-header h4 { font-size: 15px; margin: 0; color: #242e1a; }
     .disp-dia-group { margin-bottom: 16px; }
     .disp-dia-titulo {
       font-size: 12px;
       font-weight: 700;
-      color: #1a9e93;
+      color: #4a6a35;
       text-transform: uppercase;
       letter-spacing: .04em;
       margin-bottom: 8px;
@@ -341,18 +341,18 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: #f8fffe;
+      background: #f7faee;
       border: 1px solid #d0f0ee;
       border-radius: 10px;
       padding: 10px 14px;
       margin-bottom: 6px;
       flex-wrap: wrap;
     }
-    .disp-nome  { font-weight: 600; color: #1a2e2d; font-size: 14px; flex: 1; }
+    .disp-nome  { font-weight: 600; color: #242e1a; font-size: 14px; flex: 1; }
     .disp-obs   { font-size: 12px; color: #888; font-style: italic; }
     .badge-periodo {
-      background: #e8faf9;
-      color: #1a9e93;
+      background: #eef5e2;
+      color: #4a6a35;
       border-radius: 20px;
       padding: 3px 10px;
       font-size: 11px;
@@ -370,17 +370,17 @@
       font-size: 13px;
       transition: background .15s;
     }
-    .btn-disp-editar:hover  { background: #e8faf9; border-color: #2BBFB3; }
+    .btn-disp-editar:hover  { background: #eef5e2; border-color: #6b8e4e; }
     .btn-disp-excluir:hover { background: #fee2e2; border-color: #ef4444; }
 
     .aviso-form-inline {
-      background: #f8fffe;
+      background: #f7faee;
       border: 1px solid #d0f0ee;
       border-radius: 14px;
       padding: 20px 24px;
       margin-bottom: 24px;
     }
-    .aviso-form-inline h3 { font-size: 15px; margin: 0 0 16px; color: #1a9e93; }
+    .aviso-form-inline h3 { font-size: 15px; margin: 0 0 16px; color: #4a6a35; }
     .aviso-form-inline .form-group {
       display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px;
     }
@@ -397,7 +397,7 @@
       width: 100%;
     }
     .aviso-form-inline input:focus,
-    .aviso-form-inline textarea:focus { border-color: #2BBFB3; outline: none; }
+    .aviso-form-inline textarea:focus { border-color: #6b8e4e; outline: none; }
     .aviso-form-inline .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
     .aviso-form-inline .form-row > .form-group { flex: 1; min-width: 180px; }
     .aviso-card {
@@ -406,15 +406,15 @@
       padding: 20px 24px;
       margin-bottom: 14px;
       box-shadow: 0 2px 10px rgba(0,0,0,.07);
-      border-left: 4px solid #2BBFB3;
+      border-left: 4px solid #6b8e4e;
     }
     .aviso-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-    .aviso-head h3  { margin: 0; font-size: 15px; color: #1a2e2d; }
+    .aviso-head h3  { margin: 0; font-size: 15px; color: #242e1a; }
     .aviso-meta     { font-size: 12px; color: #aaa; margin: 4px 0 10px; }
     .aviso-texto    { font-size: 14px; color: #444; line-height: 1.6; }
     .aviso-anexo {
       display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 10px; font-size: 13px; color: #2BBFB3;
+      margin-top: 10px; font-size: 13px; color: #6b8e4e;
       font-weight: 600; text-decoration: none;
     }
     .aviso-anexo:hover { text-decoration: underline; }
@@ -423,16 +423,16 @@
       color: #dc3545; font-size: 18px; cursor: pointer; flex-shrink: 0;
     }
     .upload-area {
-      border: 2px dashed #2BBFB3;
+      border: 2px dashed #6b8e4e;
       border-radius: 10px;
       padding: 14px;
       text-align: center;
       cursor: pointer;
-      color: #2BBFB3;
+      color: #6b8e4e;
       font-size: 14px;
       transition: background .2s;
     }
-    .upload-area:hover { background: #f0fffe; }
+    .upload-area:hover { background: #f7faee; }
 
     .avisos-destaque-wrap { margin: 0 0 28px; }
     .avisos-destaque-titulo {
@@ -454,10 +454,10 @@
       overflow: hidden;
       cursor: pointer;
       transition: box-shadow .2s, transform .15s;
-      border-left: 4px solid #2BBFB3;
+      border-left: 4px solid #6b8e4e;
     }
     .aviso-destaque-card:hover {
-      box-shadow: 0 6px 24px rgba(43,191,179,.22);
+      box-shadow: 0 6px 24px rgba(107,142,78,.22);
       transform: translateY(-2px);
     }
     .aviso-destaque-img {
@@ -469,7 +469,7 @@
     }
     .aviso-destaque-body { padding: 16px 20px; }
     .aviso-destaque-body h3 {
-      font-size: 15px; font-weight: 700; color: #1a2e2d; margin: 0 0 4px;
+      font-size: 15px; font-weight: 700; color: #242e1a; margin: 0 0 4px;
     }
     .aviso-destaque-meta { font-size: 12px; color: #aaa; margin-bottom: 10px; }
     .aviso-destaque-texto {
@@ -479,7 +479,7 @@
       text-overflow: ellipsis; white-space: pre-wrap;
     }
     .aviso-destaque-rodape {
-      font-size: 12px; color: #2BBFB3; font-weight: 600; margin-top: 10px;
+      font-size: 12px; color: #6b8e4e; font-weight: 600; margin-top: 10px;
     }
 
     .filtros-wrap {
@@ -496,14 +496,14 @@
       border-radius: 8px; font-size: 14px; outline: none;
     }
     .filtros-wrap input:focus,
-    .filtros-wrap select:focus { border-color: #2BBFB3; }
+    .filtros-wrap select:focus { border-color: #6b8e4e; }
     .export-wrap { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
     .stats-row   { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
     .stat-box {
       background: white; border-radius: 12px; padding: 14px 20px;
       text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.07); min-width: 110px;
     }
-    .stat-box .stat-num   { font-size: 28px; font-weight: 800; color: #2BBFB3; }
+    .stat-box .stat-num   { font-size: 28px; font-weight: 800; color: #6b8e4e; }
     .stat-box .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
     .stat-box.verde    .stat-num { color: #10b981; }
     .stat-box.vermelho .stat-num { color: #ef4444; }
@@ -523,7 +523,7 @@
       margin-top: 8px; display: flex; align-items: center; gap: 8px;
     }
     .link-box .btn-copiar {
-      background: #2BBFB3; color: white; border: none; border-radius: 6px;
+      background: #6b8e4e; color: white; border: none; border-radius: 6px;
       padding: 4px 10px; font-size: 12px; cursor: pointer; white-space: nowrap;
     }
     .empty-state { text-align: center; color: #bbb; padding: 50px 20px; font-size: 15px; }
@@ -532,9 +532,9 @@
       border: 1px solid #ddd; font-size: 14px; resize: vertical;
       font-family: inherit; box-sizing: border-box;
     }
-    .modal textarea:focus { border-color: #2BBFB3; outline: none; }
+    .modal textarea:focus { border-color: #6b8e4e; outline: none; }
     .sel-todos {
-      font-size: 13px; color: #2BBFB3; cursor: pointer;
+      font-size: 13px; color: #6b8e4e; cursor: pointer;
       font-weight: 600; margin-bottom: 6px; display: inline-block;
     }
 
@@ -545,11 +545,11 @@
     .confirm-card {
       background: white; border-radius: 20px; padding: 40px;
       max-width: 460px; width: 100%; text-align: center;
-      box-shadow: 0 8px 32px rgba(0,0,0,.12); border-top: 5px solid #2BBFB3;
+      box-shadow: 0 8px 32px rgba(0,0,0,.12); border-top: 5px solid #6b8e4e;
     }
     .confirm-card .big-icon  { font-size: 60px; margin-bottom: 12px; }
-    .confirm-card h2         { font-size: 22px; margin-bottom: 8px; color: #1a2e2d; }
-    .confirm-card .conf-data { color: #2BBFB3; font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .confirm-card h2         { font-size: 22px; margin-bottom: 8px; color: #242e1a; }
+    .confirm-card .conf-data { color: #6b8e4e; font-weight: 700; font-size: 15px; margin-bottom: 6px; }
     .confirm-card .conf-desc { color: #888; font-size: 14px; margin-bottom: 24px; }
     .confirm-btns            { display: flex; gap: 12px; justify-content: center; }
 
@@ -562,7 +562,7 @@
       position: relative;
       box-shadow: 0 8px 32px rgba(0,0,0,.15);
     }
-    .modal-box h2 { font-size: 17px; margin: 0 0 20px; color: #1a2e2d; }
+    .modal-box h2 { font-size: 17px; margin: 0 0 20px; color: #242e1a; }
     .modal-box .form-group {
       display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;
     }
@@ -579,7 +579,7 @@
       box-sizing: border-box;
     }
     .modal-box select:focus,
-    .modal-box textarea:focus { border-color: #2BBFB3; }
+    .modal-box textarea:focus { border-color: #6b8e4e; }
     .modal-close {
       position: absolute; top: 14px; right: 16px;
       background: none; border: none; font-size: 20px;
@@ -604,7 +604,7 @@
       border-radius: 10px; font-size: 14px; font-family: inherit;
       transition: border-color .2s;
     }
-    .playlist-busca:focus { border-color: #2BBFB3; outline: none; }
+    .playlist-busca:focus { border-color: #6b8e4e; outline: none; }
     .playlist-grid {
       display: flex;
       flex-direction: column;
@@ -623,7 +623,7 @@
       transition: background .15s;
     }
     .musica-card:last-child { border-bottom: none; }
-    .musica-card:hover { background: #f8fffe; }
+    .musica-card:hover { background: #f7faee; }
     .musica-thumb {
       width: 44px; height: 44px; flex-shrink: 0;
       border-radius: 8px;
@@ -641,7 +641,7 @@
       flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;
     }
     .musica-titulo {
-      font-size: 14px; font-weight: 700; color: #1a2e2d;
+      font-size: 14px; font-weight: 700; color: #242e1a;
       margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .musica-artista {
@@ -650,7 +650,7 @@
     }
     .musica-tags { display: flex; gap: 4px; flex-shrink: 0; }
     .musica-tag {
-      background: #e8faf9; color: #1a9e93;
+      background: #eef5e2; color: #4a6a35;
       border-radius: 20px; padding: 2px 8px;
       font-size: 11px; font-weight: 600; white-space: nowrap;
     }
@@ -668,7 +668,7 @@
       border-radius: 7px; padding: 5px 8px; cursor: pointer;
       font-size: 12px; transition: background .15s; color: #888;
     }
-    .btn-editar-musica:hover  { background: #e8faf9; border-color: #2BBFB3; color: #2BBFB3; }
+    .btn-editar-musica:hover  { background: #eef5e2; border-color: #6b8e4e; color: #6b8e4e; }
     .btn-excluir-musica:hover { background: #fee2e2; border-color: #ef4444; color: #ef4444; }
     .btn-play-musica {
       width: 30px; height: 30px; border-radius: 50%;
@@ -678,7 +678,7 @@
       transition: background .2s, transform .15s;
     }
     .btn-play-musica:hover { background: #158a3c; transform: scale(1.1); }
-    .btn-play-musica.ativo { background: #1a9e93; }
+    .btn-play-musica.ativo { background: #4a6a35; }
     .musica-player-row {
       display: none;
       padding: 0 16px 10px 92px;
@@ -690,16 +690,16 @@
       width: 100%; height: 80px; border: none; border-radius: 10px;
     }
     .playlist-culto-wrap {
-      background: linear-gradient(135deg, #f0fffe, #e8faf9);
+      background: linear-gradient(135deg, #f7faee, #eef5e2);
       border: 1.5px solid #b0e8e4; border-radius: 16px;
       padding: 20px 24px; margin-bottom: 24px;
     }
     .culto-sel-grid { display: flex; flex-wrap: wrap; gap: 8px; }
     .culto-musica-pill {
       display: flex; align-items: center; gap: 8px;
-      background: white; border: 1.5px solid #2BBFB3;
+      background: white; border: 1.5px solid #6b8e4e;
       border-radius: 20px; padding: 5px 12px; font-size: 13px; font-weight: 600;
-      color: #1a9e93;
+      color: #4a6a35;
     }
     .culto-musica-pill button {
       background: none; border: none; cursor: pointer;
@@ -714,14 +714,14 @@
       font-size: 14px; font-family: inherit; box-sizing: border-box; width: 100%;
     }
     .form-group-pl input:focus, .form-group-pl textarea:focus,
-    .form-group-pl select:focus { border-color: #2BBFB3; outline: none; }
+    .form-group-pl select:focus { border-color: #6b8e4e; outline: none; }
     .spotify-preview {
       display: flex; align-items: center; gap: 10px;
-      background: #f8fffe; border: 1px solid #d0f0ee;
+      background: #f7faee; border: 1px solid #d0f0ee;
       border-radius: 10px; padding: 10px 14px; margin-top: 6px;
     }
     .spotify-preview img { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; }
-    .spotify-preview-info strong { font-size: 13px; color: #1a2e2d; display: block; }
+    .spotify-preview-info strong { font-size: 13px; color: #242e1a; display: block; }
     .spotify-preview-info span   { font-size: 12px; color: #888; }
 
     /* ── CALENDÁRIO DA PLAYLIST (compacto) ───────────── */
@@ -893,11 +893,11 @@
   .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
 </style>
 
-  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="theme-color" content="#6b8e4e" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <meta name="apple-mobile-web-app-title" content="Ministério Semente" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
@@ -905,7 +905,7 @@
 <body>
 
 <aside class="sidebar">
-  <div class="logo"><img src="logo.png" alt="Sua Igreja" /></div>
+  <div class="logo"><img src="logo.png" alt="Ministério Semente" /></div>
   <nav id="sidebar-nav">
     <a href="dashboard.html">🏠 Dashboard</a>
     <a href="membros.html">👥 Membros</a>
@@ -1186,27 +1186,27 @@
     <div class="aba-content" id="aba-playlist" data-aba="playlist">
 
       <div class="playlist-culto-wrap" id="playlist-culto-wrap">
-        <h3 style="font-size:15px;color:#1a9e93;margin:0 0 14px;display:flex;align-items:center;gap:8px;">
+        <h3 style="font-size:15px;color:#4a6a35;margin:0 0 14px;display:flex;align-items:center;gap:8px;">
           🎶 Vincular repertório a um evento
         </h3>
 
         <div class="cal-wrap" style="margin-bottom:16px;">
           <div class="cal-header">
             <button class="cal-nav-btn" onclick="mudarMesPlaylist(-1)">‹</button>
-            <h3 id="pl-cal-titulo" style="font-size:15px;margin:0;color:#1a2e2d;"></h3>
+            <h3 id="pl-cal-titulo" style="font-size:15px;margin:0;color:#242e1a;"></h3>
             <button class="cal-nav-btn" onclick="mudarMesPlaylist(1)">›</button>
           </div>
           <div class="cal-grid" id="pl-cal-grid"></div>
         </div>
 
         <div id="pl-evento-selecionado"
-          style="display:none;background:white;border:2px solid #2BBFB3;
+          style="display:none;background:white;border:2px solid #6b8e4e;
                  border-radius:12px;padding:12px 16px;margin-bottom:14px;
                  align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
           <div>
             <span style="font-size:12px;color:#aaa;display:block;">Evento selecionado</span>
-            <span id="pl-evento-nome" style="font-size:14px;font-weight:700;color:#1a2e2d;"></span>
-            <span id="pl-evento-data" style="font-size:12px;color:#2BBFB3;margin-left:8px;"></span>
+            <span id="pl-evento-nome" style="font-size:14px;font-weight:700;color:#242e1a;"></span>
+            <span id="pl-evento-data" style="font-size:12px;color:#6b8e4e;margin-left:8px;"></span>
           </div>
           <button onclick="limparEventoPlaylist()"
             style="background:none;border:none;color:#aaa;font-size:18px;cursor:pointer;line-height:1;">✕</button>
@@ -1312,7 +1312,7 @@
   <div class="modal" style="text-align:center;">
     <div style="font-size:48px;margin-bottom:10px;">🎵</div>
     <h2 id="mse-nome">Evento</h2>
-    <p id="mse-data" style="color:#2BBFB3;font-weight:700;margin:6px 0 4px;"></p>
+    <p id="mse-data" style="color:#6b8e4e;font-weight:700;margin:6px 0 4px;"></p>
     <p id="mse-vol"  style="color:#888;font-size:14px;margin-bottom:16px;"></p>
     <div id="mse-funcoes-wrap" style="text-align:left;margin-bottom:16px;display:none;">
       <p style="font-size:13px;font-weight:600;color:#374151;margin-bottom:10px;">🎵 Vai executar neste evento:</p>
@@ -1361,7 +1361,7 @@
     </div>
     <div style="padding:28px 32px;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
-        <h2 id="modal-av-titulo" style="margin:0; font-size:20px; color:#1a2e2d;"></h2>
+        <h2 id="modal-av-titulo" style="margin:0; font-size:20px; color:#242e1a;"></h2>
         <button onclick="fecharAvisoExpandido()"
           style="background:none; border:none; font-size:22px; cursor:pointer; color:#aaa; flex-shrink:0; line-height:1;">✕</button>
       </div>
@@ -1383,15 +1383,15 @@
 <div class="modal-overlay" id="modal-escala-geral">
   <div class="modal" style="max-width:540px;">
     <h2>👥 Escalar Voluntários</h2>
-    <p id="escala-geral-evento-nome" style="font-weight:700;color:#2BBFB3;margin-bottom:4px;"></p>
+    <p id="escala-geral-evento-nome" style="font-weight:700;color:#6b8e4e;margin-bottom:4px;"></p>
     <p id="escala-geral-evento-data" style="font-size:13px;color:#888;margin-bottom:16px;"></p>
     <label style="margin-bottom:10px;display:flex;align-items:center;gap:10px;">
-      <span style="cursor:pointer;color:#2BBFB3;font-size:13px;font-weight:600;"
+      <span style="cursor:pointer;color:#6b8e4e;font-size:13px;font-weight:600;"
         onclick="toggleTodosGeral()">Selecionar todos</span>
     </label>
     <div class="check-list" id="check-vols-geral" style="max-height:260px;overflow-y:auto;margin-bottom:16px;"></div>
     <div id="escala-geral-links-wrap" style="display:none;margin-bottom:16px;">
-      <div style="font-size:13px;font-weight:700;color:#1a2e2d;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #e8e8e8;">
+      <div style="font-size:13px;font-weight:700;color:#242e1a;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #e8e8e8;">
         🔗 Links de confirmação — envie para cada voluntário:
       </div>
       <div id="escala-geral-links-lista"></div>

@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Meu Painel — Sua Igreja</title>
+  <title>Meu Painel — Ministério Semente</title>
   <link rel="stylesheet" href="plataforma.css"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
 </head>
@@ -17,7 +17,7 @@
   <!-- SIDEBAR -->
   <aside class="plat-sidebar" id="plat-sidebar">
     <div class="plat-sidebar-logo">
-      <img src="/logo.png" alt="Sua Igreja"/>
+      <img src="/logo.png" alt="Ministério Semente"/>
       <span>Plataforma de Cursos</span>
     </div>
     <nav class="plat-nav">
@@ -62,7 +62,7 @@
       <div class="dash-boas-vindas plat-card" id="dash-boas-vindas">
         <div class="dash-bv-texto">
           <h2 id="dash-bv-nome">Olá!</h2>
-          <p id="dash-bv-sub">Bem-vindo à plataforma de cursos da Sua Igreja.</p>
+          <p id="dash-bv-sub">Bem-vindo à plataforma de cursos da Ministério Semente.</p>
         </div>
         <div class="dash-bv-stats" id="dash-bv-stats"></div>
       </div>
@@ -195,8 +195,8 @@
     const primeiroNome = aluno.nome?.split(' ')[0] || 'Aluno'
     document.getElementById('dash-bv-nome').textContent = `Olá, ${primeiroNome}! 👋`
     document.getElementById('dash-bv-sub').textContent = aluno.is_membro
-      ? 'Você é membro da Sua Igreja — acesso gratuito a todos os cursos!'
-      : 'Bem-vindo à plataforma de cursos da Sua Igreja.'
+      ? 'Você é membro da Ministério Semente — acesso gratuito a todos os cursos!'
+      : 'Bem-vindo à plataforma de cursos da Ministério Semente.'
     document.getElementById('plat-user-tipo').textContent = aluno.is_membro ? '⭐ Membro' : 'Aluno'
 
     // Busca matrículas
@@ -346,7 +346,7 @@
 }
 .dash-curso-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 28px rgba(43,191,179,0.15);
+  box-shadow: 0 8px 28px rgba(107,142,78,0.15);
 }
 .dash-curso-thumb {
   width: 100%; aspect-ratio: 16/9;
@@ -385,7 +385,7 @@
   transition: background 0.2s, box-shadow 0.2s;
   margin-bottom: 10px;
 }
-.dash-continuar-card:hover { background: var(--brand-light); box-shadow: 0 2px 12px rgba(43,191,179,0.10); }
+.dash-continuar-card:hover { background: var(--brand-light); box-shadow: 0 2px 12px rgba(107,142,78,0.10); }
 .dash-continuar-thumb {
   width: 120px; height: 68px; border-radius: 8px; flex-shrink: 0;
   background: linear-gradient(135deg, var(--brand-deep), var(--brand));

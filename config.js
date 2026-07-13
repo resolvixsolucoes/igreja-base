@@ -29,9 +29,9 @@ window.APP_CONFIG = {
 
   // Cores da identidade visual (aceita hex ou qualquer valor CSS)
   CORES: {
-    primaria:   '#0EA5E9',
-    secundaria: '#0284C7',
-    destaque:   '#F59E0B',
+    primaria:   '#6b8e4e',   // verde-salvia (brand)
+    secundaria: '#4a6a35',   // verde profundo
+    destaque:   '#c1d8a4',   // verde suave
   },
 
   // Contatos institucionais

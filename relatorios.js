@@ -25,7 +25,7 @@ let rfLancamentos = []
 let rfModo = 'saidas' // 'entradas' | 'saidas' | 'saldo'
 let rfChartPizza = null
 let rfChartBarras = null
-const RF_COR_ENTRADA = '#2BBFB3'
+const RF_COR_ENTRADA = '#6b8e4e'
 const RF_COR_SAIDA   = '#e85a5a'
 
 function rfValorEmCentavos(v) { return Math.round(parseFloat(v || 0) * 100) }
@@ -381,7 +381,7 @@ function renderGraficoFrequenciaCultos() {
     type: 'bar',
     data: {
       labels: comDado.map(e => new Date(e.data + 'T00:00:00').toLocaleDateString('pt-BR')),
-      datasets: [{ label: 'Total geral', data: comDado.map(e => e.totalGeral), backgroundColor: '#2BBFB3' }],
+      datasets: [{ label: 'Total geral', data: comDado.map(e => e.totalGeral), backgroundColor: '#6b8e4e' }],
     },
     options: {
       responsive: true, maintainAspectRatio: false,

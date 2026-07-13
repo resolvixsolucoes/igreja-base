@@ -1,6 +1,6 @@
-﻿// ========================================================
+// ========================================================
 // auth.js — Guard de autenticação + controle de permissões
-// Sua Igreja
+// Ministério Semente
 // ========================================================
 
 const PAGINA_SLUG = {
@@ -213,14 +213,14 @@ function redirecionarParaPrimeiraPermitida() {
       text-align: center; gap: 16px; padding: 40px 20px;
     ">
       <span style="font-size: 64px;">🔒</span>
-      <h2 style="color: #1a2e2d; margin: 0;">Sem permissões</h2>
+      <h2 style="color: #242e1a; margin: 0;">Sem permissões</h2>
       <p style="color: #888; margin: 0;">
         Sua conta não possui nenhum acesso liberado.<br>
         Contate o administrador.
       </p>
       <a href="login.html"
         style="
-          background: #2BBFB3; color: white;
+          background: #6b8e4e; color: white;
           padding: 10px 24px; border-radius: 8px;
           text-decoration: none; font-weight: 600;
         ">
@@ -316,7 +316,7 @@ function injetarSidebar() {
       : `<span style="
            display:inline-flex;align-items:center;justify-content:center;
            width:28px;height:28px;border-radius:50%;
-           background:#2BBFB3;color:white;font-size:13px;font-weight:700;
+           background:#6b8e4e;color:white;font-size:13px;font-weight:700;
          ">${(nome)[0].toUpperCase()}</span>`
 
     footer.innerHTML = `

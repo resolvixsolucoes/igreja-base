@@ -518,7 +518,7 @@ let chartPizza = null
 let chartBarras = null
 let relatorioModo = 'saidas' // 'entradas' | 'saidas' | 'saldo'
 
-const COR_ENTRADA = '#2BBFB3'
+const COR_ENTRADA = '#6b8e4e'
 const COR_SAIDA   = '#e85a5a'
 
 function setRelatorioModo(modo) {

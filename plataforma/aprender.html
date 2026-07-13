@@ -1,15 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aprendendo — Sua Igreja</title>
+  <title>Aprendendo — Ministério Semente</title>
   <link rel="stylesheet" href="plataforma.css"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
   <link rel="dns-prefetch" href="https://www.youtube.com"/>
   <style>
     /* ── LAYOUT APRENDER ──────────────────────────────────────── */
-    body { background: #0d1f1e; }
+    body { background: #1f2a15; }
 
     .aprender-layout {
       display: flex;
@@ -117,7 +117,7 @@
       text-decoration: none;
     }
     .ap-aula-item:hover { background: rgba(255,255,255,0.04); }
-    .ap-aula-item.ativa { background: rgba(43,191,179,0.12); }
+    .ap-aula-item.ativa { background: rgba(107,142,78,0.12); }
     .ap-aula-item.ativa::before {
       content: ''; position: absolute; left: 0; top: 0; bottom: 0;
       width: 3px; background: var(--brand); border-radius: 0 2px 2px 0;
@@ -150,7 +150,7 @@
     /* Área central */
     .ap-centro {
       flex: 1; display: flex; flex-direction: column; overflow: hidden;
-      background: #0d1f1e;
+      background: #1f2a15;
     }
 
     /* Painéis de conteúdo (apenas a parte abaixo do vídeo alterna) */
@@ -206,9 +206,9 @@
     .btn-concluir.pendente {
       background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
     }
-    .btn-concluir.pendente:hover { background: rgba(43,191,179,0.25); color: var(--brand); }
+    .btn-concluir.pendente:hover { background: rgba(107,142,78,0.25); color: var(--brand); }
     .btn-concluir.feita {
-      background: rgba(43,191,179,0.2); color: var(--brand);
+      background: rgba(107,142,78,0.2); color: var(--brand);
     }
     .btn-concluir svg { width: 16px; height: 16px; }
 
@@ -267,7 +267,7 @@
       text-decoration: none; color: #fff;
       transition: background 0.2s;
     }
-    .ap-material-item:hover { background: rgba(43,191,179,0.12); border-color: rgba(43,191,179,0.3); }
+    .ap-material-item:hover { background: rgba(107,142,78,0.12); border-color: rgba(107,142,78,0.3); }
     .ap-material-icon {
       width: 38px; height: 38px; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
@@ -339,7 +339,7 @@
     .ap-coment-autor { font-size: 13px; font-weight: 700; color: #fff; }
     .ap-coment-tag {
       font-size: 10px; font-weight: 700; color: var(--brand);
-      background: rgba(43,191,179,0.15); padding: 1px 6px; border-radius: 4px;
+      background: rgba(107,142,78,0.15); padding: 1px 6px; border-radius: 4px;
       vertical-align: middle;
     }
     .ap-coment-data { font-size: 11px; color: rgba(255,255,255,0.35); }
@@ -915,12 +915,12 @@
       <title>${titulo} — Anotações</title>
       <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 40px auto; max-width: 720px;
-               color: #1a2e2d; line-height: 1.8; font-size: 14px; }
-        h1 { font-size: 1.4rem; color: #0f6b64; margin-bottom: 4px; }
-        .sub { font-size: 12px; color: #6b8b89; margin-bottom: 28px; }
+               color: #242e1a; line-height: 1.8; font-size: 14px; }
+        h1 { font-size: 1.4rem; color: #2f4a1e; margin-bottom: 4px; }
+        .sub { font-size: 12px; color: #6e806b; margin-bottom: 28px; }
         hr { border: none; border-top: 1px solid #e0f0ee; margin: 20px 0; }
-        h2 { font-size: 1.1rem; color: #0f6b64; }
-        h3 { font-size: 1rem; color: #1a9e93; }
+        h2 { font-size: 1.1rem; color: #2f4a1e; }
+        h3 { font-size: 1rem; color: #4a6a35; }
       </style>
     </head><body>
       <h1>${titulo}</h1>
@@ -974,7 +974,7 @@
       return
     }
     const tipoEmoji = { pdf:'📄', video:'🎬', link:'🔗', arquivo:'📎', imagem:'🖼️', audio:'🎵', outro:'📎' }
-    const tipoCor   = { pdf:'#c0392b', video:'#2563eb', link:'#0f6b64', arquivo:'#6b7280', imagem:'#7c3aed', audio:'#d97706', outro:'#6b7280' }
+    const tipoCor   = { pdf:'#c0392b', video:'#2563eb', link:'#2f4a1e', arquivo:'#6b7280', imagem:'#7c3aed', audio:'#d97706', outro:'#6b7280' }
 
     wrap.innerHTML = MATERIAIS.map(m => `
       <a class="ap-material-item" href="${esc(m.url)}" target="_blank" rel="noopener">

@@ -60,7 +60,7 @@ async function carregarEventos() {
         <div class="res-nome">📅 ${escapeHtml(ev.nome)}</div>
         <div class="res-meta">${horaTxt ? `🕐 ${horaTxt}` : 'Hoje'}</div>
       </div>
-      <div style="color:#2BBFB3;font-size:18px;">→</div>`
+      <div style="color:#6b8e4e;font-size:18px;">→</div>`
     wrap.appendChild(div)
   })
 }
@@ -114,7 +114,7 @@ async function buscar() {
         <div class="res-nome">🧒 ${escapeHtml(r.crianca_nome)}${tagVisit}</div>
         <div class="res-meta">${idadeTxt}${respMeta}</div>
       </div>
-      <div style="color:#2BBFB3;font-size:18px;">→</div>`
+      <div style="color:#6b8e4e;font-size:18px;">→</div>`
     wrap.appendChild(div)
   })
 }

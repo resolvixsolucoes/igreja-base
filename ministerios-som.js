@@ -1,4 +1,4 @@
-﻿// v-meu-vol-id
+// v-meu-vol-id
 // ================================================================
 //  ministerios-som.js
 // ================================================================
@@ -109,10 +109,10 @@ async function resolverMeuVoluntarioId() {
     .from('perfis').select('id, membro_id')
     .eq('id', session.user.id).maybeSingle()
 
-  console.log('[Sua Igreja] perfil:', perfil)
+  console.log('[Ministério Semente] perfil:', perfil)
 
   if (!perfil?.membro_id) {
-    console.log('[Sua Igreja] perfil sem membro_id')
+    console.log('[Ministério Semente] perfil sem membro_id')
     return
   }
 
@@ -121,9 +121,9 @@ async function resolverMeuVoluntarioId() {
     .from('voluntarios').select('id')
     .eq('membro_id', perfil.membro_id).maybeSingle()
 
-  console.log('[Sua Igreja] voluntario encontrado:', vol)
+  console.log('[Ministério Semente] voluntario encontrado:', vol)
   MEU_VOLUNTARIO_ID = vol?.id || null
-  console.log('[Sua Igreja] MEU_VOLUNTARIO_ID:', MEU_VOLUNTARIO_ID)
+  console.log('[Ministério Semente] MEU_VOLUNTARIO_ID:', MEU_VOLUNTARIO_ID)
 }
 
 // ================================================================
@@ -571,8 +571,8 @@ function buildEventoCard(ev, esc, showDate = false, pode = false) {
                     border-radius:6px;text-decoration:none;white-space:nowrap;">📱</a>
                 <button onclick="copiarTextoGeral('${_url}', this)"
                   title="Copiar link de confirmação"
-                  style="padding:3px 8px;font-size:11px;background:#f0fffe;
-                    border:1px solid #2BBFB3;color:#2BBFB3;border-radius:6px;cursor:pointer;">🔗</button>`
+                  style="padding:3px 8px;font-size:11px;background:#f7faee;
+                    border:1px solid #6b8e4e;color:#6b8e4e;border-radius:6px;cursor:pointer;">🔗</button>`
               : ''
             return `
               <div class="escala-item">
@@ -967,8 +967,8 @@ async function renderDisponibilidadesDia(dataStr) {
     const bloco  = document.createElement('div')
     bloco.style.cssText = 'margin-bottom:10px;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;'
     bloco.innerHTML =
-      '<div style="background:#f8f8f8;padding:7px 12px;font-size:12px;font-weight:800;color:#1a2e2d;border-bottom:1px solid #eee;">' +
-        '📋 ' + evNome + '<span style="color:#2BBFB3;font-weight:400;">' + evHora + '</span>' +
+      '<div style="background:#f8f8f8;padding:7px 12px;font-size:12px;font-weight:800;color:#242e1a;border-bottom:1px solid #eee;">' +
+        '📋 ' + evNome + '<span style="color:#6b8e4e;font-weight:400;">' + evHora + '</span>' +
       '</div>' +
       '<div style="padding:8px 12px;display:flex;flex-wrap:wrap;gap:6px;">' +
         vols.map(d => {
@@ -983,19 +983,19 @@ async function renderDisponibilidadesDia(dataStr) {
             } else {
               btnEscalar = '<button data-acao-lider onclick="aceitarDisponibilidade(\'' + d.id + '\',\'' + d.voluntario_id + '\',\'' + evId + '\', this)"' +
                 ' style="font-size:11px;padding:2px 10px;border-radius:20px;cursor:pointer;' +
-                'background:#f0fffe;color:#1a9e93;border:1px solid #2BBFB3;font-weight:600;">✅ Escalar</button>'
+                'background:#f7faee;color:#4a6a35;border:1px solid #6b8e4e;font-weight:600;">✅ Escalar</button>'
             }
           }
           const btnsMeus = ehMeu
             ? '<button title="Editar minha disponibilidade" onclick="abrirModalDisponibilidade(\'' + d.data + '\')" ' +
-              'style="font-size:11px;padding:2px 7px;border-radius:6px;cursor:pointer;background:#fff;border:1px solid #2BBFB3;color:#1a9e93;">✏️</button>' +
+              'style="font-size:11px;padding:2px 7px;border-radius:6px;cursor:pointer;background:#fff;border:1px solid #6b8e4e;color:#4a6a35;">✏️</button>' +
               '<button title="Excluir minha disponibilidade" onclick="excluirDisponibilidade(\'' + d.id + '\')" ' +
               'style="font-size:11px;padding:2px 7px;border-radius:6px;cursor:pointer;background:#fff;border:1px solid #ef4444;color:#ef4444;">🗑️</button>'
             : ''
           return '<div style="display:flex;align-items:center;gap:6px;">' +
             '<span style="font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;' +
-            'background:' + (ehMeu ? '#e8faf9' : '#f5f5f5') + ';' +
-            'color:' + (ehMeu ? '#1a9e93' : '#555') + ';">' +
+            'background:' + (ehMeu ? '#eef5e2' : '#f5f5f5') + ';' +
+            'color:' + (ehMeu ? '#4a6a35' : '#555') + ';">' +
             (d.voluntarios?.nome || '—') +
             (ehMeu ? ' <span style="font-size:10px;">✓ eu</span>' : '') +
             '</span>' + btnEscalar + btnsMeus + '</div>'
@@ -1043,19 +1043,19 @@ function abrirModalDisponibilidade(data) {
       const jaMarc   = jaConfirmados.has(ev.id)
       const item     = document.createElement('label')
       item.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px 14px;' +
-        'border:2px solid ' + (jaMarc ? '#2BBFB3' : '#e8e8e8') + ';border-radius:10px;cursor:pointer;' +
-        'background:' + (jaMarc ? '#f0fffe' : 'white') + ';transition:all .2s;'
+        'border:2px solid ' + (jaMarc ? '#6b8e4e' : '#e8e8e8') + ';border-radius:10px;cursor:pointer;' +
+        'background:' + (jaMarc ? '#f7faee' : 'white') + ';transition:all .2s;'
       item.innerHTML =
         '<input type="checkbox" class="chk-disp-ev" value="' + ev.id + '"' +
         (jaMarc ? ' checked' : '') +
-        ' style="accent-color:#2BBFB3;width:18px;height:18px;flex-shrink:0;" />' +
+        ' style="accent-color:#6b8e4e;width:18px;height:18px;flex-shrink:0;" />' +
         '<div style="flex:1;">' +
-          '<strong style="font-size:14px;color:#1a2e2d;">' + ev.nome + '</strong>' +
-          (horaFmt ? '<span style="font-size:12px;color:#2BBFB3;margin-left:8px;">⏰ ' + horaFmt + '</span>' : '') +
+          '<strong style="font-size:14px;color:#242e1a;">' + ev.nome + '</strong>' +
+          (horaFmt ? '<span style="font-size:12px;color:#6b8e4e;margin-left:8px;">⏰ ' + horaFmt + '</span>' : '') +
         '</div>'
       item.addEventListener('change', () => {
-        item.style.borderColor = item.querySelector('input').checked ? '#2BBFB3' : '#e8e8e8'
-        item.style.background  = item.querySelector('input').checked ? '#f0fffe' : 'white'
+        item.style.borderColor = item.querySelector('input').checked ? '#6b8e4e' : '#e8e8e8'
+        item.style.background  = item.querySelector('input').checked ? '#f7faee' : 'white'
       })
       wrap.appendChild(item)
     })

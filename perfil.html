@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Meu Perfil — Sua Igreja</title>
+  <title>Meu Perfil — Ministério Semente</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>  <script src="supabase.js"></script>
@@ -31,7 +31,7 @@
     .perfil-avatar-btn {
       position: absolute;
       bottom: 0; right: 0;
-      background: #2BBFB3;
+      background: #6b8e4e;
       border: none;
       border-radius: 50%;
       width: 30px; height: 30px;
@@ -41,25 +41,25 @@
       color: white;
       box-shadow: 0 2px 6px rgba(0,0,0,.2);
     }
-    .perfil-header-info h2 { margin: 0 0 4px; color: #1a2e2d; font-size: 22px; }
+    .perfil-header-info h2 { margin: 0 0 4px; color: #242e1a; font-size: 22px; }
     .perfil-header-info p  { margin: 0; color: #888; font-size: 14px; }
 
     .apelido-wrap { display: flex; align-items: center; gap: 8px; }
     .btn-editar-apelido {
       background: none; border: none; cursor: pointer;
-      font-size: 16px; color: #2BBFB3;
+      font-size: 16px; color: #6b8e4e;
       padding: 2px 6px; border-radius: 6px; transition: background .2s;
     }
-    .btn-editar-apelido:hover { background: #e8faf9; }
+    .btn-editar-apelido:hover { background: #eef5e2; }
     .apelido-input-wrap {
       display: none; align-items: center; gap: 8px; flex-wrap: wrap;
     }
     .apelido-input-wrap input {
-      padding: 6px 10px; border: 1.5px solid #2BBFB3;
+      padding: 6px 10px; border: 1.5px solid #6b8e4e;
       border-radius: 8px; font-size: 15px; outline: none; width: 200px;
     }
     .btn-apelido-salvar {
-      background: #2BBFB3; color: white; border: none;
+      background: #6b8e4e; color: white; border: none;
       padding: 6px 14px; border-radius: 8px; font-size: 13px;
       font-weight: 600; cursor: pointer;
     }
@@ -74,7 +74,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,.07); margin-bottom: 20px;
     }
     .perfil-card h3 {
-      margin: 0 0 20px; font-size: 16px; color: #1a2e2d;
+      margin: 0 0 20px; font-size: 16px; color: #242e1a;
       border-bottom: 2px solid #f0f2f5; padding-bottom: 10px;
     }
     .perfil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -86,19 +86,19 @@
     .form-group input,
     .form-group select {
       padding: 10px 12px; border: 1.5px solid #e0e0e0;
-      border-radius: 8px; font-size: 14px; color: #1a2e2d;
+      border-radius: 8px; font-size: 14px; color: #242e1a;
       transition: border .2s; background: #fafafa;
       box-sizing: border-box;
     }
     .form-group input:focus,
     .form-group select:focus {
-      outline: none; border-color: #2BBFB3; background: white;
+      outline: none; border-color: #6b8e4e; background: white;
     }
 
     /* Autocomplete */
     .ac-box {
       position: absolute; top: calc(100% + 2px); left: 0; right: 0;
-      background: white; border: 1.5px solid #2BBFB3;
+      background: white; border: 1.5px solid #6b8e4e;
       border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.12);
       z-index: 9999; max-height: 200px; overflow-y: auto; display: none;
     }
@@ -108,15 +108,15 @@
       display: flex; align-items: center; gap: 8px;
     }
     .ac-item:last-child { border-bottom: none; }
-    .ac-item:hover { background: #e8faf9; color: #2BBFB3; }
+    .ac-item:hover { background: #eef5e2; color: #6b8e4e; }
     .ac-vazio { padding: 9px 12px; color: #aaa; font-size: 13px; }
 
     /* Cônjuge */
     .conjuge-vinculado {
       display: flex; align-items: center; gap: 8px;
-      padding: 8px 12px; background: #e8faf9;
-      border: 1.5px solid #2BBFB3; border-radius: 8px;
-      font-size: 14px; color: #1a2e2d; font-weight: 600;
+      padding: 8px 12px; background: #eef5e2;
+      border: 1.5px solid #6b8e4e; border-radius: 8px;
+      font-size: 14px; color: #242e1a; font-weight: 600;
     }
     .conjuge-vinculado button {
       margin-left: auto; background: none; border: none;
@@ -136,7 +136,7 @@
       width: 18px; height: 18px; background: white;
       border-radius: 50%; top: 3px; left: 3px; transition: .3s;
     }
-    .toggle-switch input:checked + .slider { background: #2BBFB3; }
+    .toggle-switch input:checked + .slider { background: #6b8e4e; }
     .toggle-switch input:checked + .slider:before { transform: translateX(20px); }
 
     /* Filhos */
@@ -144,12 +144,12 @@
     .filho-item {
       display: grid; grid-template-columns: 1fr 1fr auto;
       gap: 10px; align-items: end; padding: 14px;
-      background: #f8fffe; border: 1.5px solid #e0e0e0; border-radius: 10px;
+      background: #f7faee; border: 1.5px solid #e0e0e0; border-radius: 10px;
     }
-    .filho-item.salvo { border-color: #2BBFB3; background: #e8faf9; }
+    .filho-item.salvo { border-color: #6b8e4e; background: #eef5e2; }
     .badge-salvo {
       grid-column: 1 / -1;
-      font-size: 11px; color: #2BBFB3; font-weight: 700; margin-bottom: 4px;
+      font-size: 11px; color: #6b8e4e; font-weight: 700; margin-bottom: 4px;
     }
     .btn-remover-filho {
       background: #fee; border: 1.5px solid #f5c6cb; color: #e74c3c;
@@ -159,11 +159,11 @@
     .btn-remover-filho:hover { background: #f8d7da; }
     .btn-add-filho {
       display: inline-flex; align-items: center; gap: 6px;
-      background: #e8faf9; border: 1.5px dashed #2BBFB3; color: #2BBFB3;
+      background: #eef5e2; border: 1.5px dashed #6b8e4e; color: #6b8e4e;
       border-radius: 8px; padding: 10px 16px; font-size: 14px;
       font-weight: 600; cursor: pointer; margin-top: 10px;
     }
-    .btn-add-filho:hover { background: #d0f5f2; }
+    .btn-add-filho:hover { background: #cee0b0; }
 
     /* Ministérios */
     .ministerios-checks { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -175,13 +175,13 @@
     }
     .ministerio-chip input { display: none; }
     .ministerio-chip.ativo {
-      border-color: #2BBFB3; background: #e8faf9;
-      color: #2BBFB3; font-weight: 600;
+      border-color: #6b8e4e; background: #eef5e2;
+      color: #6b8e4e; font-weight: 600;
     }
 
     .perfil-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
     .btn-salvar {
-      background: #2BBFB3; color: white; border: none;
+      background: #6b8e4e; color: white; border: none;
       padding: 11px 28px; border-radius: 8px; font-size: 15px;
       font-weight: 600; cursor: pointer; transition: background .2s;
     }
@@ -198,7 +198,7 @@
 
     .toast {
       position: fixed; bottom: 28px; right: 28px;
-      background: #1a2e2d; color: white; padding: 12px 22px;
+      background: #242e1a; color: white; padding: 12px 22px;
       border-radius: 10px; font-size: 14px; font-weight: 500;
       box-shadow: 0 4px 16px rgba(0,0,0,.2); opacity: 0;
       transform: translateY(10px); transition: all .3s;
@@ -206,7 +206,7 @@
     }
     .toast.show    { opacity: 1; transform: translateY(0); }
     .toast.erro    { background: #e74c3c; }
-    .toast.sucesso { background: #2BBFB3; }
+    .toast.sucesso { background: #6b8e4e; }
     .toast.aviso   { background: #f39c12; }
 
     /* ── CEP ── */
@@ -267,11 +267,11 @@
     .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
   </style>
 
-  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="theme-color" content="#6b8e4e" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <meta name="apple-mobile-web-app-title" content="Ministério Semente" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
@@ -279,7 +279,7 @@
 <body>
 
 <aside class="sidebar">
-  <div class="logo"><img src="logo.png" alt="Sua Igreja" /></div>
+  <div class="logo"><img src="logo.png" alt="Ministério Semente" /></div>
   <nav id="sidebar-nav">
     <a href="dashboard.html">🏠 Dashboard</a>
     <a href="membros.html">👥 Membros</a>
@@ -358,7 +358,7 @@
           <button class="btn-apelido-cancelar" onclick="fecharEditarApelido()">✖</button>
         </div>
         <p id="perfilEmail"></p>
-        <p id="perfilRole" style="font-size:12px;color:#2BBFB3;font-weight:600;margin-top:4px;"></p>
+        <p id="perfilRole" style="font-size:12px;color:#6b8e4e;font-weight:600;margin-top:4px;"></p>
       </div>
     </div>
 
@@ -491,7 +491,7 @@
       <h3>⛪ Ministérios</h3>
       <div class="form-group" style="margin-bottom:16px;">
         <label style="font-size:13px;font-weight:600;color:#555;margin-bottom:6px;display:block;">
-          Você serve como voluntário na Sua Igreja?
+          Você serve como voluntário na Ministério Semente?
         </label>
         <select id="campo_voluntario" onchange="onVoluntarioChange()"
           style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;width:100%;max-width:300px;background:#fafafa;">
@@ -626,12 +626,12 @@ function renderizarAvatar(fotoUrl, nome) {
   const c = document.getElementById('avatarContainer')
   if (fotoUrl) {
     c.innerHTML = `<img src="${fotoUrl}" alt="Avatar"
-      style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid #2BBFB3;">`
+      style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid #6b8e4e;">`
   } else {
     const inicial = (nome || 'U')[0].toUpperCase()
-    c.innerHTML = `<div style="width:100px;height:100px;border-radius:50%;background:#2BBFB3;
+    c.innerHTML = `<div style="width:100px;height:100px;border-radius:50%;background:#6b8e4e;
       color:white;display:flex;align-items:center;justify-content:center;
-      font-size:36px;font-weight:700;border:3px solid #2BBFB3;">${inicial}</div>`
+      font-size:36px;font-weight:700;border:3px solid #6b8e4e;">${inicial}</div>`
   }
 }
 
@@ -747,7 +747,7 @@ async function buscarConjugeDB(termo, box) {
     item.className = 'ac-item'
     const av = m.foto_url
       ? `<img src="${m.foto_url}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">`
-      : `<div style="width:26px;height:26px;border-radius:50%;background:#2BBFB3;color:white;
+      : `<div style="width:26px;height:26px;border-radius:50%;background:#6b8e4e;color:white;
            display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">
            ${m.nome[0].toUpperCase()}</div>`
     item.innerHTML = `${av} ${m.nome}`

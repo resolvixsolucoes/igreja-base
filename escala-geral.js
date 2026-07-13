@@ -44,7 +44,7 @@ window.renderCheckinEscalaBadge = window.renderCheckinEscalaBadge || function(es
          'onclick="marcarCheckinEscala(\'' + escalaId + '\', this)" ' +
          'title="Marcar presença" ' +
          'style="padding:3px 9px;font-size:11px;background:#fff;' +
-         'color:#1a9e93;border:1px solid #2BBFB3;border-radius:8px;cursor:pointer;' +
+         'color:#4a6a35;border:1px solid #6b8e4e;border-radius:8px;cursor:pointer;' +
          'font-weight:600;white-space:nowrap;">Check-in</button>'
 }
 
@@ -153,7 +153,7 @@ async function abrirModalEscalaGeral(evId, evNome, evData) {
       salaDropdown =
         '<select class="sel-sala-vol" data-vol-id="' + v.id + '"' +
         (jaEsc ? ' disabled' : '') +
-        ' style="margin-left:8px;padding:3px 6px;border:1px solid #c0e8e6;border-radius:6px;font-size:12px;background:#f0fffe;color:#1a9e93;">' +
+        ' style="margin-left:8px;padding:3px 6px;border:1px solid #c0e8e6;border-radius:6px;font-size:12px;background:#f7faee;color:#4a6a35;">' +
         '<option value="">— sala —</option>' + opcoes + '</select>'
     }
 
@@ -167,7 +167,7 @@ async function abrirModalEscalaGeral(evId, evNome, evData) {
       '<input type="checkbox" class="chk-vol-geral" value="' + v.id + '"' +
       ' data-nome="' + v.nome.replace(/"/g, '') + '"' +
       (jaEsc ? ' checked disabled' : '') +
-      ' style="accent-color:#2BBFB3;flex-shrink:0;" />' +
+      ' style="accent-color:#6b8e4e;flex-shrink:0;" />' +
       '<span style="flex:1;font-size:14px;color:#333;">' + v.nome +
       (v.telefone ? ' <span style="color:#aaa;font-size:12px;">· ' + v.telefone + '</span>' : '') +
       statusBadge + '</span>' + salaDropdown
@@ -251,8 +251,8 @@ function _mostrarLinksEscalados(escala, vols) {
         '<div style="font-size:10px;color:#bbb;word-break:break-all;margin-top:2px;">' + url + '</div>' +
       '</div>' +
       '<button onclick="copiarTextoGeral(\'' + url.replace(/\\/g, '\\\\').replace(/'/g, "\\'") + '\', this)" ' +
-        'style="padding:5px 10px;font-size:11px;background:#f0fffe;border:1px solid #2BBFB3;' +
-        'color:#2BBFB3;border-radius:6px;cursor:pointer;white-space:nowrap;font-weight:600;">' +
+        'style="padding:5px 10px;font-size:11px;background:#f7faee;border:1px solid #6b8e4e;' +
+        'color:#6b8e4e;border-radius:6px;cursor:pointer;white-space:nowrap;font-weight:600;">' +
         '📋 Link</button>' +
       '<a href="' + window.linkWhatsApp(tel, whatsMsg) + '" target="_blank" ' +
         'style="padding:5px 10px;font-size:11px;background:#25D366;color:white;' +

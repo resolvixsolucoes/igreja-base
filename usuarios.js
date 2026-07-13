@@ -1,6 +1,6 @@
-﻿// ========================================================
+// ========================================================
 // usuarios.js — Gerenciamento de usuários
-// Sua Igreja
+// Ministério Semente
 // ========================================================
 
 // Inventario de paginas/abas com gate granular consumido pelo modal.
@@ -351,7 +351,7 @@ async function salvarVinculoMembro() {
     : '✅ Vínculo removido!'
   toast.style.cssText = `
     position:fixed; bottom:24px; right:24px;
-    background:#2BBFB3; color:white;
+    background:#6b8e4e; color:white;
     padding:12px 20px; border-radius:10px;
     font-size:14px; font-weight:600;
     box-shadow:0 4px 16px rgba(0,0,0,0.15);
@@ -668,7 +668,7 @@ async function montarSecaoGranular(userId) {
         onclick="toggleCardGranular(this)">
         <div style="display:flex;align-items:center;gap:8px;">
           <span class="card-arrow" style="font-size:11px;color:#888;width:12px;display:inline-block;">${temAlguma ? '▼' : '▶'}</span>
-          <strong style="color:#1a2e2d;font-size:14px;">${info.label}</strong>
+          <strong style="color:#242e1a;font-size:14px;">${info.label}</strong>
         </div>
         <div style="display:flex;gap:6px;" onclick="event.stopPropagation()">
           <button type="button" class="btn btn-secondary"
@@ -793,7 +793,7 @@ async function salvarPermissoes() {
   toast.textContent = '✅ Permissões salvas!'
   toast.style.cssText = `
     position:fixed; bottom:24px; right:24px;
-    background:#2BBFB3; color:white;
+    background:#6b8e4e; color:white;
     padding:12px 20px; border-radius:10px;
     font-size:14px; font-weight:600;
     box-shadow:0 4px 16px rgba(0,0,0,0.15);

@@ -7,7 +7,7 @@
 
 body {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a9e93 0%, #2BBFB3 50%, #3dd6c8 100%);
+  background: linear-gradient(135deg, #4a6a35 0%, #6b8e4e 50%, #3dd6c8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,7 +47,7 @@ body {
 /* ===== TÍTULOS ===== */
 h2 {
   font-size: 22px;
-  color: #1a2e2d;
+  color: #242e1a;
   margin-bottom: 6px;
   text-align: center;
 }
@@ -85,7 +85,7 @@ h2 {
 }
 
 .form-group input:focus {
-  border-color: #2BBFB3;
+  border-color: #6b8e4e;
   background: #fff;
 }
 
@@ -113,14 +113,14 @@ h2 {
 }
 
 .btn-olho:hover {
-  color: #2BBFB3;
+  color: #6b8e4e;
 }
 
 /* ===== BOTÃO PRINCIPAL ===== */
 .btn-login {
   width: 100%;
   padding: 13px;
-  background: #2BBFB3;
+  background: #6b8e4e;
   color: white;
   border: none;
   border-radius: 10px;
@@ -153,7 +153,7 @@ h2 {
   margin-top: 14px;
   background: none;
   border: none;
-  color: #2BBFB3;
+  color: #6b8e4e;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -162,7 +162,7 @@ h2 {
 }
 
 .link-btn:hover {
-  color: #1a9e93;
+  color: #4a6a35;
   text-decoration: underline;
 }
 

@@ -182,7 +182,7 @@ function renderizar(listaMembros, listaFilhos) {
 
             const tipoBadge = p.tipo === 'filho'
               ? '<span style="background:#fef3c7;color:#b45309;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;">👶 Criança</span>'
-              : '<span style="background:#e8faf9;color:#2BBFB3;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;">👤 Membro</span>';
+              : '<span style="background:#eef5e2;color:#6b8e4e;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;">👤 Membro</span>';
 
             // Ministério para membros, nome do responsável para filhos
             const infoExtra = p.tipo === 'filho'

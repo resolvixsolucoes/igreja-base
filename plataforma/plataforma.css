@@ -3,13 +3,13 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --brand:       #2BBFB3;
-  --brand-dark:  #1a9e93;
-  --brand-deep:  #0f6b64;
-  --brand-light: #e8faf9;
-  --brand-mid:   #b2e8e4;
-  --text:        #1a2e2d;
-  --muted:       #6b8b89;
+  --brand:       #6b8e4e;
+  --brand-dark:  #4a6a35;
+  --brand-deep:  #2f4a1e;
+  --brand-light: #eef5e2;
+  --brand-mid:   #c1d8a4;
+  --text:        #242e1a;
+  --muted:       #6e806b;
   --bg:          #f4fdfc;
   --bg-card:     #ffffff;
   --border:      #e0f0ee;
@@ -65,7 +65,7 @@ body {
   transition: background 0.2s, color 0.2s;
 }
 .plat-nav a:hover   { background: rgba(255,255,255,0.1);  color: #fff; }
-.plat-nav a.active  { background: rgba(43,191,179,0.25);  color: #fff; }
+.plat-nav a.active  { background: rgba(107,142,78,0.25);  color: #fff; }
 .plat-nav a svg     { width: 17px; height: 17px; flex-shrink: 0; }
 .plat-nav-divider {
   height: 1px; background: rgba(255,255,255,0.08);
@@ -92,7 +92,7 @@ body {
   font-size: 10.5px; color: rgba(255,255,255,0.5); font-weight: 600;
 }
 .plat-badge-membro {
-  display: inline-block; background: rgba(43,191,179,0.3);
+  display: inline-block; background: rgba(107,142,78,0.3);
   color: #7af3ec; font-size: 9px; font-weight: 800;
   letter-spacing: 0.8px; text-transform: uppercase;
   padding: 2px 7px; border-radius: 20px;
@@ -153,7 +153,7 @@ body {
 }
 .curso-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 28px rgba(43,191,179,0.15);
+  box-shadow: 0 8px 28px rgba(107,142,78,0.15);
 }
 .curso-card-thumb {
   width: 100%; aspect-ratio: 16/9;
@@ -222,9 +222,9 @@ body {
   padding: 3px 10px; border-radius: 20px;
   font-size: 11px; font-weight: 700;
 }
-.badge-membro  { background: #e8faf9; color: var(--brand-deep); }
+.badge-membro  { background: #eef5e2; color: var(--brand-deep); }
 .badge-pago    { background: #fffbeb; color: #92400e; }
-.badge-ativo   { background: #e8faf9; color: var(--brand-deep); }
+.badge-ativo   { background: #eef5e2; color: var(--brand-deep); }
 .badge-concluido { background: #f0fdf4; color: #166534; }
 
 /* ── BOTÕES ───────────────────────────────────────────────── */
@@ -234,10 +234,10 @@ body {
   background: linear-gradient(135deg, var(--brand), var(--brand-dark));
   color: #fff; border: none; font-size: 14px; font-weight: 700;
   cursor: pointer; font-family: inherit;
-  box-shadow: 0 4px 14px rgba(43,191,179,0.30);
+  box-shadow: 0 4px 14px rgba(107,142,78,0.30);
   transition: all 0.2s; text-decoration: none;
 }
-.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(43,191,179,0.40); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(107,142,78,0.40); }
 .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
 
 .btn-secondary {

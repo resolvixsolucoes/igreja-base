@@ -14,7 +14,7 @@ body {
 /* ===== SIDEBAR ===== */
 .sidebar {
   width: 240px;
-  background: #2BBFB3;
+  background: #6b8e4e;
   color: white;
   display: flex;
   flex-direction: column;
@@ -37,7 +37,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: #2BBFB3;
+  background: #6b8e4e;
 }
 
 .logo img {
@@ -88,7 +88,7 @@ nav a.active {
   flex-shrink: 0; /* ← footer nunca encolhe */
   position: sticky;
   bottom: 0;
-  background: #2BBFB3;
+  background: #6b8e4e;
   z-index: 10;
 }
 
@@ -146,7 +146,7 @@ header {
 
 header h1 {
   font-size: 26px;
-  color: #1a2e2d;
+  color: #242e1a;
 }
 
 /* ===== CARDS ===== */
@@ -163,7 +163,7 @@ header h1 {
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   text-align: center;
-  border-top: 4px solid #2BBFB3;
+  border-top: 4px solid #6b8e4e;
 }
 
 .card h3 {
@@ -175,7 +175,7 @@ header h1 {
 .card p, .card h2 {
   font-size: 32px;
   font-weight: bold;
-  color: #2BBFB3;
+  color: #6b8e4e;
 }
 
 /* ===== TABELAS ===== */
@@ -196,7 +196,7 @@ header h1 {
 
 .table-header h2 {
   font-size: 18px;
-  color: #1a2e2d;
+  color: #242e1a;
 }
 
 table {
@@ -212,8 +212,8 @@ th, td {
 }
 
 th {
-  background: #e8faf9;
-  color: #2BBFB3;
+  background: #eef5e2;
+  color: #6b8e4e;
   font-weight: 600;
 }
 
@@ -233,7 +233,7 @@ tr:hover {
 }
 
 .btn-primary {
-  background: #2BBFB3;
+  background: #6b8e4e;
   color: white;
 }
 
@@ -279,12 +279,12 @@ tr:hover {
   width: 100%;
   max-width: 480px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  border-top: 5px solid #2BBFB3;
+  border-top: 5px solid #6b8e4e;
 }
 
 .modal h2 {
   margin-bottom: 20px;
-  color: #1a2e2d;
+  color: #242e1a;
 }
 
 .modal label {
@@ -320,7 +320,7 @@ tr:hover {
 .modal input:focus,
 .modal select:focus,
 .modal textarea:focus {
-  border-color: #2BBFB3;
+  border-color: #6b8e4e;
 }
 
 .modal-actions {
@@ -368,7 +368,7 @@ tr:hover {
 }
 
 .search-bar:focus {
-  border-color: #2BBFB3;
+  border-color: #6b8e4e;
 }
 
 /* ===== MINISTÉRIOS ===== */
@@ -383,7 +383,7 @@ tr:hover {
 
 .ministerio-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(43, 191, 179, 0.25);
+  box-shadow: 0 8px 20px rgba(107, 142, 78, 0.25);
 }
 
 .ministerio-icon {
@@ -402,7 +402,7 @@ tr:hover {
 
 .page-header h1 {
   font-size: 26px;
-  color: #1a2e2d;
+  color: #242e1a;
   flex: 1;
 }
 
@@ -443,8 +443,8 @@ tr:hover {
 .autocomplete-item:last-child { border-bottom: none; }
 
 .autocomplete-item:hover {
-  background: #f0fffe;
-  color: #2BBFB3;
+  background: #f7faee;
+  color: #6b8e4e;
 }
 
 
@@ -461,7 +461,7 @@ tr:hover {
   flex-shrink: 0;
   position: sticky;
   bottom: 0;
-  background: #2BBFB3;
+  background: #6b8e4e;
   z-index: 10;
 }
 .sidebar-user {
@@ -582,7 +582,7 @@ tr:hover {
     cursor: pointer;
     transition: box-shadow .2s;
   }
-  tbody tr:hover { box-shadow: 0 4px 16px rgba(43,191,179,.15); }
+  tbody tr:hover { box-shadow: 0 4px 16px rgba(107,142,78,.15); }
 
   tbody td {
     display: none;
@@ -603,7 +603,7 @@ tr:hover {
   tbody td:nth-child(1) {
     font-weight: 700;
     font-size: 14px;
-    color: #1a2e2d;
+    color: #242e1a;
     padding-top: 14px;
     border-bottom: none;
   }
@@ -620,7 +620,7 @@ tr:hover {
     content: '▼';
     margin-left: auto;
     font-size: 10px;
-    color: #2BBFB3;
+    color: #6b8e4e;
     flex-shrink: 0;
     transition: transform .2s;
   }
@@ -634,7 +634,7 @@ tr:hover {
   tbody td[data-label]::before {
     content: attr(data-label);
     font-weight: 700;
-    color: #2BBFB3;
+    color: #6b8e4e;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.4px;

@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="pagina-slug"  content="pedido_oracao">
   <meta name="pagina-label" content="🙏 Pedidos de Oração">
-  <title>Pedidos de Oração — Sua Igreja</title>
+  <title>Pedidos de Oração — Ministério Semente</title>
   <link rel="stylesheet" href="style.css" />
   <style>
 
@@ -27,8 +27,8 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .btn-filtro:hover { border-color: #2BBFB3; color: #2BBFB3; }
-    .btn-filtro.active-todos    { background: #2BBFB3; border-color: #2BBFB3; color: #fff; }
+    .btn-filtro:hover { border-color: #6b8e4e; color: #6b8e4e; }
+    .btn-filtro.active-todos    { background: #6b8e4e; border-color: #6b8e4e; color: #fff; }
     .btn-filtro.active-pendente { background: #f59e0b; border-color: #f59e0b; color: #fff; }
     .btn-filtro.active-atendido { background: #10b981; border-color: #10b981; color: #fff; }
 
@@ -48,12 +48,12 @@
       flex-direction: column;
       gap: 4px;
     }
-    .contador-card.total    { background: #f0fffe; border: 1.5px solid #b2ece8; }
+    .contador-card.total    { background: #f7faee; border: 1.5px solid #b2ece8; }
     .contador-card.pendente { background: #fffbeb; border: 1.5px solid #fde68a; }
     .contador-card.atendido { background: #f0fdf4; border: 1.5px solid #a7f3d0; }
     .contador-num   { font-size: 26px; font-weight: 800; line-height: 1; }
     .contador-label { font-size: 12px; font-weight: 600; color: #888; }
-    .contador-card.total    .contador-num { color: #2BBFB3; }
+    .contador-card.total    .contador-num { color: #6b8e4e; }
     .contador-card.pendente .contador-num { color: #f59e0b; }
     .contador-card.atendido .contador-num { color: #10b981; }
 
@@ -81,7 +81,7 @@
       gap: 14px;
       box-shadow: 0 8px 40px rgba(0,0,0,0.15);
     }
-    .modal h2 { font-size: 17px; font-weight: 800; color: #1a2e2d; }
+    .modal h2 { font-size: 17px; font-weight: 800; color: #242e1a; }
     .modal label { font-size: 13px; font-weight: 600; color: #444; display: block; margin-bottom: 5px; }
     .modal input, .modal textarea {
       width: 100%;
@@ -96,7 +96,7 @@
     }
     .modal input:focus, .modal textarea:focus {
       outline: none;
-      border-color: #2BBFB3;
+      border-color: #6b8e4e;
       background: #fff;
     }
     .modal textarea { min-height: 100px; resize: vertical; }
@@ -122,7 +122,7 @@
       text-align: center;
     }
     .modal-excluir .icone-excluir { font-size: 3rem; line-height: 1; }
-    .modal-excluir h2 { font-size: 18px; font-weight: 800; color: #1a2e2d; margin: 0; }
+    .modal-excluir h2 { font-size: 18px; font-weight: 800; color: #242e1a; margin: 0; }
     .modal-excluir p  { font-size: 14px; color: #555; line-height: 1.7; margin: 0; }
     .modal-excluir strong { color: #e74c3c; }
     .btn-danger {
@@ -188,7 +188,7 @@
       justify-content: space-between;
       gap: 10px;
     }
-    .pedido-nome     { font-size: 15px; font-weight: 800; color: #1a2e2d; line-height: 1.3; }
+    .pedido-nome     { font-size: 15px; font-weight: 800; color: #242e1a; line-height: 1.3; }
     .pedido-telefone { font-size: 12px; color: #888; margin-top: 2px; }
 
     .badge-origem {
@@ -352,11 +352,11 @@
 
     .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
 </style>
-  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="theme-color" content="#6b8e4e" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <meta name="apple-mobile-web-app-title" content="Ministério Semente" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
@@ -366,7 +366,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="logo.png" alt="Sua Igreja" />
+      <img src="logo.png" alt="Ministério Semente" />
     </div>
   <nav id="sidebar-nav">
     <a href="dashboard.html">🏠 Dashboard</a>

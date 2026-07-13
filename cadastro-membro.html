@@ -1,15 +1,15 @@
-﻿@<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cadastro de Membro — Sua Igreja</title>
+  <title>Cadastro de Membro — Ministério Semente</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       min-height: 100vh;
-      background: #f0fffe;
+      background: #f7faee;
       font-family: 'Segoe UI', sans-serif;
       display: flex;
       flex-direction: column;
@@ -21,8 +21,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #2BBFB3;
-      box-shadow: 0 2px 16px rgba(43,191,179,0.30);
+      background: #6b8e4e;
+      box-shadow: 0 2px 16px rgba(107,142,78,0.30);
     }
     .header-logo img { height: 50px; object-fit: contain; }
 
@@ -42,8 +42,8 @@
       margin-bottom: 32px;
       text-align: center;
     }
-    .page-header h1 { font-size: 1.5rem; color: #1a2e2d; font-weight: 800; }
-    .page-header p  { font-size: 0.92rem; color: #6b8b89; }
+    .page-header h1 { font-size: 1.5rem; color: #242e1a; font-weight: 800; }
+    .page-header p  { font-size: 0.92rem; color: #6e806b; }
 
     .form-card {
       background: #fff;
@@ -51,7 +51,7 @@
       padding: 36px 32px;
       width: 100%;
       max-width: 560px;
-      box-shadow: 0 8px 40px rgba(43,191,179,0.10);
+      box-shadow: 0 8px 40px rgba(107,142,78,0.10);
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -60,11 +60,11 @@
     .form-section-title {
       font-size: 13px;
       font-weight: 700;
-      color: #2BBFB3;
+      color: #6b8e4e;
       text-transform: uppercase;
       letter-spacing: 0.8px;
       padding-bottom: 6px;
-      border-bottom: 2px solid #e0faf8;
+      border-bottom: 2px solid #e2ecd0;
       margin-top: 4px;
     }
 
@@ -84,7 +84,7 @@
     }
     input:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: #2BBFB3;
+      border-color: #6b8e4e;
       background: #fff;
     }
 
@@ -97,7 +97,7 @@
       position: absolute;
       top: 100%; left: 0; right: 0;
       background: #fff;
-      border: 1.5px solid #2BBFB3;
+      border: 1.5px solid #6b8e4e;
       border-top: none;
       border-radius: 0 0 10px 10px;
       max-height: 180px;
@@ -111,10 +111,10 @@
       font-size: 13px;
       cursor: pointer;
       color: #333;
-      border-bottom: 1px solid #f0fffe;
+      border-bottom: 1px solid #f7faee;
       transition: background 0.15s;
     }
-    .autocomplete-item:hover { background: #e8faf9; }
+    .autocomplete-item:hover { background: #eef5e2; }
     .autocomplete-item small { color: #999; font-size: 11px; margin-left: 6px; }
 
     #lista-filhos-pub .filho-row {
@@ -140,9 +140,9 @@
     .btn-remove-filho:hover { background: #ffe0e0; }
 
     .btn-add {
-      background: #e8faf9;
-      border: 1.5px dashed #2BBFB3;
-      color: #1a9e93;
+      background: #eef5e2;
+      border: 1.5px dashed #6b8e4e;
+      color: #4a6a35;
       border-radius: 10px;
       padding: 9px 14px;
       cursor: pointer;
@@ -151,21 +151,21 @@
       transition: background 0.15s;
       width: fit-content;
     }
-    .btn-add:hover { background: #d0f5f2; }
+    .btn-add:hover { background: #cee0b0; }
 
     .mesa-selecionada { display: flex; align-items: center; gap: 8px; }
     .mesa-selecionada input[type="text"] {
       flex: 1;
-      background: #e8faf9;
-      border-color: #2BBFB3;
+      background: #eef5e2;
+      border-color: #6b8e4e;
       color: #1a6e68;
       font-weight: 600;
       cursor: default;
     }
     .btn-trocar-mesa {
       background: #fff;
-      border: 1.5px solid #2BBFB3;
-      color: #2BBFB3;
+      border: 1.5px solid #6b8e4e;
+      color: #6b8e4e;
       border-radius: 8px;
       padding: 8px 12px;
       cursor: pointer;
@@ -175,14 +175,14 @@
       transition: all 0.15s;
       white-space: nowrap;
     }
-    .btn-trocar-mesa:hover { background: #e8faf9; }
+    .btn-trocar-mesa:hover { background: #eef5e2; }
 
     .checkbox-list {
       display: flex;
       flex-direction: column;
       gap: 8px;
       padding: 10px 14px;
-      background: #f8fffe;
+      background: #f7faee;
       border: 1.5px solid #ddd;
       border-radius: 10px;
     }
@@ -197,7 +197,7 @@
     .checkbox-item input[type="checkbox"],
     .checkbox-item input[type="radio"] {
       width: 16px; height: 16px;
-      accent-color: #2BBFB3;
+      accent-color: #6b8e4e;
       cursor: pointer;
       padding: 0; border: none; background: none;
       flex-shrink: 0;
@@ -210,7 +210,7 @@
     }
 
     .btn-submit {
-      background: #2BBFB3;
+      background: #6b8e4e;
       color: #fff;
       border: none;
       border-radius: 12px;
@@ -221,12 +221,12 @@
       width: 100%;
       margin-top: 8px;
       transition: all 0.2s;
-      box-shadow: 0 4px 16px rgba(43,191,179,0.30);
+      box-shadow: 0 4px 16px rgba(107,142,78,0.30);
     }
     .btn-submit:hover {
       background: #1fa89d;
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(43,191,179,0.35);
+      box-shadow: 0 6px 20px rgba(107,142,78,0.35);
     }
     .btn-submit:disabled { background: #a8deda; cursor: not-allowed; transform: none; }
 
@@ -240,8 +240,8 @@
     }
     .feedback.show { display: flex; }
     .feedback-icon { font-size: 3rem; }
-    .feedback h2 { font-size: 1.3rem; color: #1a2e2d; font-weight: 800; }
-    .feedback p  { font-size: 0.95rem; color: #6b8b89; line-height: 1.6; }
+    .feedback h2 { font-size: 1.3rem; color: #242e1a; font-weight: 800; }
+    .feedback p  { font-size: 0.95rem; color: #6e806b; line-height: 1.6; }
     .feedback-error { color: #e74c3c !important; }
     .required { color: #e74c3c; margin-left: 2px; }
 
@@ -266,11 +266,11 @@
     @keyframes cepSpin { to { transform: rotate(360deg); } }
 
   </style>
-  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="theme-color" content="#6b8e4e" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <meta name="apple-mobile-web-app-title" content="Ministério Semente" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
@@ -279,14 +279,14 @@
 
   <header>
     <div class="header-logo">
-      <img src="logo.png" alt="Sua Igreja" />
+      <img src="logo.png" alt="Ministério Semente" />
     </div>
   </header>
 
   <div class="page-content">
     <div class="page-header">
       <h1>Cadastro de Membro</h1>
-      <p>Preencha o formulário abaixo para se cadastrar na Sua Igreja.</p>
+      <p>Preencha o formulário abaixo para se cadastrar na Ministério Semente.</p>
     </div>
 
     <div class="form-card" id="form-card">

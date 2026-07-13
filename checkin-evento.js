@@ -70,15 +70,15 @@ function mostrarPicker(escalas) {
     const hora = e.evento_hora ? e.evento_hora.slice(0, 5) : '—'
     const status = e.ja_marcado
       ? `<span style="color:#16a34a;font-size:12px;font-weight:700;">✓ marcado ${e.checkin_em ? fmtHora(e.checkin_em) : ''}</span>`
-      : '<span style="color:#1a9e93;font-size:12px;font-weight:600;">marcar →</span>'
+      : '<span style="color:#4a6a35;font-size:12px;font-weight:600;">marcar →</span>'
     return `
       <button class="picker-item" onclick="marcarEvento('${e.evento_id}')"
         style="display:flex;align-items:center;justify-content:space-between;
                width:100%;padding:14px 16px;margin:0;
-               border:1px solid #d0f0ee;border-radius:12px;background:#f0fffe;
+               border:1px solid #d0f0ee;border-radius:12px;background:#f7faee;
                cursor:pointer;text-align:left;font-family:inherit;">
         <div>
-          <div style="font-weight:700;color:#1a2e2d;font-size:15px;">${e.evento_nome}</div>
+          <div style="font-weight:700;color:#242e1a;font-size:15px;">${e.evento_nome}</div>
           <div style="color:#888;font-size:12px;">${hora}</div>
         </div>
         ${status}

@@ -1,5 +1,5 @@
-﻿// ================================================================
-//  agenda.js — Agenda da Sua Igreja
+// ================================================================
+//  agenda.js — Agenda da Ministério Semente
 //  Eventos gerais/ministério + Aconselhamento Pastoral
 // ================================================================
 const _db = db
@@ -54,7 +54,7 @@ const FINALIDADE_LABEL = {
 }
 
 function corFinalidade(finalidade) {
-  return FINALIDADE_COR[finalidade] || '#2BBFB3'
+  return FINALIDADE_COR[finalidade] || '#6b8e4e'
 }
 
 // ================================================================
@@ -196,7 +196,7 @@ function confirmarAcao(msg, titulo = 'Confirmar') {
 // ================================================================
 //  TOAST
 // ================================================================
-function toast(msg, cor = '#2BBFB3') {
+function toast(msg, cor = '#6b8e4e') {
   const t = document.createElement('div')
   t.textContent = msg
   t.style.cssText = `
@@ -286,7 +286,7 @@ function filtrarMembrosBusca() {
     const avatar = document.createElement('div')
     avatar.style.cssText = `
       width: 32px; height: 32px; border-radius: 50%;
-      background: linear-gradient(135deg, #2BBFB3, #1a9e93);
+      background: linear-gradient(135deg, #6b8e4e, #4a6a35);
       display: flex; align-items: center; justify-content: center;
       color: white; font-weight: 700; font-size: 13px;
       flex-shrink: 0; overflow: hidden;
@@ -304,7 +304,7 @@ function filtrarMembrosBusca() {
     item.appendChild(avatar)
     item.appendChild(label)
 
-    item.addEventListener('mouseenter', () => { item.style.background = '#f0fffe' })
+    item.addEventListener('mouseenter', () => { item.style.background = '#f7faee' })
     item.addEventListener('mouseleave', () => { item.style.background = 'white' })
 
     item.addEventListener('click', () => {
@@ -372,7 +372,7 @@ function renderEventos(lista) {
         ${isMin && minNome ? `<span>${minNome}</span>` : ''}
       </div>
       <div class="evento-actions">
-        ${ev.publico ? `<button class="btn-sm btn-ver-inscricoes" data-acao="inscricoes" style="background:#e8faf9;color:#1a9e93;">📋 Inscrições</button>` : ''}
+        ${ev.publico ? `<button class="btn-sm btn-ver-inscricoes" data-acao="inscricoes" style="background:#eef5e2;color:#4a6a35;">📋 Inscrições</button>` : ''}
         <button class="btn-sm btn-editar-evento" data-acao="editar" style="background:#f0f4ff;color:#3b5bdb;">✏️ Editar</button>
         <button class="btn-sm btn-sm-danger btn-excluir-evento" data-acao="excluir">🗑️ Excluir</button>
       </div>
@@ -496,7 +496,7 @@ async function carregarFrequenciaCriancasModal(ev) {
         ${usaCheckin ? 'disabled' : ''}
         placeholder="—"
         style="width:90px;box-sizing:border-box;padding:8px 10px;border:1.5px solid #d0e8e6;border-radius:8px;font-size:13px;text-align:center;${usaCheckin ? 'background:#f5f5f5;' : ''}" />
-      ${usaCheckin ? '<span style="font-size:11px;color:#2BBFB3;white-space:nowrap;">🔄 via check-in</span>' : '<span style="width:80px;"></span>'}
+      ${usaCheckin ? '<span style="font-size:11px;color:#6b8e4e;white-space:nowrap;">🔄 via check-in</span>' : '<span style="width:80px;"></span>'}
     `
     wrap.appendChild(linha)
   })
@@ -752,7 +752,7 @@ async function carregarInscricoes(eventoId) {
     tr.style.borderBottom = '1px solid #f0f0f0'
     tr.innerHTML = `
       <td style="padding:10px 12px;color:#aaa;font-size:12px;">${i + 1}</td>
-      <td style="padding:10px 12px;font-weight:600;color:#1a2e2d;">${ins.nome}</td>
+      <td style="padding:10px 12px;font-weight:600;color:#242e1a;">${ins.nome}</td>
       <td style="padding:10px 12px;color:#555;">${nasc}</td>
       <td style="padding:10px 12px;color:#555;">${ins.email || '—'}</td>
       <td style="padding:10px 12px;color:#555;font-size:12px;">${end}</td>
@@ -1199,7 +1199,7 @@ async function renderPainelDia() {
 
         grupos.forEach(({ label, vols: gvols }) => {
           if (label) {
-            volsHtml += '<div class="esc-sala-titulo" style="font-size:11px;font-weight:700;color:#1a9e93;margin:6px 0 2px;text-transform:uppercase;letter-spacing:0.4px;">'
+            volsHtml += '<div class="esc-sala-titulo" style="font-size:11px;font-weight:700;color:#4a6a35;margin:6px 0 2px;text-transform:uppercase;letter-spacing:0.4px;">'
               + label + ' <span style="color:#aaa;font-weight:500;">(' + gvols.length + ')</span></div>'
           }
           const confirmados = gvols.filter(v => v.status === 'confirmado')
@@ -1244,8 +1244,8 @@ async function renderPainelDia() {
     if (repertorio.length) {
       repertorioHtml = `
         <div style="margin-top:12px;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;">
-          <div style="background:#f0fffe;padding:8px 12px;font-size:12px;font-weight:800;
-                      color:#1a9e93;border-bottom:1px solid #d0f0ee;display:flex;
+          <div style="background:#f7faee;padding:8px 12px;font-size:12px;font-weight:800;
+                      color:#4a6a35;border-bottom:1px solid #d0f0ee;display:flex;
                       align-items:center;gap:6px;">
             🎵 Repertório de Música
             <span style="font-size:10px;font-weight:400;color:#aaa;margin-left:4px;">
@@ -1259,7 +1259,7 @@ async function renderPainelDia() {
                 <span style="font-size:11px;color:#ccc;font-weight:700;min-width:18px;text-align:right;">
                   ${m.ordem || i + 1}.
                 </span>
-                <span style="font-size:13px;font-weight:600;color:#1a2e2d;flex:1;
+                <span style="font-size:13px;font-weight:600;color:#242e1a;flex:1;
                              white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                   ${m.titulo || '—'}
                 </span>
@@ -1268,7 +1268,7 @@ async function renderPainelDia() {
                     ${m.artista}
                   </span>` : ''}
                 ${m.tonalidade ? `
-                  <span style="font-size:10px;background:#e8faf9;color:#1a9e93;
+                  <span style="font-size:10px;background:#eef5e2;color:#4a6a35;
                                 border-radius:20px;padding:1px 7px;font-weight:700;
                                 white-space:nowrap;">
                     ${m.tonalidade}
@@ -1303,7 +1303,7 @@ async function renderPainelDia() {
             '<span>' + finLabel + (isMin && minNome ? ' · ' + minNome : '') + '</span>' +
           '</div>' +
           '<div style="display:flex;gap:6px;margin-left:auto;">' +
-            (ev.publico ? '<button class="dia-ev-inscricoes" title="Ver Inscrições" data-acao="inscricoes" style="background:#e8faf9;color:#1a9e93;border:none;border-radius:7px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">📋 Inscrições</button>' : '') +
+            (ev.publico ? '<button class="dia-ev-inscricoes" title="Ver Inscrições" data-acao="inscricoes" style="background:#eef5e2;color:#4a6a35;border:none;border-radius:7px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">📋 Inscrições</button>' : '') +
             '<button class="dia-ev-editar" title="Editar" data-acao="editar" style="background:#f0f4ff;color:#3b5bdb;border:none;border-radius:7px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">✏️ Editar</button>' +
             '<button class="dia-ev-excluir" title="Excluir" data-acao="excluir" style="background:#ffeaea;color:#c0392b;border:none;border-radius:7px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">🗑️</button>' +
           '</div>' +
@@ -1803,7 +1803,7 @@ function renderAgendamentos(lista) {
           : '⏳ Pendente'
         }</span>
         <div class="agend-actions">
-          <button class="btn-sm btn-agend-status" style="background:#e8faf9; color:#1a9e93;">
+          <button class="btn-sm btn-agend-status" style="background:#eef5e2; color:#4a6a35;">
             ✏️ Status
           </button>
           <button class="btn-sm btn-sm-danger btn-excluir-agend" data-acao="excluir">🗑️</button>
@@ -1916,7 +1916,7 @@ async function carregarHistoricoRelatorios(telefone, agendamentoIdAtual) {
       <div style="font-size:11px; color:#888; margin-bottom:4px;">
         📅 ${dt} &nbsp;·&nbsp; 👤 ${cons}
       </div>
-      <div style="font-size:13px; color:#1a2e2d; white-space:pre-wrap; line-height:1.4;">
+      <div style="font-size:13px; color:#242e1a; white-space:pre-wrap; line-height:1.4;">
         ${(r.relatorio || '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}
       </div>
     `
