@@ -46,7 +46,7 @@ window.addEventListener('load', async () => {
     history.replaceState(null, '', window.location.pathname)
     const msg = tipo === 'email_change'
       ? '✅ E-mail alterado com sucesso!'
-      : '✅ E-mail confirmado com sucesso! Bem-vindo(a) à Ministério Semente.'
+      : '✅ E-mail confirmado com sucesso! Bem-vindo(a) ao Ministério Semente.'
     mostrarMsg('login-erro', msg, 'sucesso')
 
     // Se o hash trouxe access_token, a sessão já está ativa → redireciona.

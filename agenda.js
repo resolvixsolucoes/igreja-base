@@ -1,5 +1,5 @@
 // ================================================================
-//  agenda.js — Agenda da Ministério Semente
+//  agenda.js — Agenda do Ministério Semente
 //  Eventos gerais/ministério + Aconselhamento Pastoral
 // ================================================================
 const _db = db

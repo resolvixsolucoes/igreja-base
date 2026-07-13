@@ -62,7 +62,7 @@
       <div class="dash-boas-vindas plat-card" id="dash-boas-vindas">
         <div class="dash-bv-texto">
           <h2 id="dash-bv-nome">Olá!</h2>
-          <p id="dash-bv-sub">Bem-vindo à plataforma de cursos da Ministério Semente.</p>
+          <p id="dash-bv-sub">Bem-vindo à plataforma de cursos do Ministério Semente.</p>
         </div>
         <div class="dash-bv-stats" id="dash-bv-stats"></div>
       </div>
@@ -195,8 +195,8 @@
     const primeiroNome = aluno.nome?.split(' ')[0] || 'Aluno'
     document.getElementById('dash-bv-nome').textContent = `Olá, ${primeiroNome}! 👋`
     document.getElementById('dash-bv-sub').textContent = aluno.is_membro
-      ? 'Você é membro da Ministério Semente — acesso gratuito a todos os cursos!'
-      : 'Bem-vindo à plataforma de cursos da Ministério Semente.'
+      ? 'Você é membro do Ministério Semente — acesso gratuito a todos os cursos!'
+      : 'Bem-vindo à plataforma de cursos do Ministério Semente.'
     document.getElementById('plat-user-tipo').textContent = aluno.is_membro ? '⭐ Membro' : 'Aluno'
 
     // Busca matrículas

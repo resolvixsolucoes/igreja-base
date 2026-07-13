@@ -134,7 +134,7 @@ async function processar(telefone, textoRaw) {
       sessao.dados.comoConheceu = opcao
       await enviarMensagem(
         telefone,
-        `Deseja receber informações sobre as *programações da Ministério Semente* pelo WhatsApp?\n\n1️⃣ Sim, quero receber\n2️⃣ Não, obrigado`
+        `Deseja receber informações sobre as *programações do Ministério Semente* pelo WhatsApp?\n\n1️⃣ Sim, quero receber\n2️⃣ Não, obrigado`
       )
       sessao.estado = ESTADOS.AGUARDANDO_PROGRAMACOES
       await setSession(telefone, sessao)
