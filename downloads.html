@@ -1,0 +1,844 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Downloads — Sua Igreja</title>
+  <meta name="description" content="Baixe ebooks, livros, apostilas e materiais da Sua Igreja para a sua jornada de fé." />
+  <meta name="theme-color" content="#2BBFB3" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand:       #2BBFB3;
+      --brand-dark:  #1a9e93;
+      --brand-deep:  #0f6b64;
+      --brand-light: #e8faf9;
+      --brand-mid:   #b2e8e4;
+      --text:        #1a2e2d;
+      --muted:       #6b8b89;
+      --bg:          #ffffff;
+      --bg-soft:     #f4fdfc;
+      --radius:      16px;
+      --dropdown-bg: #071a18;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────────────── */
+    header {
+      width: 100%; padding: 12px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--brand);
+      box-shadow: 0 2px 16px rgba(43,191,179,0.30);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    header.scrolled { background: var(--brand-dark); box-shadow: 0 2px 24px rgba(0,0,0,0.18); }
+    .header-logo img { height: 44px; object-fit: contain; display: block; }
+    .header-right { display: flex; align-items: center; gap: 4px; }
+
+    .main-nav { display: flex; align-items: center; gap: 2px; list-style: none; }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 8px 13px; border-radius: 8px;
+      color: rgba(255,255,255,0.92); font-size: 13.5px; font-weight: 600;
+      text-decoration: none; cursor: pointer; white-space: nowrap;
+      background: transparent; border: none; font-family: inherit;
+      transition: background 0.2s, color 0.2s; user-select: none;
+    }
+    .nav-link:hover, .nav-item.open > .nav-link { background: rgba(255,255,255,0.15); color: #ffffff; }
+    .nav-link .chevron { width: 13px; height: 13px; flex-shrink: 0; transition: transform 0.25s; opacity: 0.70; }
+    .nav-item.open > .nav-link .chevron { transform: rotate(180deg); opacity: 1; }
+
+    .dropdown {
+      position: absolute; top: calc(100% + 12px); right: 0;
+      background: var(--dropdown-bg);
+      border-radius: 12px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.20);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-width: 210px; padding: 6px;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 200;
+    }
+    .nav-item.open > .dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .dropdown::before {
+      content: ''; position: absolute; top: -7px; right: 20px;
+      border-left: 7px solid transparent; border-right: 7px solid transparent;
+      border-bottom: 7px solid var(--dropdown-bg);
+    }
+    .dropdown-item {
+      display: flex; align-items: center;
+      padding: 11px 14px; border-radius: 8px;
+      color: rgba(255,255,255,0.82); font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(43,191,179,0.18); color: #ffffff; }
+    .dropdown-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 3px 6px; }
+
+    .btn-membros {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px; border-radius: 50px; margin-left: 8px;
+      background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.45);
+      color: #ffffff; font-size: 13px; font-weight: 700;
+      text-decoration: none; white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-membros:hover { background: rgba(255,255,255,0.30); border-color: rgba(255,255,255,0.80); }
+
+    .nav-toggle {
+      display: none;
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.40);
+      border-radius: 10px; width: 42px; height: 42px; cursor: pointer;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 5px; transition: background .2s; flex-shrink: 0; margin-left: 8px;
+    }
+    .nav-toggle:hover { background: rgba(255,255,255,0.28); }
+    .nav-toggle span { display: block; width: 18px; height: 2px; background: #ffffff; border-radius: 2px; transition: all .3s; }
+    .nav-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    .mobile-menu-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,40,38,0.55); z-index: 98;
+      opacity: 0; transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .mobile-menu-overlay.active { opacity: 1; pointer-events: all; }
+    .mobile-menu {
+      position: fixed; top: 0; left: 0; width: 300px; height: 100vh;
+      background: var(--brand-dark); z-index: 99;
+      display: flex; flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      overflow-y: auto;
+    }
+    .mobile-menu.active { transform: translateX(0); }
+    .mobile-menu-header {
+      padding: 20px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .mobile-menu-header img { height: 36px; object-fit: contain; }
+    .btn-fechar-mobile {
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.35);
+      color: #fff; width: 34px; height: 34px; border-radius: 50%;
+      font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .btn-fechar-mobile:hover { background: rgba(255,255,255,0.28); }
+    .mobile-nav { padding: 12px 0; flex: 1; }
+    .m-group { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .m-group-btn {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; cursor: pointer; font-family: inherit;
+      color: rgba(255,255,255,0.92); font-size: 14px; font-weight: 700;
+      transition: background 0.2s;
+    }
+    .m-group-btn:hover { background: rgba(255,255,255,0.08); }
+    .m-group-btn .m-chevron { width: 16px; height: 16px; transition: transform 0.25s; opacity: 0.6; }
+    .m-group.open .m-group-btn .m-chevron { transform: rotate(180deg); opacity: 1; }
+    .m-sub { max-height: 0; overflow: hidden; transition: max-height 0.30s ease; background: rgba(0,0,0,0.20); }
+    .m-group.open .m-sub { max-height: 400px; }
+    .m-sub a {
+      display: flex; align-items: center;
+      padding: 12px 20px 12px 32px;
+      color: rgba(255,255,255,0.75); font-size: 13.5px; font-weight: 600;
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .m-sub a:last-child { border-bottom: none; }
+    .m-sub a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .mobile-menu-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .btn-membros-mobile {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 13px;
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.40);
+      border-radius: 12px; color: #ffffff;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-membros-mobile:hover { background: rgba(255,255,255,0.28); }
+
+    /* ── HERO ────────────────────────────────────────────────────────── */
+    .hero {
+      padding: 110px 24px 56px;
+      background: linear-gradient(160deg, var(--brand-deep) 0%, var(--brand-dark) 55%, var(--brand) 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 50%, rgba(255,255,255,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 80% 30%, rgba(43,191,179,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 16px;
+      max-width: 640px; margin: 0 auto;
+      animation: fadeUp 0.8s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: #fff; font-weight: 900;
+      line-height: 1.1; letter-spacing: -0.5px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.15);
+    }
+    .hero h1 em { font-style: normal; position: relative; }
+    .hero h1 em::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 3px; background: rgba(255,255,255,0.5); border-radius: 4px;
+    }
+    .hero p {
+      font-size: clamp(0.92rem, 1.8vw, 1.08rem);
+      color: rgba(255,255,255,0.85); line-height: 1.75;
+      max-width: 460px; font-style: italic;
+    }
+
+    /* ══ MAIN ══ */
+    .main-content { flex: 1; background: #0a2e2b; padding: 48px 24px 72px; }
+    .content-wrapper { max-width: 1140px; margin: 0 auto; }
+
+    /* ── FILTROS (chips) ───────────────────────────────────────────── */
+    .filtros-row {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 32px; justify-content: center;
+    }
+    .filtro-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 50px;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.75);
+      font-size: 13px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .filtro-chip:hover { background: rgba(255,255,255,0.10); color: #fff; }
+    .filtro-chip.ativo {
+      background: var(--brand); color: #fff;
+      border-color: var(--brand);
+      box-shadow: 0 4px 16px rgba(43,191,179,0.35);
+    }
+    .filtro-chip .chip-count {
+      font-size: 11px; opacity: 0.65;
+      background: rgba(0,0,0,0.18); padding: 1px 7px;
+      border-radius: 10px; font-weight: 700;
+    }
+    .filtro-chip.ativo .chip-count { background: rgba(255,255,255,0.22); opacity: 0.95; }
+
+    /* ── BUSCA ─────────────────────────────────────────────────────── */
+    .busca-wrap {
+      max-width: 480px; margin: 0 auto 28px;
+      position: relative;
+    }
+    .busca-wrap input {
+      width: 100%; padding: 12px 16px 12px 42px;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.10);
+      color: #fff; font-size: 14px; font-family: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .busca-wrap input::placeholder { color: rgba(255,255,255,0.45); }
+    .busca-wrap input:focus {
+      outline: none; border-color: var(--brand);
+      background: rgba(255,255,255,0.10);
+    }
+    .busca-wrap .busca-icon {
+      position: absolute; left: 16px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px; opacity: 0.55;
+    }
+
+    /* ── GRID DE CARDS ─────────────────────────────────────────────── */
+    .downloads-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .download-card {
+      background: linear-gradient(180deg, #0d3936 0%, #0a2e2b 100%);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
+      animation: fadeUp 0.4s ease both;
+    }
+    .download-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(43,191,179,0.40);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+    }
+
+    .card-cover {
+      width: 100%; aspect-ratio: 3/4;
+      background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-dark) 100%);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card-cover img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .card-cover .cover-placeholder {
+      font-size: 3.6rem; opacity: 0.55;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .card-badge {
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(0,0,0,0.55);
+      color: #fff;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 50px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .card-body {
+      padding: 16px 16px 18px;
+      display: flex; flex-direction: column;
+      gap: 8px; flex: 1;
+    }
+    .card-categoria {
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--brand);
+    }
+    .card-titulo {
+      font-size: 0.95rem; font-weight: 800;
+      color: #fff; line-height: 1.32;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .card-desc {
+      font-size: 12px; color: rgba(255,255,255,0.60);
+      line-height: 1.55;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .card-meta {
+      font-size: 11px; color: rgba(255,255,255,0.42);
+      margin-top: auto; padding-top: 6px;
+    }
+    .btn-download {
+      margin-top: 10px;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 11px 14px;
+      background: var(--brand); color: #fff;
+      border: none; border-radius: 10px;
+      font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-download:hover { background: var(--brand-dark); transform: translateY(-1px); }
+    .btn-download:active { transform: translateY(0); }
+    .btn-download svg { width: 14px; height: 14px; }
+
+    /* ── ESTADOS ───────────────────────────────────────────────────── */
+    .estado-box {
+      text-align: center; padding: 80px 24px;
+      display: none; flex-direction: column;
+      align-items: center; gap: 14px;
+    }
+    .estado-box.visivel { display: flex; }
+    .estado-icone  { font-size: 3rem; opacity: 0.5; }
+    .estado-titulo { font-size: 1.1rem; font-weight: 700; color: #ffffff; }
+    .estado-sub    { font-size: 0.9rem; color: rgba(255,255,255,0.55); max-width: 320px; line-height: 1.6; }
+
+    /* ── DRAWER ORAÇÃO ─────────────────────────────────────────────── */
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(10,40,38,0.55); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .drawer-overlay.active { opacity: 1; pointer-events: all; }
+    .drawer { position: fixed; top: 0; right: 0; width: 100%; max-width: 440px; height: 100vh; background: #fff; z-index: 301; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); box-shadow: -8px 0 40px rgba(0,0,0,0.18); }
+    .drawer.active { transform: translateX(0); }
+    .drawer-header { background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%); padding: 28px 24px 24px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-shrink: 0; }
+    .drawer-header-text h2 { color:#fff; font-size:20px; font-weight:800; }
+    .drawer-header-text p  { color:rgba(255,255,255,0.82); font-size:13px; margin-top:4px; line-height:1.5; }
+    .btn-fechar-drawer { background: rgba(255,255,255,0.20); border: 1.5px solid rgba(255,255,255,0.40); color: #fff; width:34px; height:34px; border-radius:50%; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background 0.2s; }
+    .btn-fechar-drawer:hover { background:rgba(255,255,255,0.35); }
+    .drawer-body { flex:1; overflow-y:auto; padding:28px 24px; display:flex; flex-direction:column; gap:18px; }
+    .drawer-field { display:flex; flex-direction:column; gap:6px; }
+    .drawer-field label { font-size:13px; font-weight:700; color:#444; }
+    .drawer-field input, .drawer-field textarea { width:100%; padding:11px 14px; border:1.5px solid #e0e0e0; border-radius:10px; font-size:14px; font-family:inherit; background:#fafafa; color:var(--text); transition:border-color 0.2s, background 0.2s; }
+    .drawer-field input:focus, .drawer-field textarea:focus { outline:none; border-color:var(--brand); background:#fff; }
+    .drawer-field textarea { min-height:120px; resize:vertical; }
+    .drawer-hint { font-size:11px; color:#aaa; line-height:1.5; margin-top:-8px; }
+    .drawer-divider { width:100%; height:1px; background:#f0f0f0; }
+    .btn-enviar-oracao { width:100%; padding:14px; background:linear-gradient(135deg, var(--brand), var(--brand-dark)); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; box-shadow:0 4px 16px rgba(43,191,179,0.35); }
+    .btn-enviar-oracao:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(43,191,179,0.45); }
+    .btn-enviar-oracao:disabled { opacity:0.65; cursor:not-allowed; transform:none; }
+    .drawer-sucesso { display:none; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; padding:40px 20px; flex:1; }
+    .drawer-sucesso.show { display:flex; }
+    .drawer-sucesso .icone-sucesso { font-size:4rem; }
+    .drawer-sucesso h3 { font-size:20px; font-weight:800; color:var(--text); }
+    .drawer-sucesso p  { font-size:14px; color:var(--muted); line-height:1.7; max-width:280px; }
+    .btn-novo-pedido { margin-top:8px; padding:10px 28px; border-radius:50px; border:2px solid var(--brand); background:#fff; color:var(--brand); font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+    .btn-novo-pedido:hover { background:var(--brand); color:#fff; }
+
+    /* ── RESPONSIVO ───────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      header { padding: 12px 16px; }
+      .main-nav, .btn-membros { display: none; }
+      .nav-toggle { display: flex; }
+      .mobile-menu-overlay { display: block; pointer-events: none; }
+      .hero { padding: 90px 20px 48px; }
+      .main-content { padding: 32px 16px 56px; }
+      .downloads-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+      .card-titulo { font-size: 0.88rem; }
+    }
+    @media (max-width: 580px) {
+      .drawer { max-width: 100%; }
+      .downloads-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .card-body { padding: 12px 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────────────────────────── -->
+  <header id="main-header">
+    <div class="header-logo">
+      <a href="index.html"><img src="logo.png" alt="Sua Igreja" /></a>
+    </div>
+    <div class="header-right">
+      <ul class="main-nav" id="main-nav">
+        <li class="nav-item" data-nav="sobre">
+          <button class="nav-link" onclick="toggleNav('sobre')">
+            Sobre Nós
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="dropdown">
+            <a class="dropdown-item" href="quem-somos.html">Quem Somos</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="o-que-cremos.html">O Que Cremos</a>
+          </div>
+        </li>
+        <li class="nav-item" data-nav="conteudo">
+          <button class="nav-link" onclick="toggleNav('conteudo')">
+            Conteúdo
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="dropdown">
+            <a class="dropdown-item" href="pregacoes.html">Pregações</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="cursos.html">Cursos</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="downloads.html">Downloads</a>
+          </div>
+        </li>
+        <li class="nav-item" data-nav="fale">
+          <button class="nav-link" onclick="toggleNav('fale')">
+            Fale Conosco
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="dropdown">
+            <a class="dropdown-item" href="#" onclick="fecharTodosNavs(); abrirDrawer(); return false;">Pedido de Oração</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="agendamento-pastoral.html">Agendamento Pastoral</a>
+          </div>
+        </li>
+      </ul>
+      <a href="login.html" class="btn-membros">🔑 Área de Membros</a>
+      <button class="nav-toggle" id="nav-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── MENU MOBILE ─────────────────────────────────────────────────── -->
+  <div class="mobile-menu-overlay" id="mobile-overlay" onclick="fecharMobileMenu()"></div>
+  <nav class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-header">
+      <img src="logo.png" alt="Sua Igreja" />
+      <button class="btn-fechar-mobile" onclick="fecharMobileMenu()">✕</button>
+    </div>
+    <div class="mobile-nav">
+      <div class="m-group" id="m-sobre">
+        <button class="m-group-btn" onclick="toggleMobileGroup('m-sobre')">
+          Sobre Nós
+          <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="m-sub">
+          <a href="quem-somos.html">Quem Somos</a>
+          <a href="o-que-cremos.html">O Que Cremos</a>
+        </div>
+      </div>
+      <div class="m-group" id="m-conteudo">
+        <button class="m-group-btn" onclick="toggleMobileGroup('m-conteudo')">
+          Conteúdo
+          <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="m-sub">
+          <a href="pregacoes.html">Pregações</a>
+          <a href="cursos.html">Cursos</a>
+          <a href="downloads.html">Downloads</a>
+        </div>
+      </div>
+      <div class="m-group" id="m-fale">
+        <button class="m-group-btn" onclick="toggleMobileGroup('m-fale')">
+          Fale Conosco
+          <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="m-sub">
+          <a href="#" onclick="fecharMobileMenu(); abrirDrawer(); return false;">Pedido de Oração</a>
+          <a href="agendamento-pastoral.html">Agendamento Pastoral</a>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-menu-footer">
+      <a href="login.html" class="btn-membros-mobile">🔑 Área de Membros</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Materiais para<br/><em>baixar e estudar</em></h1>
+      <p>Ebooks, livros, apostilas e devocionais preparados com carinho para fortalecer a sua caminhada com Deus.</p>
+    </div>
+  </section>
+
+  <!-- ── CONTEÚDO PRINCIPAL ──────────────────────────────────────────── -->
+  <main class="main-content">
+    <div class="content-wrapper">
+
+      <div class="busca-wrap">
+        <span class="busca-icon">🔍</span>
+        <input type="text" id="busca" placeholder="Buscar por título, descrição ou categoria..." oninput="aplicarFiltros()" />
+      </div>
+
+      <div class="filtros-row" id="filtros-row">
+        <button class="filtro-chip ativo" data-subtipo="todos" onclick="selecionarSubtipo('todos')">
+          Todos <span class="chip-count" id="cnt-todos">0</span>
+        </button>
+        <button class="filtro-chip" data-subtipo="ebook" onclick="selecionarSubtipo('ebook')">
+          📄 Ebooks &amp; Livros <span class="chip-count" id="cnt-ebook">0</span>
+        </button>
+        <button class="filtro-chip" data-subtipo="devocional" onclick="selecionarSubtipo('devocional')">
+          ✝️ Devocionais <span class="chip-count" id="cnt-devocional">0</span>
+        </button>
+        <button class="filtro-chip" data-subtipo="artigo" onclick="selecionarSubtipo('artigo')">
+          📝 Apostilas &amp; Artigos <span class="chip-count" id="cnt-artigo">0</span>
+        </button>
+        <button class="filtro-chip" data-subtipo="audio" onclick="selecionarSubtipo('audio')">
+          🎧 Áudios <span class="chip-count" id="cnt-audio">0</span>
+        </button>
+      </div>
+
+      <div class="estado-box visivel" id="estado-carregando">
+        <div class="estado-icone">⏳</div>
+        <div class="estado-titulo">Carregando materiais...</div>
+        <div class="estado-sub">Buscando os arquivos disponíveis para download.</div>
+      </div>
+
+      <div class="estado-box" id="estado-vazio">
+        <div class="estado-icone">📭</div>
+        <div class="estado-titulo">Nenhum material encontrado</div>
+        <div class="estado-sub">Não há materiais disponíveis com esse filtro. Em breve novos conteúdos chegarão!</div>
+      </div>
+
+      <div class="downloads-grid" id="downloads-grid"></div>
+
+    </div>
+  </main>
+
+  <!-- ── FOOTER ──────────────────────────────────────────────────────── -->
+  <div data-site-footer></div>
+
+  <!-- ── DRAWER ORAÇÃO ───────────────────────────────────────────────── -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
+  <div class="drawer" id="drawer-oracao">
+    <div class="drawer-header">
+      <div class="drawer-header-text">
+        <h2>Pedido de Oração</h2>
+        <p>Compartilhe seu pedido conosco.<br/>Vamos orar por você! 🙏</p>
+      </div>
+      <button class="btn-fechar-drawer" onclick="fecharDrawer()">✕</button>
+    </div>
+    <div class="drawer-body" id="drawer-form-body">
+      <div class="drawer-field">
+        <label>Nome completo <span style="color:#e74c3c">*</span></label>
+        <input type="text" id="oracao-nome" placeholder="Ex: Maria Souza" />
+      </div>
+      <div class="drawer-field">
+        <label>Telefone / WhatsApp</label>
+        <input type="text" id="oracao-telefone" placeholder="(31) 99999-9999" />
+        <span class="drawer-hint">Opcional — para que possamos entrar em contato.</span>
+      </div>
+      <div class="drawer-divider"></div>
+      <div class="drawer-field">
+        <label>Seu pedido de oração <span style="color:#e74c3c">*</span></label>
+        <textarea id="oracao-pedido" placeholder="Escreva aqui o seu pedido de oração..."></textarea>
+      </div>
+      <p id="drawer-erro" style="display:none;font-size:13px;color:#e74c3c;background:#fff0f0;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-weight:600;"></p>
+      <button class="btn-enviar-oracao" id="btn-enviar" onclick="enviarPedidoOracao()">🙏 Enviar Pedido de Oração</button>
+    </div>
+    <div class="drawer-sucesso" id="drawer-sucesso">
+      <div class="icone-sucesso">🙏</div>
+      <h3>Pedido enviado!</h3>
+      <p>Recebemos seu pedido de oração.<br/>Nossa equipe vai orar por você com muito carinho.</p>
+      <button class="btn-novo-pedido" onclick="resetDrawer()">+ Enviar outro pedido</button>
+    </div>
+  </div>
+
+  <!-- ── SCRIPTS ─────────────────────────────────────────────────────── -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script>
+    let todosItens   = []
+    let subtipoAtivo = 'todos'
+
+    const ICONES_SUBTIPO = {
+      ebook:      '📄',
+      devocional: '✝️',
+      artigo:     '📝',
+      audio:      '🎧'
+    }
+    const LABELS_SUBTIPO = {
+      ebook:      'Ebook',
+      devocional: 'Devocional',
+      artigo:     'Apostila',
+      audio:      'Áudio'
+    }
+
+    function esc(s) {
+      if (s === null || s === undefined) return ''
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+    }
+    function formatarData(str) {
+      if (!str) return ''
+      const [y, m, d] = str.split('-')
+      return `${d}/${m}/${y}`
+    }
+
+    function selecionarSubtipo(s) {
+      subtipoAtivo = s
+      document.querySelectorAll('.filtro-chip').forEach(chip => {
+        chip.classList.toggle('ativo', chip.dataset.subtipo === s)
+      })
+      aplicarFiltros()
+    }
+
+    function aplicarFiltros() {
+      const termo = (document.getElementById('busca').value || '').trim().toLowerCase()
+      let lista = todosItens.slice()
+
+      if (subtipoAtivo !== 'todos') {
+        lista = lista.filter(i => i.subtipo === subtipoAtivo)
+      }
+      if (termo) {
+        lista = lista.filter(i =>
+          (i.titulo     || '').toLowerCase().includes(termo) ||
+          (i.descricao  || '').toLowerCase().includes(termo) ||
+          (i.categoria  || '').toLowerCase().includes(termo)
+        )
+      }
+      renderGrid(lista)
+    }
+
+    function renderGrid(lista) {
+      const grid    = document.getElementById('downloads-grid')
+      const vazio   = document.getElementById('estado-vazio')
+      grid.innerHTML = ''
+
+      if (!lista.length) {
+        vazio.classList.add('visivel')
+        return
+      }
+      vazio.classList.remove('visivel')
+
+      lista.forEach((item, i) => {
+        const url   = item.arquivo_url || item.link_externo || ''
+        const isUpload = !!item.arquivo_url
+        const icone = ICONES_SUBTIPO[item.subtipo] || '📚'
+        const tipoLabel = LABELS_SUBTIPO[item.subtipo] || 'Material'
+
+        const card = document.createElement('div')
+        card.className = 'download-card'
+        card.style.animationDelay = `${Math.min(i * 0.04, 0.4)}s`
+
+        const cover = item.thumbnail_url
+          ? `<img src="${esc(item.thumbnail_url)}" alt="${esc(item.titulo)}" loading="lazy">`
+          : `<div class="cover-placeholder">${icone}</div>`
+
+        const meta = []
+        if (item.data_publicacao) meta.push(formatarData(item.data_publicacao))
+        if (item.categoria)       meta.push(esc(item.categoria))
+
+        card.innerHTML = `
+          <div class="card-cover">
+            ${cover}
+            <span class="card-badge">${icone} ${tipoLabel}</span>
+          </div>
+          <div class="card-body">
+            ${item.categoria ? `<div class="card-categoria">${esc(item.categoria)}</div>` : ''}
+            <div class="card-titulo">${esc(item.titulo)}</div>
+            ${item.descricao ? `<div class="card-desc">${esc(item.descricao)}</div>` : ''}
+            ${meta.length ? `<div class="card-meta">${meta.join('  ·  ')}</div>` : ''}
+            ${url ? `
+              <a class="btn-download" href="${esc(url)}" ${isUpload ? `download="${esc(item.arquivo_nome || item.titulo)}"` : 'target="_blank" rel="noopener"'}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                ${isUpload ? 'Baixar' : 'Acessar'}
+              </a>` : ''}
+          </div>
+        `
+        grid.appendChild(card)
+      })
+    }
+
+    function atualizarContadores() {
+      const cont = { todos: todosItens.length, ebook: 0, devocional: 0, artigo: 0, audio: 0 }
+      todosItens.forEach(i => { if (cont[i.subtipo] !== undefined) cont[i.subtipo]++ })
+      Object.keys(cont).forEach(k => {
+        const el = document.getElementById('cnt-' + k)
+        if (el) el.textContent = cont[k]
+      })
+    }
+
+    async function carregarDados() {
+      try {
+        const { data, error } = await db
+          .from('conteudos')
+          .select('id, titulo, descricao, categoria, subtipo, link_externo, arquivo_url, arquivo_nome, thumbnail_url, data_publicacao')
+          .eq('tipo', 'biblioteca')
+          .eq('publicado', true)
+          .order('data_publicacao', { ascending: false })
+        if (error) throw error
+
+        todosItens = (data || []).filter(i => i.arquivo_url || i.link_externo)
+
+        document.getElementById('estado-carregando').classList.remove('visivel')
+        atualizarContadores()
+        if (!todosItens.length) {
+          document.getElementById('estado-vazio').classList.add('visivel')
+        } else {
+          aplicarFiltros()
+        }
+      } catch (err) {
+        console.error('[Sua Igreja]', err)
+        document.getElementById('estado-carregando').classList.remove('visivel')
+        const vazio = document.getElementById('estado-vazio')
+        vazio.classList.add('visivel')
+        vazio.querySelector('.estado-titulo').textContent = 'Erro ao carregar'
+        vazio.querySelector('.estado-sub').textContent    = 'Tente novamente em alguns instantes.'
+      }
+    }
+
+    /* ── NAV / MOBILE / DRAWER ─────────────────────────────────────── */
+    function toggleNav(id) {
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('open', item.dataset.nav === id && !item.classList.contains('open'))
+      })
+    }
+    function fecharTodosNavs() {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('open'))
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.nav-item')) fecharTodosNavs()
+    })
+
+    function toggleMobileMenu() {
+      const menu    = document.getElementById('mobile-menu')
+      const overlay = document.getElementById('mobile-overlay')
+      const toggle  = document.getElementById('nav-toggle')
+      const open    = menu.classList.toggle('active')
+      overlay.classList.toggle('active', open)
+      toggle.classList.toggle('open', open)
+      document.body.style.overflow = open ? 'hidden' : ''
+    }
+    function fecharMobileMenu() {
+      document.getElementById('mobile-menu').classList.remove('active')
+      document.getElementById('mobile-overlay').classList.remove('active')
+      document.getElementById('nav-toggle').classList.remove('open')
+      document.body.style.overflow = ''
+    }
+    function toggleMobileGroup(id) {
+      const group   = document.getElementById(id)
+      const wasOpen = group.classList.contains('open')
+      document.querySelectorAll('.m-group').forEach(g => g.classList.remove('open'))
+      if (!wasOpen) group.classList.add('open')
+    }
+
+    function abrirDrawer() {
+      document.getElementById('drawer-overlay').classList.add('active')
+      document.getElementById('drawer-oracao').classList.add('active')
+      document.body.style.overflow = 'hidden'
+    }
+    function fecharDrawer() {
+      document.getElementById('drawer-overlay').classList.remove('active')
+      document.getElementById('drawer-oracao').classList.remove('active')
+      document.body.style.overflow = ''
+    }
+    function resetDrawer() {
+      document.getElementById('oracao-nome').value     = ''
+      document.getElementById('oracao-telefone').value = ''
+      document.getElementById('oracao-pedido').value   = ''
+      document.getElementById('drawer-erro').style.display = 'none'
+      document.getElementById('drawer-form-body').style.display = 'flex'
+      document.getElementById('drawer-sucesso').classList.remove('show')
+    }
+    async function enviarPedidoOracao() {
+      const nome     = document.getElementById('oracao-nome').value.trim()
+      const telefone = document.getElementById('oracao-telefone').value.trim() || null
+      const pedido   = document.getElementById('oracao-pedido').value.trim()
+      const erroEl   = document.getElementById('drawer-erro')
+      const btnEl    = document.getElementById('btn-enviar')
+      erroEl.style.display = 'none'
+      if (!nome)   { erroEl.textContent = '⚠️ O nome é obrigatório.';         erroEl.style.display = 'block'; document.getElementById('oracao-nome').focus();   return }
+      if (!pedido) { erroEl.textContent = '⚠️ Escreva seu pedido de oração.'; erroEl.style.display = 'block'; document.getElementById('oracao-pedido').focus(); return }
+      btnEl.disabled = true; btnEl.textContent = '⏳ Enviando...'
+      const { error } = await db.from('pedidos_oracao').insert({ nome, telefone, pedido, origem: 'Site', status: 'Pendente' })
+      btnEl.disabled = false; btnEl.innerHTML = '🙏 Enviar Pedido de Oração'
+      if (error) { erroEl.textContent = '❌ Erro ao enviar. Tente novamente.'; erroEl.style.display = 'block'; return }
+      document.getElementById('drawer-form-body').style.display = 'none'
+      document.getElementById('drawer-sucesso').classList.add('show')
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { fecharTodosNavs(); fecharMobileMenu(); fecharDrawer() }
+    })
+    window.addEventListener('scroll', () => {
+      document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50)
+    })
+
+    document.addEventListener('DOMContentLoaded', carregarDados)
+  </script>
+  <script src="/pwa.js"></script>
+  <script src="site-footer.js"></script>
+</body>
+</html>

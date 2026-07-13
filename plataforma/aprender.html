@@ -1,0 +1,1166 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aprendendo — Sua Igreja</title>
+  <link rel="stylesheet" href="plataforma.css"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="dns-prefetch" href="https://www.youtube.com"/>
+  <style>
+    /* ── LAYOUT APRENDER ──────────────────────────────────────── */
+    body { background: #0d1f1e; }
+
+    .aprender-layout {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    /* Topbar */
+    .ap-topbar {
+      height: 54px;
+      background: #0a1a19;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center;
+      padding: 0 16px; gap: 12px;
+      position: sticky; top: 0; z-index: 200;
+      flex-shrink: 0;
+    }
+    .ap-topbar-back {
+      display: flex; align-items: center; gap: 6px;
+      color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 600;
+      text-decoration: none; padding: 6px 10px; border-radius: 8px;
+      transition: background 0.2s, color 0.2s; flex-shrink: 0;
+    }
+    .ap-topbar-back:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .ap-topbar-back svg { width: 15px; height: 15px; }
+    .ap-topbar-titulo {
+      flex: 1; font-size: 14px; font-weight: 700; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ap-tab {
+      padding: 6px 14px; border-radius: 8px; font-size: 12.5px;
+      font-weight: 700; cursor: pointer; border: none; font-family: inherit;
+      color: rgba(255,255,255,0.55); background: transparent;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .ap-tab.active { background: var(--brand); color: #fff; }
+    .ap-topbar-prog {
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    }
+    .ap-topbar-prog-bar {
+      width: 90px; height: 5px; background: rgba(255,255,255,0.15);
+      border-radius: 20px; overflow: hidden;
+    }
+    .ap-topbar-prog-fill {
+      height: 100%; border-radius: 20px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+      transition: width 0.4s;
+    }
+    .ap-topbar-prog-pct {
+      font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,0.55);
+    }
+    .ap-topbar-menu-btn {
+      display: none; background: none; border: none;
+      color: rgba(255,255,255,0.6); padding: 6px; cursor: pointer; border-radius: 8px;
+    }
+    .ap-topbar-menu-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .ap-topbar-menu-btn svg { width: 20px; height: 20px; }
+
+    /* Corpo principal */
+    .ap-body {
+      display: flex; flex: 1; overflow: hidden;
+      height: calc(100vh - 54px);
+    }
+
+    /* Sidebar de aulas */
+    .ap-sidebar {
+      width: 320px; flex-shrink: 0;
+      background: #0a1a19;
+      border-right: 1px solid rgba(255,255,255,0.07);
+      overflow-y: auto; overflow-x: hidden;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .ap-sidebar::-webkit-scrollbar { width: 4px; }
+    .ap-sidebar::-webkit-scrollbar-track { background: transparent; }
+    .ap-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
+
+    .ap-modulo {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .ap-modulo-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; cursor: pointer; gap: 10px;
+      transition: background 0.2s;
+    }
+    .ap-modulo-header:hover { background: rgba(255,255,255,0.04); }
+    .ap-modulo-titulo {
+      font-size: 12px; font-weight: 800; color: rgba(255,255,255,0.85);
+      letter-spacing: 0.3px; flex: 1; line-height: 1.4;
+    }
+    .ap-modulo-meta {
+      font-size: 10.5px; color: rgba(255,255,255,0.35); font-weight: 600; flex-shrink: 0;
+    }
+    .ap-modulo-chevron {
+      width: 14px; height: 14px; color: rgba(255,255,255,0.35);
+      transition: transform 0.2s; flex-shrink: 0;
+    }
+    .ap-modulo.collapsed .ap-modulo-chevron { transform: rotate(-90deg); }
+    .ap-modulo-aulas { overflow: hidden; }
+    .ap-modulo.collapsed .ap-modulo-aulas { display: none; }
+
+    .ap-aula-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 16px 10px 20px; cursor: pointer;
+      transition: background 0.15s; position: relative;
+      text-decoration: none;
+    }
+    .ap-aula-item:hover { background: rgba(255,255,255,0.04); }
+    .ap-aula-item.ativa { background: rgba(43,191,179,0.12); }
+    .ap-aula-item.ativa::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--brand); border-radius: 0 2px 2px 0;
+    }
+    .ap-aula-check {
+      width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px; transition: all 0.2s;
+    }
+    .ap-aula-check.feita {
+      background: var(--brand); border-color: var(--brand);
+    }
+    .ap-aula-check svg { width: 10px; height: 10px; color: #fff; }
+    .ap-aula-info { flex: 1; min-width: 0; }
+    .ap-aula-titulo {
+      font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.75);
+      line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .ap-aula-item.ativa .ap-aula-titulo { color: #fff; font-weight: 700; }
+    .ap-aula-duracao {
+      font-size: 10.5px; color: rgba(255,255,255,0.3); font-weight: 600; margin-top: 2px;
+    }
+    .ap-aula-tipo {
+      flex-shrink: 0; width: 16px; height: 16px;
+      color: rgba(255,255,255,0.3); margin-top: 1px;
+    }
+
+    /* Área central */
+    .ap-centro {
+      flex: 1; display: flex; flex-direction: column; overflow: hidden;
+      background: #0d1f1e;
+    }
+
+    /* Painéis de conteúdo (apenas a parte abaixo do vídeo alterna) */
+    .ap-painel { display: none; flex: 1; overflow-y: auto; flex-direction: column; }
+    .ap-painel.ativo { display: flex; }
+
+    /* ── ÁREA SUPERIOR FIXA: VÍDEO + TÍTULO/CONCLUIR + TABS ──── */
+    .ap-aula-top {
+      flex-shrink: 0;
+      background: #000;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .ap-video-wrap {
+      width: 100%;
+      max-width: 880px;
+      margin: 0 auto;
+      background: #000;
+      position: relative;
+    }
+    .ap-video-wrap iframe,
+    .ap-video-wrap video {
+      display: block; width: 100%; aspect-ratio: 16/9; border: none;
+    }
+    .ap-video-placeholder {
+      aspect-ratio: 16/9; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+      color: rgba(255,255,255,0.35); background: #0a1a19;
+    }
+    .ap-video-placeholder svg { width: 40px; height: 40px; opacity: 0.4; }
+    .ap-video-placeholder p { font-size: 13px; }
+
+    .ap-aula-detalhe { padding: 18px 32px; }
+    .ap-aula-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+    }
+    .ap-aula-header > div {
+      flex: 1; min-width: 0;
+    }
+    .ap-aula-nome {
+      font-size: 1.25rem; font-weight: 800; color: #fff; line-height: 1.3;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ap-aula-descricao { font-size: 13.5px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-top: 6px; }
+
+    .btn-concluir {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 20px; border-radius: 10px;
+      border: none; font-size: 13.5px; font-weight: 700;
+      cursor: pointer; font-family: inherit; transition: all 0.2s;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .btn-concluir.pendente {
+      background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+    }
+    .btn-concluir.pendente:hover { background: rgba(43,191,179,0.25); color: var(--brand); }
+    .btn-concluir.feita {
+      background: rgba(43,191,179,0.2); color: var(--brand);
+    }
+    .btn-concluir svg { width: 16px; height: 16px; }
+
+    /* Tabs (Anotações / Materiais) abaixo do vídeo */
+    .ap-tabs-bar {
+      display: flex; justify-content: center; gap: 2px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.03);
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .ap-tabs-bar .ap-tab { padding: 8px 22px; font-size: 13px; }
+
+    /* ── PAINEL ANOTAÇÕES ── */
+    .ap-notas-wrap {
+      flex: 1; display: flex; flex-direction: column;
+      background: #f4fdfc; overflow: hidden;
+    }
+    .ap-notas-toolbar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px; background: #fff;
+      border-bottom: 1px solid var(--border); flex-wrap: wrap;
+    }
+    .ap-nota-btn {
+      padding: 5px 10px; border: 1.5px solid var(--border); border-radius: 7px;
+      background: #fff; font-size: 12px; font-weight: 700;
+      cursor: pointer; font-family: inherit; color: var(--muted);
+      transition: all 0.15s;
+    }
+    .ap-nota-btn:hover { border-color: var(--brand); color: var(--brand-dark); background: var(--brand-light); }
+    .ap-nota-sep { width: 1px; height: 20px; background: var(--border); margin: 0 2px; }
+    .ap-notas-editor {
+      flex: 1; padding: 20px 24px; font-size: 14px;
+      font-family: 'Segoe UI', sans-serif; color: var(--text);
+      line-height: 1.8; outline: none; overflow-y: auto;
+      background: #f4fdfc;
+    }
+    .ap-notas-editor:empty::before {
+      content: 'Escreva suas anotações aqui... Use a barra de formatação acima.';
+      color: #aac8c6; pointer-events: none;
+    }
+    .ap-notas-footer {
+      padding: 10px 16px; background: #fff;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; flex-wrap: wrap;
+    }
+    .ap-notas-status { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+
+    /* ── PAINEL MATERIAIS ── */
+    .ap-materiais-wrap { padding: 24px 32px; flex: 1; }
+    .ap-materiais-titulo { font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: 16px; }
+    .ap-material-item {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px 18px; margin-bottom: 10px;
+      text-decoration: none; color: #fff;
+      transition: background 0.2s;
+    }
+    .ap-material-item:hover { background: rgba(43,191,179,0.12); border-color: rgba(43,191,179,0.3); }
+    .ap-material-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .ap-material-info { flex: 1; min-width: 0; }
+    .ap-material-nome { font-size: 13.5px; font-weight: 700; color: #fff; }
+    .ap-material-desc { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+    .ap-material-baixar {
+      font-size: 11.5px; font-weight: 700; color: var(--brand);
+      display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+    }
+    .ap-material-baixar svg { width: 13px; height: 13px; }
+    .ap-materiais-vazio {
+      text-align: center; padding: 60px 20px;
+      color: rgba(255,255,255,0.3); font-size: 13.5px;
+    }
+    .ap-materiais-vazio div { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.4; }
+
+    /* ── PAINEL DÚVIDAS ── */
+    .ap-duvidas-wrap { padding: 24px 32px; flex: 1; max-width: 880px; width: 100%; margin: 0 auto; }
+    .ap-duvidas-titulo { font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: 16px; }
+    .ap-duvidas-form {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px; margin-bottom: 22px;
+    }
+    .ap-coment-input {
+      width: 100%; box-sizing: border-box;
+      background: rgba(0,0,0,0.25); color: #fff;
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+      padding: 10px 12px; font-size: 13.5px; font-family: inherit;
+      resize: vertical; min-height: 60px; outline: none;
+      transition: border-color .15s;
+    }
+    .ap-coment-input:focus { border-color: var(--brand); }
+    .ap-coment-input::placeholder { color: rgba(255,255,255,0.35); }
+    .ap-coment-btn-enviar {
+      background: var(--brand); color: #fff; border: none;
+      padding: 8px 18px; border-radius: 8px; font-size: 12.5px;
+      font-weight: 700; cursor: pointer; font-family: inherit;
+      transition: background .15s;
+    }
+    .ap-coment-btn-enviar:hover { background: var(--brand-dark); }
+    .ap-coment-btn-enviar:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .ap-coment {
+      display: flex; gap: 12px; padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .ap-coment:last-child { border-bottom: none; }
+    .ap-coment-reply {
+      padding: 10px 0 10px 0; border-bottom: none;
+    }
+    .ap-coment-avatar {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+      background: var(--brand); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 13px;
+    }
+    .ap-coment-reply .ap-coment-avatar {
+      width: 28px; height: 28px; font-size: 11.5px;
+    }
+    .ap-coment-body { flex: 1; min-width: 0; }
+    .ap-coment-header {
+      display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .ap-coment-autor { font-size: 13px; font-weight: 700; color: #fff; }
+    .ap-coment-tag {
+      font-size: 10px; font-weight: 700; color: var(--brand);
+      background: rgba(43,191,179,0.15); padding: 1px 6px; border-radius: 4px;
+      vertical-align: middle;
+    }
+    .ap-coment-data { font-size: 11px; color: rgba(255,255,255,0.35); }
+    .ap-coment-texto {
+      font-size: 13.5px; color: rgba(255,255,255,0.82); line-height: 1.55;
+      white-space: pre-wrap; word-wrap: break-word;
+    }
+    .ap-coment-acoes {
+      display: flex; gap: 14px; margin-top: 6px;
+    }
+    .ap-coment-link {
+      background: none; border: none; padding: 0;
+      font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,0.45);
+      cursor: pointer; font-family: inherit;
+    }
+    .ap-coment-link:hover { color: var(--brand); }
+    .ap-coment-replies {
+      margin-top: 8px; margin-left: 0;
+      border-left: 2px solid rgba(255,255,255,0.07);
+      padding-left: 14px;
+    }
+    .ap-coment-reply-form { margin-top: 10px; }
+    .ap-duvidas-vazio {
+      text-align: center; padding: 60px 20px;
+      color: rgba(255,255,255,0.3); font-size: 13.5px;
+    }
+    .ap-duvidas-vazio div { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.4; }
+
+    /* Overlay sidebar mobile */
+    .ap-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); z-index: 150;
+    }
+    .ap-overlay.active { display: block; }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .ap-sidebar {
+        position: fixed; left: 0; top: 54px;
+        height: calc(100vh - 54px); z-index: 160;
+        transform: translateX(-100%);
+      }
+      .ap-sidebar.open { transform: translateX(0); }
+      .ap-topbar-menu-btn { display: flex; }
+      .ap-tabs-bar    { display: none; }
+      .ap-aula-detalhe { padding: 16px; }
+      .ap-notas-editor { padding: 14px 16px; }
+      .ap-materiais-wrap { padding: 16px; }
+      .ap-duvidas-wrap   { padding: 16px; }
+    }
+    @media (max-width: 600px) {
+      .ap-topbar-prog { display: none; }
+      .ap-aula-nome { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="ap-overlay" class="ap-overlay" onclick="fecharSidebarAp()"></div>
+<div id="plat-toast"></div>
+
+<div class="aprender-layout">
+
+  <!-- TOPBAR -->
+  <div class="ap-topbar">
+    <a href="dashboard.html" class="ap-topbar-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Painel
+    </a>
+
+    <div class="ap-topbar-titulo" id="ap-curso-titulo">Carregando...</div>
+
+    <div class="ap-topbar-prog">
+      <div class="ap-topbar-prog-bar">
+        <div class="ap-topbar-prog-fill" id="ap-prog-fill" style="width:0%"></div>
+      </div>
+      <span class="ap-topbar-prog-pct" id="ap-prog-pct">0%</span>
+    </div>
+
+    <button class="ap-topbar-menu-btn" onclick="toggleSidebarAp()" title="Aulas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- CORPO -->
+  <div class="ap-body">
+
+    <!-- Sidebar de módulos/aulas -->
+    <aside class="ap-sidebar" id="ap-sidebar">
+      <div id="ap-sidebar-loading" style="padding:24px;text-align:center;color:rgba(255,255,255,.3);font-size:13px">
+        Carregando aulas...
+      </div>
+      <div id="ap-modulos-lista"></div>
+    </aside>
+
+    <!-- Área central -->
+    <div class="ap-centro">
+
+      <!-- Topo fixo: vídeo + título/concluir + tabs (não trocam ao alternar painel) -->
+      <div class="ap-aula-top">
+        <div class="ap-video-wrap" id="ap-video-wrap">
+          <div class="ap-video-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <p>Selecione uma aula para começar</p>
+          </div>
+        </div>
+        <div class="ap-aula-detalhe">
+          <div class="ap-aula-header" id="ap-aula-header" style="display:none">
+            <div>
+              <div class="ap-aula-nome" id="ap-aula-nome"></div>
+              <div class="ap-aula-descricao" id="ap-aula-descricao"></div>
+            </div>
+            <button class="btn-concluir pendente" id="btn-concluir" onclick="toggleConcluir()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Marcar como concluída
+            </button>
+          </div>
+        </div>
+        <div class="ap-tabs-bar">
+          <button class="ap-tab active" onclick="trocarPainel('notas', this)">📝 Anotações</button>
+          <button class="ap-tab" onclick="trocarPainel('materiais', this)">📎 Materiais</button>
+          <button class="ap-tab" onclick="trocarPainel('duvidas', this)">💬 Dúvidas</button>
+        </div>
+      </div>
+
+      <!-- Painel: Anotações -->
+      <div class="ap-painel ativo" id="painel-notas">
+        <div class="ap-notas-wrap">
+          <div class="ap-notas-toolbar">
+            <button class="ap-nota-btn" onclick="doc('bold')" title="Negrito"><b>N</b></button>
+            <button class="ap-nota-btn" onclick="doc('italic')" title="Itálico"><i>I</i></button>
+            <button class="ap-nota-btn" onclick="doc('underline')" title="Sublinhado"><u>S</u></button>
+            <div class="ap-nota-sep"></div>
+            <button class="ap-nota-btn" onclick="doc('insertUnorderedList')" title="Lista">• Lista</button>
+            <button class="ap-nota-btn" onclick="doc('insertOrderedList')" title="Numerada">1. Lista</button>
+            <div class="ap-nota-sep"></div>
+            <button class="ap-nota-btn" onclick="formatHeading('h2')" title="Título">H2</button>
+            <button class="ap-nota-btn" onclick="formatHeading('h3')" title="Subtítulo">H3</button>
+            <button class="ap-nota-btn" onclick="doc('removeFormat')" title="Limpar">✕ Formato</button>
+          </div>
+          <div class="ap-notas-editor" id="ap-notas-editor" contenteditable="true" oninput="notaAlterada()"></div>
+          <div class="ap-notas-footer">
+            <span class="ap-notas-status" id="ap-notas-status">—</span>
+            <div style="display:flex;gap:8px">
+              <button class="btn-ghost" onclick="salvarNota()" style="font-size:12px;padding:7px 14px">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Salvar
+              </button>
+              <button class="btn-primary" onclick="exportarPDF()" style="font-size:12px;padding:7px 16px">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Exportar PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Painel: Materiais -->
+      <div class="ap-painel" id="painel-materiais">
+        <div class="ap-materiais-wrap">
+          <div class="ap-materiais-titulo">Materiais desta aula</div>
+          <div id="ap-materiais-lista">
+            <div class="ap-materiais-vazio">
+              <div>📁</div>
+              Selecione uma aula para ver os materiais disponíveis.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Painel: Dúvidas -->
+      <div class="ap-painel" id="painel-duvidas">
+        <div class="ap-duvidas-wrap">
+          <div class="ap-duvidas-titulo">Dúvidas e comentários</div>
+          <div class="ap-duvidas-form">
+            <textarea id="ap-duvidas-input" class="ap-coment-input"
+                      placeholder="Tire uma dúvida, faça um comentário ou compartilhe algo sobre esta aula..."
+                      rows="3"></textarea>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px">
+              <button id="ap-duvidas-enviar" class="ap-coment-btn-enviar" onclick="enviarComentario()">
+                Publicar
+              </button>
+            </div>
+          </div>
+          <div id="ap-duvidas-lista"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Tabs mobile (flutuante) -->
+<div id="ap-tabs-mobile" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#0a1a19;border-top:1px solid rgba(255,255,255,0.08);padding:8px 16px;z-index:180;gap:4px;justify-content:center">
+  <button class="ap-tab active" onclick="trocarPainel('notas', this)" style="flex:1;padding:9px">📝 Anotações</button>
+  <button class="ap-tab" onclick="trocarPainel('materiais', this)" style="flex:1;padding:9px">📎 Materiais</button>
+  <button class="ap-tab" onclick="trocarPainel('duvidas', this)" style="flex:1;padding:9px">💬 Dúvidas</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/config.js"></script>
+<script src="/supabase.js"></script>
+<script src="plataforma-auth.js"></script>
+<!-- YouTube IFrame API: detecta fim do vídeo p/ auto-concluir + auto-avançar.
+     async: não bloqueia o render. criarYouTubePlayer() já trata o caso da API
+     ainda não ter carregado via window._ytPlayerPendente + onYouTubeIframeAPIReady. -->
+<script src="https://www.youtube.com/iframe_api" async></script>
+<script>
+  const params       = new URLSearchParams(location.search)
+  const MATRICULA_ID = params.get('m')
+  const AULA_INICIAL = params.get('aula') || null
+
+  let MATRICULA    = null
+  let CURSO        = null
+  let MODULOS      = []   // [{...modulo, aulas:[...]}]
+  let AULAS_FLAT   = []   // lista plana ordenada de aulas
+  let AULA_ATUAL   = null
+  let PROGRESSO    = {}   // { aula_id: {concluida, percentual} }
+  let MATERIAIS    = []   // materiais da AULA_ATUAL
+  let COMENTARIOS  = []   // comentários da AULA_ATUAL
+  let notaTimer    = null
+  let notaAlterou  = false
+
+  // ── UTILS ──────────────────────────────────────────────────
+  function toast(msg, tipo = 'ok') {
+    const el = document.getElementById('plat-toast')
+    el.textContent = msg; el.className = `show ${tipo}`
+    setTimeout(() => el.className = '', 3500)
+  }
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  }
+  function formatarDuracao(min) {
+    if (!min || min <= 0) return ''
+    const h = Math.floor(min / 60)
+    const m = min % 60
+    if (h && m) return `${h}h ${m}min`
+    if (h)      return `${h}h`
+    return `${m}min`
+  }
+
+  // ── SIDEBAR MOBILE ──────────────────────────────────────────
+  function toggleSidebarAp() {
+    document.getElementById('ap-sidebar').classList.toggle('open')
+    document.getElementById('ap-overlay').classList.toggle('active')
+  }
+  function fecharSidebarAp() {
+    document.getElementById('ap-sidebar').classList.remove('open')
+    document.getElementById('ap-overlay').classList.remove('active')
+  }
+
+  // ── TABS ───────────────────────────────────────────────────
+  // Vídeo permanece visível e tocando ao trocar de aba — apenas o painel
+  // abaixo das tabs alterna entre anotações e materiais.
+  function trocarPainel(id, btn) {
+    document.querySelectorAll('.ap-painel').forEach(p => p.classList.remove('ativo'))
+    document.getElementById('painel-' + id).classList.add('ativo')
+    document.querySelectorAll('.ap-tab').forEach(b => b.classList.remove('active'))
+    document.querySelectorAll('.ap-tab').forEach(b => {
+      if (b.onclick && b.onclick.toString().includes(`'${id}'`)) b.classList.add('active')
+    })
+    if (id === 'materiais') carregarMateriais()
+    if (id === 'duvidas')   carregarComentarios()
+  }
+
+  // ── RESPONSIVO ─────────────────────────────────────────────
+  function checarMobile() {
+    const mobile = window.innerWidth <= 900
+    const tabsMob = document.getElementById('ap-tabs-mobile')
+    if (mobile) {
+      tabsMob.style.display = 'flex'
+      document.querySelector('.ap-centro').style.paddingBottom = '58px'
+    } else {
+      tabsMob.style.display = 'none'
+      document.querySelector('.ap-centro').style.paddingBottom = ''
+      fecharSidebarAp()
+    }
+  }
+  window.addEventListener('resize', checarMobile)
+
+  // ── SIDEBAR DE MÓDULOS/AULAS ────────────────────────────────
+  function renderSidebar() {
+    document.getElementById('ap-sidebar-loading').style.display = 'none'
+    const wrap = document.getElementById('ap-modulos-lista')
+    if (!MODULOS.length) {
+      wrap.innerHTML = '<div style="padding:24px;text-align:center;color:rgba(255,255,255,.3);font-size:13px">Nenhuma aula disponível.</div>'
+      return
+    }
+    wrap.innerHTML = MODULOS.map((mod, mi) => {
+      const aulasConcl = mod.aulas.filter(a => PROGRESSO[a.id]?.concluida).length
+      return `
+        <div class="ap-modulo" id="mod-${mod.id}">
+          <div class="ap-modulo-header" onclick="toggleModulo('mod-${mod.id}')">
+            <div>
+              <div class="ap-modulo-titulo">${esc(mod.titulo)}</div>
+              <div class="ap-modulo-meta">${aulasConcl}/${mod.aulas.length} concluídas</div>
+            </div>
+            <svg class="ap-modulo-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="ap-modulo-aulas">
+            ${mod.aulas.map(a => renderAulaItem(a)).join('')}
+          </div>
+        </div>`
+    }).join('')
+  }
+
+  function renderAulaItem(aula) {
+    const feita = PROGRESSO[aula.id]?.concluida
+    const ativa = AULA_ATUAL?.id === aula.id
+    const tipoIcon = aula.link_video
+      ? `<svg class="ap-aula-tipo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>`
+      : `<svg class="ap-aula-tipo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`
+    return `
+      <div class="ap-aula-item ${ativa?'ativa':''}" id="aula-item-${aula.id}" onclick="selecionarAula('${aula.id}')">
+        <div class="ap-aula-check ${feita?'feita':''}">
+          ${feita ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>` : ''}
+        </div>
+        <div class="ap-aula-info">
+          <div class="ap-aula-titulo">${esc(aula.titulo)}</div>
+          ${aula.duracao_min ? `<div class="ap-aula-duracao">${formatarDuracao(aula.duracao_min)}</div>` : ''}
+        </div>
+        ${tipoIcon}
+      </div>`
+  }
+
+  function toggleModulo(id) {
+    document.getElementById(id)?.classList.toggle('collapsed')
+  }
+
+  // ── SELECIONAR AULA ─────────────────────────────────────────
+  async function selecionarAula(aulaId) {
+    const aula = AULAS_FLAT.find(a => a.id === aulaId)
+    if (!aula) return
+    AULA_ATUAL = aula
+
+    // Salva nota da aula anterior
+    if (notaAlterou) await salvarNota()
+
+    fecharSidebarAp()
+    renderVideo(aula)
+    renderAulaInfo(aula)
+    carregarNota(aula.id)
+
+    // Materiais e comentários são por-aula: invalida e recarrega se o painel está aberto
+    MATERIAIS = []
+    COMENTARIOS = []
+    if (document.getElementById('painel-materiais')?.classList.contains('ativo')) {
+      carregarMateriais()
+    } else {
+      // limpa render antigo pra não confundir caso o usuário abra a aba depois
+      const wrap = document.getElementById('ap-materiais-lista')
+      if (wrap) wrap.innerHTML = `<div class="ap-materiais-vazio"><div>📁</div>Carregue a aba para ver os materiais desta aula.</div>`
+    }
+    if (document.getElementById('painel-duvidas')?.classList.contains('ativo')) {
+      carregarComentarios()
+    } else {
+      const wrap = document.getElementById('ap-duvidas-lista')
+      if (wrap) wrap.innerHTML = ''
+    }
+
+    // Destaque sidebar
+    document.querySelectorAll('.ap-aula-item').forEach(el => el.classList.remove('ativa'))
+    document.getElementById(`aula-item-${aulaId}`)?.classList.add('ativa')
+
+    // Atualiza URL sem recarregar
+    history.replaceState(null, '', `?m=${MATRICULA_ID}&aula=${aulaId}`)
+  }
+
+  // Player do YouTube (instanciado on-demand) — usado para detectar onStateChange === ENDED
+  let ytPlayer = null
+
+  function renderVideo(aula) {
+    const wrap = document.getElementById('ap-video-wrap')
+
+    // limpa player anterior do YouTube se houver
+    if (ytPlayer) { try { ytPlayer.destroy() } catch (_) {} ytPlayer = null }
+
+    if (!aula.link_video) {
+      wrap.innerHTML = `
+        <div class="ap-video-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <p>Esta aula ainda não tem vídeo cadastrado.</p>
+        </div>`
+      return
+    }
+
+    const ytMatch = aula.link_video.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/|v\/))([\w-]{11})/)
+    if (ytMatch) {
+      wrap.innerHTML = `<iframe id="ap-yt-iframe" src="https://www.youtube.com/embed/${ytMatch[1]}?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>`
+      criarYouTubePlayer()
+      return
+    }
+    const vimeoMatch = aula.link_video.match(/vimeo\.com\/(?:video\/)?(\d+)/)
+    if (vimeoMatch) {
+      wrap.innerHTML = `<iframe src="https://player.vimeo.com/video/${vimeoMatch[1]}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`
+      return
+    }
+    // Video direto (mp4, etc.)
+    wrap.innerHTML = `<video id="ap-html5-video" src="${esc(aula.link_video)}" controls style="background:#000"></video>`
+    const v = document.getElementById('ap-html5-video')
+    if (v) v.addEventListener('ended', marcarConcluidaAuto)
+  }
+
+  // Liga o iframe do YouTube ao YT.Player para escutar ENDED.
+  // Se a IFrame API ainda não carregou, marca pendente — onYouTubeIframeAPIReady reentra.
+  function criarYouTubePlayer() {
+    const iframe = document.getElementById('ap-yt-iframe')
+    if (!iframe) return
+    if (!window.YT || !window.YT.Player) {
+      window._ytPlayerPendente = true
+      return
+    }
+    ytPlayer = new YT.Player(iframe, {
+      events: {
+        onStateChange: (e) => {
+          if (e.data === 0) marcarConcluidaAuto()  // YT.PlayerState.ENDED === 0
+        }
+      }
+    })
+  }
+
+  window.onYouTubeIframeAPIReady = function () {
+    if (window._ytPlayerPendente) {
+      window._ytPlayerPendente = false
+      criarYouTubePlayer()
+    }
+  }
+
+  // Vídeo terminou: marca como concluída (idempotente) e avança para a próxima aula.
+  async function marcarConcluidaAuto() {
+    if (!AULA_ATUAL || !MATRICULA) return
+    const aulaAtualId = AULA_ATUAL.id
+
+    if (!PROGRESSO[aulaAtualId]?.concluida) {
+      PROGRESSO[aulaAtualId] = { concluida: true, percentual_assistido: 100 }
+      atualizarBtnConcluir()
+      atualizarCheckSidebar(aulaAtualId, true)
+      atualizarProgresso()
+      await marcarAulaConcluida(MATRICULA.id, aulaAtualId, 100)
+      toast('🎉 Aula concluída!', 'ok')
+    }
+
+    // Auto-avanço para a próxima aula (se existir)
+    const idx = AULAS_FLAT.findIndex(a => a.id === aulaAtualId)
+    const proxima = AULAS_FLAT[idx + 1]
+    if (proxima) {
+      setTimeout(() => {
+        if (AULA_ATUAL?.id === aulaAtualId) selecionarAula(proxima.id)
+      }, 1800)
+    } else {
+      // Última aula: emite certificado e redireciona
+      toast('🏆 Curso concluído! Emitindo certificado...', 'ok')
+      const { data: cert } = await db.rpc('emitir_certificado', { p_matricula_id: MATRICULA.id })
+      setTimeout(() => {
+        location.href = cert?.codigo_validacao
+          ? `certificado.html?c=${cert.codigo_validacao}`
+          : `certificado.html?m=${MATRICULA.id}`
+      }, 1500)
+    }
+  }
+
+  function renderAulaInfo(aula) {
+    document.getElementById('ap-aula-header').style.display = 'flex'
+    document.getElementById('ap-aula-nome').textContent = aula.titulo
+    document.getElementById('ap-aula-descricao').textContent = aula.descricao || ''
+    atualizarBtnConcluir()
+  }
+
+  function atualizarBtnConcluir() {
+    if (!AULA_ATUAL) return
+    const feita = PROGRESSO[AULA_ATUAL.id]?.concluida
+    const btn   = document.getElementById('btn-concluir')
+    btn.className = `btn-concluir ${feita ? 'feita' : 'pendente'}`
+    btn.innerHTML = feita
+      ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Concluída`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar como concluída`
+  }
+
+  async function toggleConcluir() {
+    if (!AULA_ATUAL || !MATRICULA) return
+    const feita = PROGRESSO[AULA_ATUAL.id]?.concluida
+    const novo  = !feita
+    PROGRESSO[AULA_ATUAL.id] = { concluida: novo, percentual_assistido: novo ? 100 : 0 }
+    atualizarBtnConcluir()
+    atualizarCheckSidebar(AULA_ATUAL.id, novo)
+    atualizarProgresso()
+    await marcarAulaConcluida(MATRICULA.id, AULA_ATUAL.id, novo ? 100 : 0)
+    toast(novo ? 'Aula marcada como concluída!' : 'Aula desmarcada.', novo ? 'ok' : '')
+
+    // Se acabou de concluir 100% do curso, emite certificado e redireciona
+    if (novo && AULAS_FLAT.every(a => PROGRESSO[a.id]?.concluida)) {
+      toast('🏆 Curso concluído! Emitindo certificado...', 'ok')
+      const { data: cert } = await db.rpc('emitir_certificado', { p_matricula_id: MATRICULA.id })
+      setTimeout(() => {
+        location.href = cert?.codigo_validacao
+          ? `certificado.html?c=${cert.codigo_validacao}`
+          : `certificado.html?m=${MATRICULA.id}`
+      }, 1500)
+    }
+  }
+
+  function atualizarCheckSidebar(aulaId, feita) {
+    const check = document.querySelector(`#aula-item-${aulaId} .ap-aula-check`)
+    if (!check) return
+    check.className = `ap-aula-check ${feita ? 'feita' : ''}`
+    check.innerHTML = feita ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>` : ''
+    // Atualiza contagem do módulo
+    renderSidebar()
+    document.querySelectorAll('.ap-aula-item').forEach(el => el.classList.remove('ativa'))
+    document.getElementById(`aula-item-${aulaId}`)?.classList.add('ativa')
+  }
+
+  function atualizarProgresso() {
+    const total   = AULAS_FLAT.length
+    const feitas  = AULAS_FLAT.filter(a => PROGRESSO[a.id]?.concluida).length
+    const pct     = total ? Math.round(feitas / total * 100) : 0
+    document.getElementById('ap-prog-fill').style.width = pct + '%'
+    document.getElementById('ap-prog-pct').textContent  = pct + '%'
+  }
+
+  // ── ANOTAÇÕES ───────────────────────────────────────────────
+  async function carregarNota(aulaId) {
+    notaAlterou = false
+    document.getElementById('ap-notas-status').textContent = 'Carregando...'
+    const { data } = await db.from('anotacoes_lms')
+      .select('id, conteudo, updated_at')
+      .eq('aluno_id', ALUNO.user.id)
+      .eq('aula_id', aulaId)
+      .maybeSingle()
+    const editor = document.getElementById('ap-notas-editor')
+    editor.innerHTML = data?.conteudo || ''
+    document.getElementById('ap-notas-status').textContent =
+      data ? `Salvo em ${new Date(data.updated_at).toLocaleString('pt-BR')}` : 'Sem anotações ainda.'
+  }
+
+  function notaAlterada() {
+    notaAlterou = true
+    document.getElementById('ap-notas-status').textContent = 'Não salvo...'
+    clearTimeout(notaTimer)
+    notaTimer = setTimeout(salvarNota, 3000)
+  }
+
+  async function salvarNota() {
+    if (!AULA_ATUAL || !MATRICULA_ID) return
+    const html = document.getElementById('ap-notas-editor').innerHTML
+    notaAlterou = false
+    const { error } = await db.from('anotacoes_lms').upsert({
+      aluno_id:  ALUNO.user.id,
+      aula_id:   AULA_ATUAL.id,
+      conteudo:  html,
+    }, { onConflict: 'aluno_id,aula_id' })
+    if (!error) {
+      document.getElementById('ap-notas-status').textContent = `Salvo às ${new Date().toLocaleTimeString('pt-BR')}`
+    }
+  }
+
+  function doc(cmd) { document.execCommand(cmd, false, null) }
+  function formatHeading(tag) {
+    document.execCommand('formatBlock', false, tag)
+  }
+
+  function exportarPDF() {
+    if (!AULA_ATUAL) { toast('Selecione uma aula primeiro.', 'err'); return }
+    const html = document.getElementById('ap-notas-editor').innerHTML
+    if (!html.trim()) { toast('Nenhuma anotação para exportar.', 'err'); return }
+
+    const titulo = AULA_ATUAL.titulo || 'Anotações'
+    const cursoT = CURSO?.titulo || 'Curso'
+    const win = window.open('', '_blank')
+    win.document.write(`<!DOCTYPE html><html><head>
+      <meta charset="UTF-8">
+      <title>${titulo} — Anotações</title>
+      <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 40px auto; max-width: 720px;
+               color: #1a2e2d; line-height: 1.8; font-size: 14px; }
+        h1 { font-size: 1.4rem; color: #0f6b64; margin-bottom: 4px; }
+        .sub { font-size: 12px; color: #6b8b89; margin-bottom: 28px; }
+        hr { border: none; border-top: 1px solid #e0f0ee; margin: 20px 0; }
+        h2 { font-size: 1.1rem; color: #0f6b64; }
+        h3 { font-size: 1rem; color: #1a9e93; }
+      </style>
+    </head><body>
+      <h1>${titulo}</h1>
+      <div class="sub">${cursoT} — Exportado em ${new Date().toLocaleDateString('pt-BR')}</div>
+      <hr>
+      ${html}
+    </body></html>`)
+    win.document.close()
+    win.print()
+  }
+
+  // ── MATERIAIS (somente da AULA_ATUAL) ───────────────────────
+  // Troca public URL por signed URL via Edge Function `signed-material`,
+  // que valida no servidor: admin / editor de cursos / matrícula ativa.
+  // Mantém URLs externas (link tipo YouTube) intactas.
+  async function carregarMateriais() {
+    const wrap = document.getElementById('ap-materiais-lista')
+    if (!AULA_ATUAL) {
+      wrap.innerHTML = `<div class="ap-materiais-vazio"><div>📁</div>Selecione uma aula para ver os materiais disponíveis.</div>`
+      return
+    }
+    if (MATERIAIS.length && MATERIAIS[0]?.aula_id === AULA_ATUAL.id) { renderMateriais(); return }
+
+    wrap.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:13px;padding:24px">Carregando...</div>'
+    const aulaId = AULA_ATUAL.id
+    const { data } = await db.from('materiais_lms')
+      .select('*')
+      .eq('aula_id', aulaId)
+      .order('ordem')
+    const raw = data || []
+
+    await Promise.all(raw.map(async (m) => {
+      try {
+        const { data: resp, error } = await db.functions.invoke('signed-material', {
+          body: { materialId: m.id },
+        })
+        if (!error && resp?.url) m.url = resp.url
+      } catch (_e) { /* mantém m.url original em caso de falha */ }
+    }))
+
+    // Se o usuário trocou de aula durante o await, descarta este resultado
+    if (AULA_ATUAL?.id !== aulaId) return
+    MATERIAIS = raw
+    renderMateriais()
+  }
+
+  function renderMateriais() {
+    const wrap = document.getElementById('ap-materiais-lista')
+    if (!MATERIAIS.length) {
+      wrap.innerHTML = `<div class="ap-materiais-vazio"><div>📁</div>Nenhum material disponível para esta aula.</div>`
+      return
+    }
+    const tipoEmoji = { pdf:'📄', video:'🎬', link:'🔗', arquivo:'📎', imagem:'🖼️', audio:'🎵', outro:'📎' }
+    const tipoCor   = { pdf:'#c0392b', video:'#2563eb', link:'#0f6b64', arquivo:'#6b7280', imagem:'#7c3aed', audio:'#d97706', outro:'#6b7280' }
+
+    wrap.innerHTML = MATERIAIS.map(m => `
+      <a class="ap-material-item" href="${esc(m.url)}" target="_blank" rel="noopener">
+        <div class="ap-material-icon"
+             style="background:${tipoCor[m.tipo]||'#6b7280'}22;color:${tipoCor[m.tipo]||'#6b7280'}">
+          ${tipoEmoji[m.tipo] || '📎'}
+        </div>
+        <div class="ap-material-info">
+          <div class="ap-material-nome">${esc(m.titulo)}</div>
+          ${m.descricao ? `<div class="ap-material-desc">${esc(m.descricao)}</div>` : ''}
+        </div>
+        <div class="ap-material-baixar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Abrir
+        </div>
+      </a>`).join('')
+  }
+
+  // ── DÚVIDAS / COMENTÁRIOS ───────────────────────────────────
+  async function carregarComentarios() {
+    const wrap = document.getElementById('ap-duvidas-lista')
+    if (!AULA_ATUAL) {
+      wrap.innerHTML = `<div class="ap-duvidas-vazio"><div>💬</div>Selecione uma aula para ver as dúvidas.</div>`
+      return
+    }
+    wrap.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:13px;padding:24px;text-align:center">Carregando...</div>'
+    const aulaId = AULA_ATUAL.id
+    const { data, error } = await db.rpc('listar_comentarios_aula', { p_aula_id: aulaId })
+    if (AULA_ATUAL?.id !== aulaId) return
+    if (error) {
+      wrap.innerHTML = `<div class="ap-duvidas-vazio"><div>⚠️</div>Não foi possível carregar as dúvidas.</div>`
+      return
+    }
+    COMENTARIOS = data || []
+    renderComentarios()
+  }
+
+  function renderComentarios() {
+    const wrap = document.getElementById('ap-duvidas-lista')
+    if (!COMENTARIOS.length) {
+      wrap.innerHTML = `<div class="ap-duvidas-vazio"><div>💬</div>Seja o primeiro a tirar uma dúvida nesta aula.</div>`
+      return
+    }
+    const raizes   = COMENTARIOS.filter(c => !c.parent_id)
+    const respostas = {}
+    COMENTARIOS.filter(c => c.parent_id).forEach(c => {
+      (respostas[c.parent_id] = respostas[c.parent_id] || []).push(c)
+    })
+    const meuId = ALUNO?.user?.id
+
+    const renderItem = (c, isReply = false) => {
+      const dono = c.aluno_id === meuId
+      const data = new Date(c.created_at).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' })
+      const inicial = (c.autor_nome || '?').trim().charAt(0).toUpperCase()
+      return `
+        <div class="ap-coment ${isReply ? 'ap-coment-reply' : ''}" data-id="${c.id}">
+          <div class="ap-coment-avatar">${esc(inicial)}</div>
+          <div class="ap-coment-body">
+            <div class="ap-coment-header">
+              <span class="ap-coment-autor">${esc(c.autor_nome || 'Aluno')}${dono ? ' <span class="ap-coment-tag">você</span>' : ''}</span>
+              <span class="ap-coment-data">${data}</span>
+            </div>
+            <div class="ap-coment-texto">${esc(c.conteudo).replace(/\n/g,'<br>')}</div>
+            <div class="ap-coment-acoes">
+              ${!isReply ? `<button class="ap-coment-link" onclick="toggleResponder('${c.id}')">Responder</button>` : ''}
+              ${dono ? `<button class="ap-coment-link" onclick="excluirComentario('${c.id}')">Excluir</button>` : ''}
+            </div>
+            ${!isReply ? `
+              <div class="ap-coment-replies">
+                ${(respostas[c.id]||[]).map(r => renderItem(r, true)).join('')}
+              </div>
+              <div class="ap-coment-reply-form" id="reply-form-${c.id}" style="display:none">
+                <textarea class="ap-coment-input" id="reply-input-${c.id}" placeholder="Escreva sua resposta..." rows="2"></textarea>
+                <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:6px">
+                  <button class="ap-coment-link" onclick="toggleResponder('${c.id}')">Cancelar</button>
+                  <button class="ap-coment-btn-enviar" onclick="enviarResposta('${c.id}')">Responder</button>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </div>`
+    }
+
+    wrap.innerHTML = raizes.map(c => renderItem(c)).join('')
+  }
+
+  function toggleResponder(parentId) {
+    const f = document.getElementById('reply-form-' + parentId)
+    if (!f) return
+    const visivel = f.style.display !== 'none'
+    f.style.display = visivel ? 'none' : 'block'
+    if (!visivel) document.getElementById('reply-input-' + parentId)?.focus()
+  }
+
+  async function enviarComentario() {
+    if (!AULA_ATUAL) return
+    const input = document.getElementById('ap-duvidas-input')
+    const texto = (input.value || '').trim()
+    if (!texto) { toast('Escreva sua dúvida primeiro.', 'err'); return }
+    const btn = document.getElementById('ap-duvidas-enviar')
+    btn.disabled = true
+    const { error } = await db.from('comentarios_lms').insert({
+      aula_id:  AULA_ATUAL.id,
+      aluno_id: ALUNO.user.id,
+      conteudo: texto,
+    })
+    btn.disabled = false
+    if (error) { toast('Não foi possível enviar.', 'err'); return }
+    input.value = ''
+    await carregarComentarios()
+  }
+
+  async function enviarResposta(parentId) {
+    if (!AULA_ATUAL) return
+    const input = document.getElementById('reply-input-' + parentId)
+    const texto = (input?.value || '').trim()
+    if (!texto) return
+    const { error } = await db.from('comentarios_lms').insert({
+      aula_id:   AULA_ATUAL.id,
+      aluno_id:  ALUNO.user.id,
+      parent_id: parentId,
+      conteudo:  texto,
+    })
+    if (error) { toast('Não foi possível responder.', 'err'); return }
+    await carregarComentarios()
+  }
+
+  async function excluirComentario(id) {
+    if (!confirm('Excluir este comentário?')) return
+    const { error } = await db.from('comentarios_lms').delete().eq('id', id)
+    if (error) { toast('Não foi possível excluir.', 'err'); return }
+    await carregarComentarios()
+  }
+
+  // ── INIT ────────────────────────────────────────────────────
+  document.addEventListener('plataforma:ready', async ({ detail: { aluno } }) => {
+    if (!MATRICULA_ID) { location.href = 'dashboard.html'; return }
+
+    // Matrícula e progresso só dependem do MATRICULA_ID, então rodam em paralelo.
+    const [matRes, progRes] = await Promise.all([
+      db.from('matriculas_lms')
+        .select('id, curso_id, status, cursos_lms(*)')
+        .eq('id', MATRICULA_ID)
+        .eq('aluno_id', ALUNO.user.id)
+        .in('status', ['ativa', 'concluida'])
+        .maybeSingle(),
+      db.from('progresso_aulas_lms')
+        .select('aula_id, concluida, percentual_assistido')
+        .eq('matricula_id', MATRICULA_ID)
+    ])
+
+    if (!matRes.data) { location.href = 'dashboard.html'; return }
+    MATRICULA = matRes.data
+    CURSO     = MATRICULA.cursos_lms
+    ;(progRes.data || []).forEach(p => { PROGRESSO[p.aula_id] = p })
+
+    document.getElementById('ap-curso-titulo').textContent = CURSO?.titulo || 'Curso'
+
+    // Módulos depende do CURSO.id, então só pode rodar depois da matrícula resolver.
+    const { data: mods } = await db.from('modulos_lms')
+      .select('id, titulo, ordem, aulas_lms(id,titulo,descricao,link_video,duracao_min,ordem,publicado)')
+      .eq('curso_id', CURSO.id)
+      .order('ordem')
+
+    MODULOS = (mods || []).map(m => ({
+      ...m,
+      aulas: (m.aulas_lms || []).sort((a,b) => a.ordem - b.ordem)
+    }))
+    AULAS_FLAT = MODULOS.flatMap(m => m.aulas)
+
+    renderSidebar()
+    atualizarProgresso()
+    checarMobile()
+
+    // Seleciona aula inicial
+    const aulaInicio = AULA_INICIAL
+      ? AULAS_FLAT.find(a => a.id === AULA_INICIAL)
+      : AULAS_FLAT.find(a => !PROGRESSO[a.id]?.concluida) || AULAS_FLAT[0]
+
+    if (aulaInicio) selecionarAula(aulaInicio.id)
+  })
+
+  // Salva nota antes de sair
+  window.addEventListener('beforeunload', () => {
+    if (notaAlterou) salvarNota()
+  })
+</script>
+</body>
+</html>

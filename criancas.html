@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="pagina-slug"  content="criancas">
+  <meta name="pagina-label" content="👶 Crianças">
+  <title>Crianças — Sua Igreja</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      border-top: 5px solid #2BBFB3;
+    }
+
+    .modal h2 { margin: 0 0 8px; font-size: 20px; color: #222; }
+    .modal label { font-size: 13px; font-weight: 600; color: #555; margin-top: 4px; }
+
+    .modal input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+      background: #fafafa;
+    }
+    .modal input:focus {
+      outline: none;
+      border-color: #2BBFB3;
+      background: #fff;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .info-mae {
+      font-size: 12px;
+      color: #888;
+      background: #f0faf9;
+      border: 1px solid #c0ebe8;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-top: 4px;
+    }
+
+    .badge-responsavel {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f0faf9;
+      border: 1px solid #c0ebe8;
+      color: #2BBFB3;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+  
+    /* ── SIDEBAR USER (perfil) ── */
+
+  </style>
+<style>
+  .sidebar-footer {
+
+      margin-top: auto;
+
+      padding: 6px 12px;
+
+      border-top: 1px solid rgba(255,255,255,0.12);
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 6px;
+
+    }
+
+    .sidebar-user {
+
+      display: flex; align-items: center; gap: 10px;
+
+      text-decoration: none; color: inherit; padding: 5px 10px;
+
+      border-radius: 10px; transition: background .2s; cursor: pointer;
+
+    }
+
+    .sidebar-user:hover { background: rgba(255,255,255,0.12); }
+
+    .sidebar-user-icon {
+
+      width: 24px; height: 24px; border-radius: 50%;
+
+      background: rgba(255,255,255,0.2);
+
+      display: flex; align-items: center; justify-content: center;
+
+      font-size: 17px; flex-shrink: 0; overflow: hidden;
+
+    }
+
+    .sidebar-user-icon img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+
+    .sidebar-user-nome {
+
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9);
+
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+
+    }
+
+    .sidebar-logout {
+
+      width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+
+      color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 600;
+
+      cursor: pointer; padding: 5px 10px; border-radius: 10px;
+
+      transition: background .2s, color .2s; text-align: left;
+
+      display: flex; align-items: center; gap: 8px;
+
+    }
+
+    .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
+</style>
+  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="logo.png" alt="Sua Igreja" />
+    </div>
+  <nav id="sidebar-nav">
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="membros.html">👥 Membros</a>
+    <a href="visitantes.html">🙋 Visitantes</a>
+    <a href="criancas.html" class="active">👶 Crianças</a>
+    <a href="pedido-de-oracao.html">🙏 Pedidos de Oração</a>
+    <a href="aniversariantes.html">🎂 Aniversariantes</a>
+
+    <!-- ITEM MINISTÉRIOS COM CASCATA -->
+    <div class="nav-ministerios" id="nav-ministerios">
+      <div class="nav-min-trigger" id="nav-min-trigger">
+        <span>✨ Ministérios</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+      <div id="nav-ministerios-lista">
+        <div class="nav-min-loading">Carregando...</div>
+      </div>
+    </div>
+
+    <a href="agenda.html">📅 Agenda</a>
+    <a href="inscricoes.html">📋 Inscrições</a>
+    <a href="central-voluntarios.html">🎯 Central de Voluntários</a>
+    <a href="mesas.html">🟤 Mesas</a>
+    <a href="financeiro.html">💰 Financeiro</a>
+    <a href="relatorios.html">📈 Relatórios</a>
+    <div class="nav-ministerios" id="nav-conteudos">
+      <div class="nav-min-trigger" id="nav-conteudos-trigger">
+        <span>📚 Conteúdos</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+        <div id="nav-conteudos-lista">
+          <a href="conteudos.html?aba=pregacoes"  class="nav-min-item" data-aba="pregacoes">🎙️ Pregações</a>
+          <a href="conteudos.html?aba=cursos"     class="nav-min-item" data-aba="cursos">🎓 Cursos</a>
+          <a href="conteudos.html?aba=biblioteca" class="nav-min-item" data-aba="biblioteca">📖 Biblioteca</a>
+        </div>
+    </div>
+    <a href="usuarios.html">⚙️ Usuários</a>
+  </nav>
+    <div class="sidebar-footer">
+      <a href="perfil.html" class="sidebar-user" title="Meu perfil">
+        <span class="sidebar-user-icon" id="sidebarUserIcon">👤</span>
+        <span class="sidebar-user-nome" id="sidebarUserNome">Carregando...</span>
+      </a>
+      <button class="sidebar-logout" onclick="fazerLogout ? fazerLogout() : db.auth.signOut().then(()=>location.href='index.html')">
+        🚪 Sair
+      </button>
+    </div>
+</aside>
+
+  <!-- MAIN -->
+  <div class="main" data-aba="_default">
+    <header class="page-header">
+      <h1>👶 Crianças</h1>
+    </header>
+
+    <div class="table-container">
+      <div class="table-header">
+        <input type="text" class="search-bar" id="busca-crianca"
+          placeholder="🔍 Buscar criança ou responsável..."
+          oninput="filtrarCriancas()" />
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th data-campo="data_nascimento">Data de Nascimento</th>
+            <th data-campo="data_nascimento">Idade</th>
+            <th>Responsável</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-criancas"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR -->
+  <div class="modal-overlay" id="modal-crianca">
+    <div class="modal">
+      <h2>✏️ Editar Criança</h2>
+
+      <p class="info-mae" id="info-responsavel"></p>
+
+      <label>Nome da criança *</label>
+      <input type="text" id="input-nome-crianca" placeholder="Ex: Pedro Silva" />
+
+      <label data-campo="data_nascimento">Data de Nascimento</label>
+      <input type="date" id="input-nascimento-crianca" data-campo="data_nascimento" />
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="salvarEdicao()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script src="auth.js"></script>
+<script>
+(function() {
+  function preencherSidebarUser() {
+    const nomeEl = document.getElementById('sidebarUserNome')
+    const iconEl = document.getElementById('sidebarUserIcon')
+    if (!nomeEl || !iconEl) return
+    const perfil  = window.AUTH?.perfil
+    const user    = window.AUTH?.user
+    const nome    = perfil?.nome || user?.email?.split('@')[0] || 'Meu perfil'
+    const fotoUrl = perfil?.foto_url || null
+    nomeEl.textContent = nome
+    if (fotoUrl) {
+      iconEl.innerHTML = '<img src="' + fotoUrl + '" alt="avatar" />'
+    } else {
+      iconEl.textContent = (nome[0] || '👤').toUpperCase()
+    }
+  }
+  preencherSidebarUser()
+  let t = 0
+  const iv = setInterval(() => {
+    preencherSidebarUser()
+    if (window.AUTH?.perfil || ++t > 40) clearInterval(iv)
+  }, 150)
+})()
+</script>
+
+<script>
+// Auto data-label + accordion para tabelas no mobile
+(function() {
+  function aplicarTudo() {
+    document.querySelectorAll('table').forEach(table => {
+      const headers = Array.from(table.querySelectorAll('thead th'))
+        .map(th => th.textContent.trim())
+      if (!headers.length) return
+
+      table.querySelectorAll('tbody tr').forEach(tr => {
+        // 1. Adiciona data-label em cada td
+        Array.from(tr.querySelectorAll('td')).forEach((td, i) => {
+          if (headers[i] && !td.getAttribute('data-label')) {
+            td.setAttribute('data-label', headers[i])
+          }
+        })
+
+        // 2. Adiciona toggle de expansão (só uma vez por tr)
+        if (!tr.dataset.acc) {
+          tr.dataset.acc = '1'
+          tr.addEventListener('click', function(e) {
+            if (window.innerWidth > 768) return
+            if (e.target.closest('button, a, input, select, textarea')) return
+            this.classList.toggle('expandido')
+          })
+        }
+      })
+    })
+  }
+
+  // Roda agora e sempre que o DOM mudar (tabelas renderizadas por JS)
+  aplicarTudo()
+  new MutationObserver(aplicarTudo).observe(document.body, {
+    childList: true, subtree: true
+  })
+})()
+</script>
+  <script src="/pwa.js"></script>
+  <script src="permissions.js"></script>
+  <script src="criancas.js"></script>
+  <script src="ministerios-nav.js"></script>
+  <script src="conteudos-nav.js"></script>
+</body>
+</html>

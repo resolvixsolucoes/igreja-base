@@ -1,0 +1,21 @@
+﻿{
+  "name": "sua-igreja-whatsapp-bot",
+  "version": "1.0.0",
+  "description": "Bot WhatsApp para registro de visitantes - Sua Igreja",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@supabase/supabase-js": "^2.49.4",
+    "@whiskeysockets/baileys": "^6.7.16",
+    "express": "^4.19.2",
+    "ioredis": "^5.4.1",
+    "pino": "^9.6.0"
+  }
+}

@@ -1,0 +1,357 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Curso — Sua Igreja</title>
+  <link rel="stylesheet" href="plataforma.css"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <style>
+    .curso-hero {
+      background: linear-gradient(135deg, var(--brand-deep), #0a2e2b);
+      border-radius: var(--radius); padding: 32px; margin-bottom: 28px;
+      display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap;
+    }
+    .curso-hero-info { flex: 1; min-width: 240px; }
+    .curso-hero-cat  { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--brand-mid); margin-bottom: 8px; }
+    .curso-hero-titulo { font-size: clamp(1.3rem,3vw,1.8rem); font-weight: 900; color: #fff; line-height: 1.25; margin-bottom: 10px; }
+    .curso-hero-desc { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 18px; }
+    .curso-hero-meta { display: flex; gap: 18px; flex-wrap: wrap; }
+    .curso-hero-meta span { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: rgba(255,255,255,0.65); font-weight: 600; }
+    .curso-hero-meta svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .curso-hero-thumb {
+      width: 260px; flex-shrink: 0; border-radius: 12px; overflow: hidden;
+      aspect-ratio: 16/9; background: rgba(255,255,255,0.1);
+    }
+    .curso-hero-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Painel de ação */
+    .acao-panel {
+      background: var(--bg-card); border-radius: var(--radius);
+      border: 1px solid var(--border); padding: 24px;
+      margin-bottom: 28px; display: flex;
+      align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    }
+    .acao-preco { font-size: 2rem; font-weight: 900; color: var(--brand-deep); }
+    .acao-preco.gratuito { color: var(--brand-dark); }
+    .acao-preco-sub { font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+    .acao-membro-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--brand-light); border: 1.5px solid var(--brand-mid);
+      color: var(--brand-deep); border-radius: 8px;
+      padding: 8px 14px; font-size: 13px; font-weight: 700;
+    }
+
+    /* Módulos / aulas */
+    .modulo-bloco { margin-bottom: 12px; }
+    .modulo-header {
+      background: var(--brand-light); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; user-select: none;
+      transition: background .2s;
+    }
+    .modulo-header:hover { background: var(--brand-mid); }
+    .modulo-header-left { display: flex; align-items: center; gap: 10px; }
+    .modulo-num { font-size: 11px; font-weight: 800; color: var(--brand); background: #fff; border-radius: 6px; padding: 2px 8px; }
+    .modulo-titulo { font-size: 14px; font-weight: 700; color: var(--text); }
+    .modulo-qtd { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+    .modulo-chevron { transition: transform .25s; color: var(--muted); }
+    .modulo-bloco.open .modulo-chevron { transform: rotate(180deg); }
+
+    .aulas-lista { display: none; padding: 4px 0 8px; }
+    .modulo-bloco.open .aulas-lista { display: block; }
+    .aula-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 16px; border-bottom: 1px solid var(--border);
+      font-size: 13.5px; color: var(--text);
+    }
+    .aula-item:last-child { border-bottom: none; }
+    .aula-item svg { width: 15px; height: 15px; color: var(--brand); flex-shrink: 0; }
+    .aula-dur { margin-left: auto; font-size: 11.5px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+
+    /* Seções */
+    .secao { margin-bottom: 32px; }
+    .secao h2 { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+
+    .o-que-aprender {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;
+    }
+    .o-que-aprender li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13.5px; color: var(--text); list-style: none; line-height: 1.5;
+    }
+    .o-que-aprender li::before { content: '✓'; color: var(--brand); font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+  </style>
+</head>
+<body>
+
+<div id="plat-overlay" class="plat-overlay" onclick="fecharSidebar()"></div>
+<div id="plat-toast"></div>
+
+<div class="plat-layout">
+  <aside class="plat-sidebar" id="plat-sidebar">
+    <div class="plat-sidebar-logo">
+      <img src="/logo.png" alt="Sua Igreja"/>
+      <span>Plataforma de Cursos</span>
+    </div>
+    <nav class="plat-nav">
+      <a href="dashboard.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Meu Painel
+      </a>
+      <a href="catalogo.html" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Catálogo
+      </a>
+      <div class="plat-nav-divider"></div>
+      <a href="perfil.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Meu Perfil
+      </a>
+    </nav>
+    <div class="plat-sidebar-user">
+      <div class="plat-avatar" id="plat-user-avatar">A</div>
+      <div class="plat-user-info">
+        <strong id="plat-user-nome">Carregando...</strong>
+        <span id="plat-user-tipo">—</span>
+      </div>
+      <button class="btn-plat-logout" onclick="platLogout()" title="Sair">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <div class="plat-main">
+    <div class="plat-topbar">
+      <button class="plat-hamburger" onclick="toggleSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <h1 id="topbar-titulo">Detalhes do Curso</h1>
+      <a href="catalogo.html" class="btn-ghost" style="font-size:13px;padding:7px 14px">← Catálogo</a>
+    </div>
+
+    <div class="plat-content" id="plat-content">
+      <div class="estado-vazio" id="estado-carregando">
+        <div style="font-size:2rem">⏳</div>
+        <h3>Carregando curso...</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/config.js"></script>
+<script src="/supabase.js"></script>
+<script src="plataforma-auth.js"></script>
+<script>
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+  function toggleSidebar() {
+    document.getElementById('plat-sidebar').classList.toggle('open')
+    document.getElementById('plat-overlay').classList.toggle('active')
+  }
+  function fecharSidebar() {
+    document.getElementById('plat-sidebar').classList.remove('open')
+    document.getElementById('plat-overlay').classList.remove('active')
+  }
+  function toast(msg, tipo='ok') {
+    const el = document.getElementById('plat-toast')
+    el.textContent = msg; el.className = `show ${tipo}`
+    setTimeout(() => el.className = '', 3500)
+  }
+  function formatarDuracao(min) {
+    if (!min) return ''
+    return min >= 60 ? `${Math.floor(min/60)}h${min%60?min%60+'min':''}` : `${min}min`
+  }
+  function toggleModulo(el) {
+    el.closest('.modulo-bloco').classList.toggle('open')
+  }
+
+  let cursoAtual = null
+
+  document.addEventListener('plataforma:ready', async ({ detail: { aluno } }) => {
+    document.getElementById('plat-user-tipo').textContent = aluno.is_membro ? '⭐ Membro' : 'Aluno'
+
+    const cursoId = new URLSearchParams(location.search).get('id')
+    if (!cursoId) { location.href = 'catalogo.html'; return }
+
+    // As 3 queries só dependem do cursoId/ALUNO (já disponíveis), então rodam em paralelo.
+    const [cursoRes, estruturaRes, matricula] = await Promise.all([
+      db.from('cursos_lms').select('*').eq('id', cursoId).eq('publicado', true).maybeSingle(),
+      db.rpc('preview_curso_estrutura', { p_curso_id: cursoId }),
+      temMatricula(cursoId)
+    ])
+
+    if (cursoRes.error || !cursoRes.data) { location.href = 'catalogo.html'; return }
+    const curso = cursoRes.data
+    cursoAtual = curso
+
+    // Preview da estrutura (módulos + títulos de aulas) — visível a todos.
+    // RPC SECURITY DEFINER contorna RLS sem expor link_video.
+    const estrutura = estruturaRes.data
+    const modulos = (estrutura || []).map(m => ({ id: m.id, titulo: m.titulo, ordem: m.ordem }))
+    const todasAulas = (estrutura || []).flatMap(m =>
+      (m.aulas || []).map(a => ({ ...a, modulo_id: m.id }))
+    )
+
+    document.getElementById('estado-carregando').style.display = 'none'
+    document.getElementById('topbar-titulo').textContent = curso.titulo
+    renderCurso(curso, modulos || [], todasAulas, matricula, aluno)
+  })
+
+  function renderCurso(curso, modulos, aulas, matricula, aluno) {
+    const isMembro    = aluno.is_membro && curso.gratuito_para_membros
+    const isGratuito  = curso.preco === 0
+    const precoBr     = isMembro ? 'Gratuito' : isGratuito ? 'Gratuito'
+                       : `R$ ${Number(curso.preco).toFixed(2).replace('.',',')}`
+    const totalAulas  = aulas.length
+    const carga       = formatarDuracao(curso.carga_horaria_min)
+    const sobreCurso  = (curso.descricao_longa || curso.descricao || '').trim()
+
+    const content = document.getElementById('plat-content')
+    content.innerHTML = `
+      <!-- Hero -->
+      <div class="curso-hero">
+        <div class="curso-hero-info">
+          ${curso.categoria ? `<div class="curso-hero-cat">${esc(curso.categoria)}</div>` : ''}
+          <div class="curso-hero-titulo">${esc(curso.titulo)}</div>
+          ${curso.descricao ? `<div class="curso-hero-desc">${esc(curso.descricao)}</div>` : ''}
+          <div class="curso-hero-meta">
+            ${carga ? `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${carga}</span>` : ''}
+            ${totalAulas ? `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>${totalAulas} aula${totalAulas!==1?'s':''}</span>` : ''}
+            ${curso.nivel ? `<span>📊 ${({iniciante:'Iniciante',intermediario:'Intermediário',avancado:'Avançado'})[curso.nivel]||curso.nivel}</span>` : ''}
+          </div>
+        </div>
+        ${curso.thumbnail_url ? `<div class="curso-hero-thumb"><img src="${esc(curso.thumbnail_url)}" alt="${esc(curso.titulo)}"></div>` : ''}
+      </div>
+
+      <!-- Painel de ação -->
+      <div class="acao-panel">
+        <div>
+          <div class="acao-preco ${(isMembro||isGratuito)?'gratuito':''}">${precoBr}</div>
+          ${isMembro ? '<div class="acao-preco-sub">🎉 Benefício exclusivo para membros</div>'
+                     : isGratuito ? '<div class="acao-preco-sub">Acesso gratuito para todos</div>'
+                     : '<div class="acao-preco-sub">Acesso vitalício ao curso</div>'}
+        </div>
+        <div id="acao-btn-wrap">
+          ${renderBotaoAcao(matricula, isMembro, isGratuito, curso)}
+        </div>
+      </div>
+
+      <!-- Sobre o Curso -->
+      ${sobreCurso ? `
+      <div class="secao">
+        <h2>📖 Sobre o Curso</h2>
+        <div style="font-size:14px;line-height:1.8;color:var(--text);white-space:pre-line">${esc(sobreCurso)}</div>
+      </div>` : ''}
+
+      <!-- Conteúdo programático -->
+      ${modulos.length ? `
+      <div class="secao">
+        <h2>📋 Conteúdo do Curso</h2>
+        <div id="modulos-lista">
+          ${modulos.map((m, mi) => {
+            const aulasModulo = aulas.filter(a => a.modulo_id === m.id)
+            return `
+              <div class="modulo-bloco ${mi===0?'open':''}">
+                <div class="modulo-header" onclick="toggleModulo(this)">
+                  <div class="modulo-header-left">
+                    <span class="modulo-num">Módulo ${mi+1}</span>
+                    <span class="modulo-titulo">${esc(m.titulo)}</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span class="modulo-qtd">${aulasModulo.length} aula${aulasModulo.length!==1?'s':''}</span>
+                    <svg class="modulo-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                  </div>
+                </div>
+                <div class="aulas-lista">
+                  ${aulasModulo.map(a => `
+                    <div class="aula-item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                      ${esc(a.titulo)}
+                      ${a.duracao_min ? `<span class="aula-dur">${formatarDuracao(a.duracao_min)}</span>` : ''}
+                    </div>`).join('')}
+                </div>
+              </div>`
+          }).join('')}
+        </div>
+      </div>` : ''}
+
+    `
+  }
+
+  function renderBotaoAcao(matricula, isMembro, isGratuito, curso) {
+    if (matricula) {
+      if (matricula.status === 'concluida') {
+        return `
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+            <a href="certificado.html?m=${matricula.id}" class="btn-primary">🎓 Ver certificado</a>
+            <a href="aprender.html?m=${matricula.id}" class="btn-ghost">Revisar aulas</a>
+          </div>`
+      }
+      return `<a href="aprender.html?m=${matricula.id}" class="btn-primary">▶ Continuar aprendendo</a>`
+    }
+    if (isMembro || isGratuito) {
+      return `<button class="btn-primary" onclick="iniciarMatricula()">🎓 Matricular-se gratuitamente</button>`
+    }
+    return `
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <button class="btn-primary" onclick="iniciarMatricula()">🎓 Matricule-se</button>
+        <span style="font-size:11px;color:var(--muted);text-align:right">Acesso vitalício após pagamento</span>
+      </div>`
+  }
+
+  async function iniciarMatricula() {
+    if (!cursoAtual) return
+    const btn = document.querySelector('#acao-btn-wrap .btn-primary')
+    if (btn) { btn.disabled = true; btn.textContent = 'Processando...' }
+
+    const resultado = await matricularAluno(cursoAtual.id, cursoAtual)
+
+    if (resultado.ok) {
+      toast('🎉 Matrícula realizada! Redirecionando...', 'ok')
+      setTimeout(() => { location.href = `aprender.html?m=${resultado.matricula.id}` }, 1200)
+      return
+    }
+
+    if (resultado.motivo === 'pagamento_necessario') {
+      toast('💳 Redirecionando para pagamento...', 'ok')
+      const { data: { session } } = await db.auth.getSession()
+      if (!session) {
+        toast('❌ Sessão expirada. Faça login novamente.', 'err')
+        if (btn) { btn.disabled = false; btn.textContent = '🎓 Matricule-se' }
+        return
+      }
+      try {
+        const resp = await fetch(
+          `${db.supabaseUrl}/functions/v1/criar-pagamento-pagseguro`,
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`,
+              'apikey':         db.supabaseKey,
+              'Content-Type':   'application/json',
+            },
+            body: JSON.stringify({ curso_id: cursoAtual.id }),
+          }
+        )
+        const body = await resp.json()
+        if (!resp.ok || !body.pay_url) {
+          toast('❌ ' + (body.error || 'Falha ao iniciar pagamento'), 'err')
+          if (btn) { btn.disabled = false; btn.textContent = '🎓 Matricule-se' }
+          return
+        }
+        window.location.href = body.pay_url
+      } catch {
+        toast('❌ Erro de rede ao iniciar pagamento', 'err')
+        if (btn) { btn.disabled = false; btn.textContent = '🎓 Matricule-se' }
+      }
+      return
+    }
+
+    toast('❌ Erro ao realizar matrícula: ' + (resultado.detail || resultado.motivo), 'err')
+    if (btn) { btn.disabled = false; btn.textContent = 'Tentar novamente' }
+  }
+</script>
+</body>
+</html>

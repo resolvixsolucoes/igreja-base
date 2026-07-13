@@ -1,0 +1,392 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro de Visitante — Sua Igreja</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #f0fffe;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      width: 100%;
+      padding: 18px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #2BBFB3;
+      box-shadow: 0 2px 16px rgba(43,191,179,0.30);
+    }
+    .header-logo img { height: 50px; object-fit: contain; }
+
+    .page-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 60px;
+    }
+
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .page-header h1 { font-size: 1.5rem; color: #1a2e2d; font-weight: 800; }
+    .page-header p  { font-size: 0.92rem; color: #6b8b89; }
+
+    .form-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 8px 40px rgba(43,191,179,0.10);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #2BBFB3;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e0faf8;
+      margin-top: 4px;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: #444; }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fafafa;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #2BBFB3;
+      background: #fff;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.6;
+    }
+
+    /* Destaque especial para o bloco de oração */
+    .oracao-box {
+      background: linear-gradient(135deg, #fff8f0 0%, #fff3e0 100%);
+      border: 1.5px solid #ffe0a0;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .oracao-box label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #b8860b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .oracao-box textarea {
+      border-color: #ffe0a0;
+      background: #fffdf7;
+    }
+    .oracao-box textarea:focus {
+      border-color: #f0a500;
+      background: #fff;
+    }
+    .oracao-hint {
+      font-size: 11.5px;
+      color: #c8960b;
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 14px;
+      background: #f8fffe;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #333;
+      cursor: pointer;
+    }
+    .checkbox-item input[type="radio"] {
+      width: 16px; height: 16px;
+      accent-color: #2BBFB3;
+      cursor: pointer;
+      padding: 0; border: none; background: none;
+      flex-shrink: 0;
+    }
+
+    .btn-submit {
+      background: #2BBFB3;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(43,191,179,0.30);
+    }
+    .btn-submit:hover {
+      background: #1fa89d;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(43,191,179,0.35);
+    }
+    .btn-submit:disabled { background: #a8deda; cursor: not-allowed; transform: none; }
+
+    .feedback {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+      padding: 20px 0 8px;
+    }
+    .feedback.show { display: flex; }
+    .feedback-icon { font-size: 3rem; }
+    .feedback h2 { font-size: 1.3rem; color: #1a2e2d; font-weight: 800; }
+    .feedback p  { font-size: 0.95rem; color: #6b8b89; line-height: 1.6; }
+    .feedback-error { color: #e74c3c !important; }
+    .required { color: #e74c3c; margin-left: 2px; }
+
+    @media (max-width: 680px) {
+      header { padding: 14px 20px; }
+    }
+    @media (max-width: 480px) {
+      .form-card { padding: 24px 18px; }
+    }
+  </style>
+  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+</head>
+<body>
+
+  <header>
+    <div class="header-logo">
+      <img src="logo.png" alt="Sua Igreja" />
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="page-header">
+      <h1>Bem-vindo à Sua Igreja! 🙋</h1>
+      <p>Preencha o formulário abaixo para registrar sua visita.</p>
+    </div>
+
+    <div class="form-card" id="form-card">
+
+      <!-- DADOS PESSOAIS -->
+      <div class="form-section-title">📋 Dados Pessoais</div>
+
+      <div class="form-group">
+        <label>Nome completo <span class="required">*</span></label>
+        <input type="text" id="vis-nome" placeholder="Ex: João da Silva" />
+      </div>
+
+      <div class="form-group">
+        <label>Telefone / WhatsApp</label>
+        <input type="text" id="vis-telefone" placeholder="(31) 99999-9999" />
+      </div>
+
+      <!-- SOBRE A VISITA -->
+      <div class="form-section-title">⛪ Sobre a Visita</div>
+
+      <div class="form-group">
+        <label>Como ficou sabendo da Sua Igreja?</label>
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="radio" name="como-conheceu" value="Indicação de amigo/familiar" />
+            Indicação de amigo / familiar
+          </label>
+          <label class="checkbox-item">
+            <input type="radio" name="como-conheceu" value="Instagram" />
+            📸 Instagram
+          </label>
+          <label class="checkbox-item">
+            <input type="radio" name="como-conheceu" value="YouTube" />
+            ▶️ YouTube
+          </label>
+          <label class="checkbox-item">
+            <input type="radio" name="como-conheceu" value="Spotify" />
+            🎵 Spotify
+          </label>
+          <label class="checkbox-item">
+            <input type="radio" name="como-conheceu" value="Passando pela rua" />
+            🚶 Passando pela rua
+          </label>
+          <label class="checkbox-item">
+            <input type="radio" name="como-conheceu" value="Outro" />
+            💬 Outro
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Data da visita</label>
+        <input type="date" id="vis-data" />
+      </div>
+
+      <!-- PEDIDO DE ORAÇÃO -->
+      <div class="form-section-title">🙏 Pedido de Oração</div>
+
+      <div class="oracao-box">
+        <label>
+          🙏 Compartilhe um pedido de oração
+          <span style="font-weight: 400; color: #c8960b; font-size: 11px;">(opcional)</span>
+        </label>
+        <textarea
+          id="vis-oracao"
+          placeholder="Escreva aqui o seu pedido... Estamos aqui para orar por você! 💛"
+        ></textarea>
+        <span class="oracao-hint">
+          ✨ Seu pedido será tratado com todo cuidado e sigilo pela nossa equipe pastoral.
+        </span>
+      </div>
+
+      <button class="btn-submit" id="btn-enviar" onclick="enviarCadastro()">
+        ✅ Enviar Cadastro
+      </button>
+
+      <!-- FEEDBACK SUCESSO -->
+      <div class="feedback" id="feedback-sucesso">
+        <div class="feedback-icon">🎉</div>
+        <h2>Cadastro enviado!</h2>
+        <p>Obrigado, <strong id="feedback-nome"></strong>!<br/>
+           Que bênção ter você aqui. Estamos orando por você! 🙏</p>
+      </div>
+
+      <!-- FEEDBACK ERRO -->
+      <div class="feedback" id="feedback-erro">
+        <div class="feedback-icon">⚠️</div>
+        <h2 class="feedback-error">Ops! Algo deu errado.</h2>
+        <p id="feedback-erro-msg">Tente novamente em instantes.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div data-site-footer></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script>
+
+    async function enviarCadastro() {
+      const nome = document.getElementById('vis-nome').value.trim()
+      if (!nome) {
+        alert('Por favor, informe o nome completo.')
+        document.getElementById('vis-nome').focus()
+        return
+      }
+
+      const btn = document.getElementById('btn-enviar')
+      btn.disabled    = true
+      btn.textContent = '⏳ Enviando...'
+
+      const radioMarcado = document.querySelector('input[name="como-conheceu"]:checked')
+      const comoConheceu = radioMarcado ? radioMarcado.value : null
+      const dataInput    = document.getElementById('vis-data').value
+      const dataVisita   = dataInput || new Date().toISOString().split('T')[0]
+      const telefone     = document.getElementById('vis-telefone').value.trim() || null
+      const oracao       = document.getElementById('vis-oracao').value.trim()   || null
+
+      // ── 1. Grava o visitante ──────────────────────────────────────
+      const { data: visitanteData, error: errVisitante } = await db
+        .from('visitantes')
+        .insert({ nome, telefone, como_conheceu: comoConheceu, data_visita: dataVisita })
+        .select('id')
+        .single()
+
+      if (errVisitante) {
+        console.error('❌ Erro ao inserir visitante:', errVisitante)
+        mostrarErro(errVisitante.message, btn)
+        return
+      }
+
+      // ── 2. Se houver oração, grava em pedidos_oracao ──────────────
+      if (oracao) {
+        const { error: errOracao } = await db
+          .from('pedidos_oracao')
+          .insert({
+            nome,
+            telefone,
+            pedido:       oracao,
+            origem:       'Visitante',
+            status:       'Pendente',
+            visitante_id: visitanteData.id,
+          })
+
+        if (errOracao) {
+          console.error('⚠️ Visitante salvo, mas erro no pedido de oração:', errOracao)
+        }
+      }
+
+      console.log('✅ Visitante inserido, ID:', visitanteData.id)
+
+      // Sucesso — esconde formulário e mostra mensagem
+      document.querySelectorAll('.form-card > *:not(#feedback-sucesso):not(#feedback-erro)')
+        .forEach(el => el.style.display = 'none')
+      document.getElementById('feedback-nome').textContent = nome.split(' ')[0]
+      document.getElementById('feedback-sucesso').classList.add('show')
+    }
+
+    function mostrarErro(msg, btn) {
+      document.getElementById('feedback-erro-msg').textContent = msg
+      document.getElementById('feedback-erro').classList.add('show')
+      btn.disabled    = false
+      btn.textContent = '✅ Enviar Cadastro'
+    }
+
+  </script>
+  <script src="/pwa.js"></script>
+  <script src="site-footer.js"></script>
+</body>
+</html>

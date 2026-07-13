@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Check-in Levinho — Sua Igreja</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --brand:       #2BBFB3;
+    --brand-dark:  #1a9e93;
+    --brand-light: #e8faf9;
+    --text:        #1a2e2d;
+    --muted:       #6b8b89;
+    --bg:          #f7fbfb;
+    --radius:      14px;
+  }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; padding: 24px 16px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  .topo {
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+    color: white; border-radius: var(--radius); padding: 22px 24px;
+    text-align: center; margin-bottom: 18px;
+  }
+  .topo .icone { font-size: 42px; }
+  .topo h1     { font-size: 20px; margin: 6px 0 2px; color: white; }
+  .topo p      { font-size: 13px; opacity: .9; }
+
+  .card {
+    background: white; border-radius: var(--radius); padding: 22px 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06); margin-bottom: 14px;
+  }
+  .card h2 { font-size: 15px; margin: 0 0 12px; color: var(--brand-dark); }
+
+  label { font-size: 12px; font-weight: 700; color: #555; display: block; margin-bottom: 4px; }
+  input[type="text"], input[type="tel"], input[type="number"], input[type="date"], select {
+    width: 100%; padding: 12px 14px; border: 1px solid #d8e3e1;
+    border-radius: 10px; font-size: 15px; outline: none;
+    background: #fafdfd; transition: border .15s;
+  }
+  input:focus, select:focus { border-color: var(--brand); background: white; }
+  .form-row { display: flex; flex-direction: column; gap: 12px; }
+
+  .resultados { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+  .res-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; background: #f0fffe; border: 1px solid #c0e8e6;
+    border-radius: 10px; cursor: pointer; transition: background .15s;
+  }
+  .res-item:hover { background: var(--brand-light); }
+  .res-nome { font-weight: 700; font-size: 14px; color: var(--text); }
+  .res-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .btn {
+    width: 100%; padding: 14px; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity .15s;
+  }
+  .btn-primary  { background: linear-gradient(135deg, var(--brand), var(--brand-dark)); color: white; }
+  .btn-primary:hover  { opacity: .9; }
+  .btn-secondary { background: #f0fffe; color: var(--brand-dark); border: 1px solid #c0e8e6; }
+  .btn-link {
+    background: transparent; color: var(--brand-dark); border: none;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    text-decoration: underline; padding: 6px 0; width: 100%;
+  }
+
+  .escolhido {
+    background: var(--brand-light); border: 2px solid var(--brand);
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .escolhido .who { font-weight: 700; }
+  .escolhido .meta { font-size: 12px; color: var(--muted); }
+  .escolhido .trocar {
+    background: transparent; border: 1px solid var(--brand);
+    color: var(--brand-dark); border-radius: 8px; padding: 4px 10px;
+    font-size: 12px; cursor: pointer; font-weight: 600;
+  }
+
+  .sucesso {
+    background: white; border-radius: 16px; padding: 28px 24px;
+    text-align: center; box-shadow: 0 4px 20px rgba(43,191,179,.18);
+    border-top: 5px solid var(--brand);
+  }
+  .sucesso .check-icon { font-size: 56px; }
+  .sucesso h2 { font-size: 19px; margin: 8px 0 4px; }
+  .sucesso .sala-pill {
+    display: inline-block; background: var(--brand-light); color: var(--brand-dark);
+    border-radius: 20px; padding: 5px 14px; font-size: 13px; font-weight: 700;
+    margin: 6px 0 16px;
+  }
+  .codigo-box {
+    background: #fff8e1; border: 2px dashed #f5b500;
+    border-radius: 14px; padding: 20px 16px; margin: 8px 0 18px;
+  }
+  .codigo-box .label { font-size: 11px; font-weight: 700;
+    color: #8a6d00; text-transform: uppercase; letter-spacing: .12em; }
+  .codigo-box .codigo {
+    font-size: 44px; font-weight: 800; color: #5e4a00;
+    letter-spacing: .18em; margin-top: 4px; font-family: 'Courier New', monospace;
+  }
+  .codigo-box .ajuda { font-size: 12px; color: #8a6d00; margin-top: 6px; }
+
+  .erro {
+    background: #fee2e2; color: #991b1b; border-radius: 10px;
+    padding: 10px 14px; font-size: 13px; margin-top: 10px; display: none;
+  }
+  .erro.show { display: block; }
+
+  .empty-busca { font-size: 13px; color: var(--muted); padding: 8px 4px; text-align: center; }
+  .loading { font-size: 13px; color: var(--muted); padding: 8px 4px; text-align: center; }
+
+  .visitante-banner {
+    background: #fff3cd; color: #856404; border: 1px solid #ffe69c;
+    border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-bottom: 12px;
+  }
+  /* ── IMPRESSÃO DE ETIQUETA ────────────────────────────────── */
+  #etiqueta-print { display: none; }
+
+  @media print {
+    @page { size: 100mm 60mm; margin: 0; }
+    body > * { display: none !important; }
+    #etiqueta-print { display: block !important; }
+
+    #etiqueta-print {
+      width: 100mm; height: 60mm;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      box-sizing: border-box;
+    }
+
+    .etiq-crianca {
+      width: 100%; height: 38mm;
+      padding: 4mm 5mm 3mm;
+      display: flex; flex-direction: column; justify-content: center;
+      box-sizing: border-box;
+    }
+    .etiq-logo-linha {
+      font-size: 7pt; color: #1a9e93; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1mm;
+    }
+    .etiq-nome {
+      font-size: 18pt; font-weight: 800; color: #1a2e2d;
+      line-height: 1.1; margin-bottom: 1.5mm;
+    }
+    .etiq-sala {
+      font-size: 11pt; font-weight: 700; color: #1a9e93; margin-bottom: 1mm;
+    }
+    .etiq-codigo-inline {
+      font-size: 13pt; font-weight: 800; font-family: 'Courier New', monospace;
+      color: #5e4a00; letter-spacing: .14em;
+    }
+    .etiq-resp {
+      font-size: 7.5pt; color: #555; margin-top: 1mm;
+    }
+
+    .etiq-corte {
+      width: 100%; height: 2mm;
+      border-top: 1px dashed #aaa;
+      margin: 0;
+    }
+
+    .etiq-canhoto {
+      width: 100%; height: 20mm;
+      padding: 2mm 5mm;
+      display: flex; align-items: center; justify-content: space-between;
+      box-sizing: border-box;
+    }
+    .etiq-canhoto-esq {
+      font-size: 7pt; color: #555; line-height: 1.5;
+    }
+    .etiq-canhoto-codigo {
+      font-size: 20pt; font-weight: 800; font-family: 'Courier New', monospace;
+      color: #5e4a00; letter-spacing: .14em;
+    }
+  }
+
+  .btn-voltar {
+    display: none;
+    align-items: center; gap: 6px;
+    background: transparent; border: none; color: var(--brand-dark);
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    padding: 0; margin-bottom: 12px;
+  }
+  .btn-voltar:hover { opacity: .75; }
+  @media (max-width: 768px) {
+    .btn-voltar { display: inline-flex; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <button class="btn-voltar" onclick="voltarOuFechar()">&#8592; Voltar</button>
+  <div class="topo">
+    <div class="icone">🧒</div>
+    <h1>Check-in Levinho</h1>
+    <p>Registre a presença do seu filho</p>
+  </div>
+
+  <!-- ETAPA 0: ESCOLHA DO EVENTO -->
+  <div id="etapa-evento" class="card" style="display:none;">
+    <h2>📅 Para qual culto/evento?</h2>
+    <div id="eventos-lista" class="resultados">
+      <div class="loading">⏳ Carregando eventos...</div>
+    </div>
+  </div>
+
+  <!-- ETAPA 1: BUSCAR / ESCOLHER -->
+  <div id="etapa-busca" class="card" style="display:none;">
+    <div id="evento-resumo" style="font-size:13px;color:#1a9e93;font-weight:700;margin-bottom:8px;"></div>
+    <h2>1. Quem é a criança?</h2>
+    <div class="form-row">
+      <div>
+        <label for="inp-busca">Nome da criança</label>
+        <input type="text" id="inp-busca" placeholder="Digite o primeiro nome..."
+               autocomplete="off" />
+      </div>
+      <div id="resultados-wrap" class="resultados"></div>
+      <button class="btn-link" onclick="abrirVisitante()">
+        Não encontrei meu filho — fazer check-in como visitante
+      </button>
+    </div>
+  </div>
+
+  <!-- ETAPA 1B: VISITANTE -->
+  <div id="etapa-visitante" class="card" style="display:none;">
+    <h2>1. Criança visitante</h2>
+    <div class="visitante-banner">
+      ℹ️ Preencha os dados para um check-in temporário (válido só hoje).
+    </div>
+    <div class="form-row">
+      <div>
+        <label>Nome da criança *</label>
+        <input type="text" id="vis-nome" placeholder="Ex: João Silva" />
+      </div>
+      <div>
+        <label>Idade *</label>
+        <input type="number" id="vis-idade" min="0" max="12" placeholder="Ex: 4" />
+      </div>
+      <button class="btn btn-secondary" onclick="confirmarVisitante()">Continuar →</button>
+      <button class="btn-link" onclick="voltarBusca()">← Voltar pra busca</button>
+    </div>
+  </div>
+
+  <!-- ETAPA 2: RESPONSÁVEL -->
+  <div id="etapa-responsavel" class="card" style="display:none;">
+    <h2>2. Dados do responsável</h2>
+    <div class="escolhido" id="escolhido-resumo"></div>
+    <div class="form-row">
+      <div>
+        <label>Seu nome *</label>
+        <input type="text" id="resp-nome" placeholder="Ex: Maria Silva" />
+      </div>
+      <div>
+        <label>Seu telefone *</label>
+        <input type="tel" id="resp-tel" placeholder="(11) 99999-9999" />
+      </div>
+      <button class="btn btn-primary" id="btn-finalizar" onclick="finalizarCheckin()">
+        ✅ Confirmar check-in
+      </button>
+      <div id="erro-checkin" class="erro"></div>
+    </div>
+  </div>
+
+  <!-- ETAPA 3: SUCESSO -->
+  <div id="etapa-sucesso" style="display:none;">
+    <div class="sucesso">
+      <div class="check-icon">✅</div>
+      <h2 id="suc-nome"></h2>
+      <div class="sala-pill" id="suc-sala"></div>
+      <div class="codigo-box">
+        <div class="label">Código de retirada</div>
+        <div class="codigo" id="suc-codigo">----</div>
+        <div class="ajuda">Apresente este código pra retirar a criança no fim do culto.</div>
+      </div>
+      <button class="btn btn-secondary" style="margin-bottom:10px;" onclick="imprimirEtiqueta()">🖨️ Imprimir etiqueta</button>
+      <button class="btn btn-primary" onclick="novoCheckin()">Fazer outro check-in</button>
+    </div>
+  </div>
+</div>
+
+<!-- Etiqueta de impressão (oculta na tela, visível só ao imprimir) -->
+<div id="etiqueta-print">
+  <div class="etiq-crianca">
+    <div class="etiq-logo-linha">🧒 Sua Igreja · Levinho</div>
+    <div class="etiq-nome" id="etiq-nome"></div>
+    <div class="etiq-sala" id="etiq-sala"></div>
+    <div class="etiq-codigo-inline" id="etiq-codigo"></div>
+    <div class="etiq-resp" id="etiq-resp"></div>
+  </div>
+  <div class="etiq-corte"></div>
+  <div class="etiq-canhoto">
+    <div class="etiq-canhoto-esq">
+      <div id="etiq-canhoto-nome" style="font-weight:700;font-size:8pt;"></div>
+      <div>Código de retirada</div>
+      <div>Levinho · Sua Igreja</div>
+    </div>
+    <div class="etiq-canhoto-codigo" id="etiq-canhoto-codigo"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabase.js"></script>
+<script src="levinho-checkin.js"></script>
+</body>
+</html>

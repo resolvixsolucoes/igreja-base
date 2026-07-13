@@ -1,0 +1,417 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meu Painel — Sua Igreja</title>
+  <link rel="stylesheet" href="plataforma.css"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+</head>
+<body>
+
+<div id="plat-overlay" class="plat-overlay" onclick="fecharSidebar()"></div>
+<div id="plat-toast"></div>
+
+<div class="plat-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="plat-sidebar" id="plat-sidebar">
+    <div class="plat-sidebar-logo">
+      <img src="/logo.png" alt="Sua Igreja"/>
+      <span>Plataforma de Cursos</span>
+    </div>
+    <nav class="plat-nav">
+      <a href="dashboard.html" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Meu Painel
+      </a>
+      <a href="catalogo.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Catálogo
+      </a>
+      <div class="plat-nav-divider"></div>
+      <a href="perfil.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Meu Perfil
+      </a>
+    </nav>
+    <div class="plat-sidebar-user">
+      <div class="plat-avatar" id="plat-user-avatar">A</div>
+      <div class="plat-user-info">
+        <strong id="plat-user-nome">Carregando...</strong>
+        <span id="plat-user-tipo">—</span>
+      </div>
+      <button class="btn-plat-logout" onclick="platLogout()" title="Sair">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="plat-main">
+    <div class="plat-topbar">
+      <button class="plat-hamburger" onclick="toggleSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <h1 id="topbar-titulo">Meu Painel</h1>
+    </div>
+
+    <div class="plat-content">
+
+      <!-- Boas-vindas -->
+      <div class="dash-boas-vindas plat-card" id="dash-boas-vindas">
+        <div class="dash-bv-texto">
+          <h2 id="dash-bv-nome">Olá!</h2>
+          <p id="dash-bv-sub">Bem-vindo à plataforma de cursos da Sua Igreja.</p>
+        </div>
+        <div class="dash-bv-stats" id="dash-bv-stats"></div>
+      </div>
+
+      <!-- Cursos em andamento -->
+      <section class="dash-section">
+        <div class="dash-section-header">
+          <h2>Meus Cursos</h2>
+          <a href="catalogo.html" class="btn-ghost" style="font-size:12.5px;padding:7px 14px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Explorar catálogo
+          </a>
+        </div>
+
+        <div class="estado-vazio" id="dash-loading">
+          <div style="font-size:2rem">⏳</div>
+          <h3>Carregando seus cursos...</h3>
+        </div>
+
+        <div class="estado-vazio" id="dash-vazio" style="display:none">
+          <div class="icone">📚</div>
+          <h3>Você ainda não se matriculou em nenhum curso</h3>
+          <p>Explore o catálogo e comece sua jornada de aprendizado!</p>
+          <a href="catalogo.html" class="btn-primary" style="margin-top:8px">Ver catálogo</a>
+        </div>
+
+        <div class="dash-cursos-grid" id="dash-cursos-grid"></div>
+      </section>
+
+      <!-- Continuar assistindo (última aula) -->
+      <section class="dash-section" id="dash-continuar-section" style="display:none">
+        <div class="dash-section-header">
+          <h2>Continuar de onde parou</h2>
+        </div>
+        <div id="dash-continuar-lista"></div>
+      </section>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/config.js"></script>
+<script src="/supabase.js"></script>
+<script src="plataforma-auth.js"></script>
+<script>
+  function toggleSidebar() {
+    document.getElementById('plat-sidebar').classList.toggle('open')
+    document.getElementById('plat-overlay').classList.toggle('active')
+  }
+  function fecharSidebar() {
+    document.getElementById('plat-sidebar').classList.remove('open')
+    document.getElementById('plat-overlay').classList.remove('active')
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  }
+
+  function fmtCarga(min) {
+    if (!min) return ''
+    const h = Math.floor(min / 60), m = min % 60
+    return h ? `${h}h${m ? m + 'min' : ''}` : `${m}min`
+  }
+
+  function renderCursoCard(matricula, progresso, totalAulas) {
+    const c = matricula.cursos_lms
+    if (!c) return ''
+    const pct = progresso || 0
+    const concluido = pct >= 100
+    const thumb = c.thumbnail_url
+      ? `<img src="${esc(c.thumbnail_url)}" alt="${esc(c.titulo)}" loading="lazy">`
+      : `<div class="dash-curso-thumb-placeholder">🎓</div>`
+
+    const href = concluido
+      ? `certificado.html?m=${matricula.id}`
+      : `aprender.html?m=${matricula.id}`
+
+    return `
+      <a class="dash-curso-card" href="${href}">
+        <div class="dash-curso-thumb">${thumb}</div>
+        <div class="dash-curso-body">
+          ${c.categoria ? `<div class="dash-curso-cat">${esc(c.categoria)}</div>` : ''}
+          <div class="dash-curso-titulo">${esc(c.titulo)}</div>
+          <div class="dash-curso-meta">
+            ${totalAulas ? `<span>${totalAulas} aulas</span>` : ''}
+            ${c.carga_horaria_min ? `<span>${fmtCarga(c.carga_horaria_min)}</span>` : ''}
+          </div>
+          <div class="dash-curso-progresso">
+            <div class="dash-prog-header">
+              <span>${concluido ? '🎓 Ver certificado' : pct + '% concluído'}</span>
+              <span>${Math.round(pct * (totalAulas || 0) / 100)} / ${totalAulas || 0} aulas</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" style="width:${pct}%"></div>
+            </div>
+          </div>
+        </div>
+      </a>`
+  }
+
+  function renderContinuar(itens) {
+    if (!itens.length) return
+    document.getElementById('dash-continuar-section').style.display = 'block'
+    document.getElementById('dash-continuar-lista').innerHTML = itens.map(item => `
+      <a class="dash-continuar-card" href="aprender.html?m=${item.matriculaId}&aula=${item.aulaId}">
+        <div class="dash-continuar-thumb">
+          ${item.thumb
+            ? `<img src="${esc(item.thumb)}" alt="${esc(item.cursoTitulo)}">`
+            : `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:1.5rem;color:rgba(255,255,255,0.4)">🎓</div>`}
+          <div class="dash-continuar-play">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+        </div>
+        <div class="dash-continuar-info">
+          <div class="dash-continuar-curso">${esc(item.cursoTitulo)}</div>
+          <div class="dash-continuar-aula">${esc(item.aulaTitulo)}</div>
+          <div class="dash-continuar-prog">
+            <div class="progress-bar-wrap" style="height:4px">
+              <div class="progress-bar-fill" style="width:${item.pct}%"></div>
+            </div>
+          </div>
+        </div>
+      </a>`).join('')
+  }
+
+  document.addEventListener('plataforma:ready', async ({ detail: { aluno } }) => {
+    // Boas-vindas
+    const primeiroNome = aluno.nome?.split(' ')[0] || 'Aluno'
+    document.getElementById('dash-bv-nome').textContent = `Olá, ${primeiroNome}! 👋`
+    document.getElementById('dash-bv-sub').textContent = aluno.is_membro
+      ? 'Você é membro da Sua Igreja — acesso gratuito a todos os cursos!'
+      : 'Bem-vindo à plataforma de cursos da Sua Igreja.'
+    document.getElementById('plat-user-tipo').textContent = aluno.is_membro ? '⭐ Membro' : 'Aluno'
+
+    // Busca matrículas
+    const { data: matriculas, error } = await db
+      .from('matriculas_lms')
+      .select(`
+        id, status, tipo_acesso, data_matricula,
+        cursos_lms ( id, titulo, descricao, thumbnail_url, carga_horaria_min, categoria )
+      `)
+      .eq('aluno_id', ALUNO.user.id)
+      .in('status', ['ativa', 'concluida'])
+      .order('data_matricula', { ascending: false })
+
+    document.getElementById('dash-loading').style.display = 'none'
+
+    if (error || !matriculas?.length) {
+      document.getElementById('dash-vazio').style.display = 'flex'
+      renderStats(0, 0, 0)
+      return
+    }
+
+    // Para cada matrícula, busca total de aulas e progresso
+    const cursosIds = matriculas.map(m => m.cursos_lms?.id).filter(Boolean)
+
+    const [{ data: aulasCounts }, { data: progressos }] = await Promise.all([
+      db.from('aulas_lms')
+        .select('id, modulo_id, modulos_lms!inner(curso_id)')
+        .in('modulos_lms.curso_id', cursosIds),
+      db.from('progresso_aulas_lms')
+        .select('aula_id, concluida, percentual_assistido, matricula_id, updated_at')
+        .in('matricula_id', matriculas.map(m => m.id))
+    ])
+
+    // Agrupa aulas por curso
+    const aulasPorCurso = {}
+    ;(aulasCounts || []).forEach(a => {
+      const cid = a.modulos_lms?.curso_id
+      if (cid) aulasPorCurso[cid] = (aulasPorCurso[cid] || 0) + 1
+    })
+
+    // Agrupa progresso por matrícula
+    const progressoPorMatricula = {}
+    ;(progressos || []).forEach(p => {
+      if (!progressoPorMatricula[p.matricula_id]) progressoPorMatricula[p.matricula_id] = []
+      progressoPorMatricula[p.matricula_id].push(p)
+    })
+
+    let concluidos = 0
+    const ultimasAulas = []
+
+    const html = matriculas.map(m => {
+      const cid = m.cursos_lms?.id
+      const total = aulasPorCurso[cid] || 0
+      const prog = progressoPorMatricula[m.id] || []
+      const feitas = prog.filter(p => p.concluida).length
+      const pct = total ? Math.round((feitas / total) * 100) : 0
+      if (pct >= 100) concluidos++
+
+      // Última aula não concluída (para "continuar assistindo")
+      const naoConc = prog.filter(p => !p.concluida && p.percentual_assistido > 0)
+        .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+      if (naoConc[0]) {
+        ultimasAulas.push({
+          matriculaId: m.id,
+          aulaId: naoConc[0].aula_id,
+          pct: naoConc[0].percentual_assistido || 0,
+          cursoTitulo: m.cursos_lms?.titulo || '',
+          thumb: m.cursos_lms?.thumbnail_url || '',
+          aulaTitulo: '', // será preenchido abaixo se disponível
+        })
+      }
+
+      return renderCursoCard(m, pct, total)
+    }).join('')
+
+    document.getElementById('dash-cursos-grid').innerHTML = html
+    renderStats(matriculas.length, concluidos, Math.round(
+      matriculas.reduce((acc, m) => {
+        const cid = m.cursos_lms?.id
+        const total = aulasPorCurso[cid] || 0
+        const prog = progressoPorMatricula[m.id] || []
+        const feitas = prog.filter(p => p.concluida).length
+        return acc + (total ? feitas / total : 0)
+      }, 0) / matriculas.length * 100
+    ))
+
+    // Busca títulos das últimas aulas
+    if (ultimasAulas.length) {
+      const aulaIds = ultimasAulas.map(u => u.aulaId)
+      const { data: aulas } = await db.from('aulas_lms').select('id,titulo').in('id', aulaIds)
+      const aulaMap = Object.fromEntries((aulas || []).map(a => [a.id, a.titulo]))
+      ultimasAulas.forEach(u => { u.aulaTitulo = aulaMap[u.aulaId] || 'Aula' })
+      renderContinuar(ultimasAulas.slice(0, 3))
+    }
+  })
+
+  function renderStats(total, concluidos, progMedio) {
+    document.getElementById('dash-bv-stats').innerHTML = `
+      <div class="dash-stat">
+        <div class="dash-stat-num">${total}</div>
+        <div class="dash-stat-label">Matrículas</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num">${concluidos}</div>
+        <div class="dash-stat-label">Concluídos</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num">${isNaN(progMedio) ? 0 : progMedio}%</div>
+        <div class="dash-stat-label">Progresso médio</div>
+      </div>`
+  }
+</script>
+
+<style>
+/* Dashboard específico */
+.dash-boas-vindas {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 28px; margin-bottom: 32px; gap: 20px; flex-wrap: wrap;
+  background: linear-gradient(135deg, var(--brand-deep) 0%, #0a4040 100%);
+  color: #fff; border: none;
+}
+.dash-bv-texto h2 { font-size: 1.4rem; font-weight: 800; color: #fff; }
+.dash-bv-texto p  { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 4px; }
+.dash-bv-stats { display: flex; gap: 28px; }
+.dash-stat { text-align: center; }
+.dash-stat-num   { font-size: 1.8rem; font-weight: 900; color: #fff; line-height: 1; }
+.dash-stat-label { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 600; margin-top: 4px; }
+
+.dash-section { margin-bottom: 36px; }
+.dash-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.dash-section-header h2 { font-size: 1rem; font-weight: 800; color: var(--text); }
+
+.dash-cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.dash-curso-card {
+  display: flex; flex-direction: column;
+  background: var(--bg-card); border-radius: var(--radius);
+  border: 1px solid var(--border); text-decoration: none; color: inherit;
+  overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
+}
+.dash-curso-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(43,191,179,0.15);
+}
+.dash-curso-thumb {
+  width: 100%; aspect-ratio: 16/9;
+  background: linear-gradient(135deg, var(--brand-deep), var(--brand));
+  overflow: hidden; flex-shrink: 0;
+}
+.dash-curso-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.dash-curso-thumb-placeholder {
+  width:100%; height:100%; display:flex; align-items:center;
+  justify-content:center; font-size:2.5rem; opacity:.5;
+}
+.dash-curso-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.dash-curso-cat {
+  font-size: 10px; font-weight: 800; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--brand);
+}
+.dash-curso-titulo { font-size: 14.5px; font-weight: 800; color: var(--text); line-height: 1.3; }
+.dash-curso-meta {
+  display: flex; gap: 10px; font-size: 11.5px; color: var(--muted); font-weight: 600;
+}
+.dash-curso-meta span::before { content: '• '; }
+.dash-curso-meta span:first-child::before { content: ''; }
+
+.dash-curso-progresso { margin-top: auto; padding-top: 10px; }
+.dash-prog-header {
+  display: flex; justify-content: space-between;
+  font-size: 11.5px; font-weight: 700; color: var(--muted); margin-bottom: 6px;
+}
+
+/* Continuar assistindo */
+.dash-continuar-card {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--bg-card); border-radius: var(--radius);
+  border: 1px solid var(--border); padding: 14px;
+  text-decoration: none; color: inherit;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-bottom: 10px;
+}
+.dash-continuar-card:hover { background: var(--brand-light); box-shadow: 0 2px 12px rgba(43,191,179,0.10); }
+.dash-continuar-thumb {
+  width: 120px; height: 68px; border-radius: 8px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--brand-deep), var(--brand));
+  overflow: hidden; position: relative;
+}
+.dash-continuar-thumb img { width:100%; height:100%; object-fit:cover; }
+.dash-continuar-play {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.35); color: #fff;
+  opacity: 0; transition: opacity 0.2s;
+}
+.dash-continuar-card:hover .dash-continuar-play { opacity: 1; }
+.dash-continuar-info { flex: 1; min-width: 0; }
+.dash-continuar-curso { font-size: 11px; color: var(--brand); font-weight: 700; text-transform: uppercase; letter-spacing: .8px; }
+.dash-continuar-aula  { font-size: 14px; font-weight: 700; color: var(--text); margin: 4px 0 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.dash-continuar-prog  { max-width: 280px; }
+
+@media (max-width: 600px) {
+  .dash-boas-vindas { padding: 18px; }
+  .dash-bv-stats { gap: 16px; }
+  .dash-stat-num { font-size: 1.4rem; }
+  .dash-cursos-grid { grid-template-columns: 1fr; }
+  .dash-continuar-thumb { width: 80px; height: 48px; }
+}
+</style>
+
+</body>
+</html>

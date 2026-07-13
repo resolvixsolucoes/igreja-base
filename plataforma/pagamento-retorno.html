@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pagamento — Sua Igreja</title>
+  <meta name="theme-color" content="#2BBFB3" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+  <link rel="stylesheet" href="plataforma.css" />
+  <style>
+    body {
+      min-height: 100vh; margin: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(150deg, #0f6b64 0%, #0a2e2b 50%, #071a18 100%);
+      font-family: 'Segoe UI', sans-serif; color: #1a2e2d;
+    }
+    .card {
+      background: #fff; border-radius: 20px; padding: 40px 32px;
+      width: 100%; max-width: 460px; text-align: center;
+      box-shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+    .icon {
+      width: 84px; height: 84px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px; font-size: 36px;
+    }
+    .icon.ok      { background: #f0fdf4; color: #16a34a; }
+    .icon.pend    { background: #fffbeb; color: #d97706; }
+    .icon.err     { background: #fff0f0; color: #dc2626; }
+    h1 { font-size: 1.3rem; font-weight: 800; margin: 0 0 10px; }
+    p  { font-size: 14px; color: #6b8b89; line-height: 1.6; margin: 6px 0; }
+    .btn {
+      display: inline-block; margin-top: 22px; padding: 12px 24px;
+      background: linear-gradient(135deg, #2BBFB3, #1a9e93); color: #fff;
+      border: none; border-radius: 12px; font-size: 14px; font-weight: 700;
+      text-decoration: none; cursor: pointer; font-family: inherit;
+      box-shadow: 0 4px 16px rgba(43,191,179,.35);
+    }
+    .btn.secundario {
+      background: #fff; color: #2BBFB3; border: 2px solid #2BBFB3;
+      box-shadow: none;
+    }
+    .spinner {
+      width: 36px; height: 36px; margin: 0 auto 12px;
+      border: 3px solid #e8faf9; border-top-color: #2BBFB3;
+      border-radius: 50%; animation: spin .9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="spinner" id="spinner"></div>
+    <h1 id="titulo">Confirmando pagamento...</h1>
+    <p id="msg">Aguarde enquanto verificamos com o PagSeguro.</p>
+    <div id="acoes" style="display:none">
+      <a href="catalogo.html" class="btn secundario">← Catálogo</a>
+      <a href="dashboard.html" class="btn" id="btn-principal">Ir para Meus Cursos</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7"></script>
+  <script src="../config.js"></script>  <script src="../supabase.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search)
+    const pagamentoId = params.get('p')
+
+    const cardEl    = document.getElementById('card')
+    const spinnerEl = document.getElementById('spinner')
+    const tituloEl  = document.getElementById('titulo')
+    const msgEl     = document.getElementById('msg')
+    const acoesEl   = document.getElementById('acoes')
+    const btnPrinc  = document.getElementById('btn-principal')
+
+    function setIcone(tipo, glyph) {
+      spinnerEl.outerHTML = `<div class="icon ${tipo}">${glyph}</div>`
+    }
+
+    function mostrarErro(texto) {
+      setIcone('err', '✕')
+      tituloEl.textContent = 'Pagamento não confirmado'
+      msgEl.textContent = texto
+      acoesEl.style.display = 'block'
+      btnPrinc.textContent = 'Tentar novamente'
+      btnPrinc.href = 'catalogo.html'
+    }
+
+    function mostrarPendente() {
+      setIcone('pend', '⏳')
+      tituloEl.textContent = 'Pagamento recebido!'
+      msgEl.innerHTML = 'Estamos confirmando o seu pagamento.<br/>O acesso ao curso será liberado em até <strong>1 dia útil</strong> após a confirmação.<br/><br/>Você pode acompanhar pelo painel em "Meus Cursos".'
+      acoesEl.style.display = 'block'
+      btnPrinc.textContent = 'Voltar ao Dashboard'
+      btnPrinc.href = 'dashboard.html'
+    }
+
+    async function mostrarSucesso(matriculaId) {
+      setIcone('ok', '✓')
+      tituloEl.textContent = '🎉 Pagamento confirmado!'
+      msgEl.textContent = 'Sua matrícula está ativa. Redirecionando para o curso...'
+      acoesEl.style.display = 'block'
+      btnPrinc.textContent = 'Começar agora'
+      btnPrinc.href = matriculaId ? `aprender.html?m=${matriculaId}` : 'dashboard.html'
+      setTimeout(() => { location.href = btnPrinc.href }, 2500)
+    }
+
+    async function consultar() {
+      if (!pagamentoId) {
+        mostrarErro('ID do pagamento não informado.')
+        return
+      }
+      const { data: { session } } = await db.auth.getSession()
+      if (!session) {
+        mostrarErro('Sessão expirada. Faça login novamente.')
+        return
+      }
+      const { data: pag, error } = await db
+        .from('pagamentos_lms')
+        .select('id, status, matricula_id, curso_id')
+        .eq('id', pagamentoId)
+        .maybeSingle()
+
+      if (error || !pag) {
+        mostrarErro('Pagamento não encontrado.')
+        return
+      }
+
+      if (pag.status === 'aprovado')   return mostrarSucesso(pag.matricula_id)
+      if (pag.status === 'recusado')   return mostrarErro('O pagamento foi recusado pelo banco.')
+      if (pag.status === 'cancelado')  return mostrarErro('O pagamento foi cancelado.')
+      // pendente — segue polling
+      return false
+    }
+
+    ;(async function init() {
+      // Polling: 6 tentativas em 60s (a cada 10s)
+      for (let i = 0; i < 6; i++) {
+        const r = await consultar()
+        if (r !== false) return
+        await new Promise(res => setTimeout(res, 10000))
+      }
+      mostrarPendente()
+    })()
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Pre-commit hook — instalado por tools/install-hooks.sh
+# Aborta commit se paginas-abas.generated.js estiver dessincronizado dos *.html.
+exec node tools/gerar-paginas-manifest.mjs --check

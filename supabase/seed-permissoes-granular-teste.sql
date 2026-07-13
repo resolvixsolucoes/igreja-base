@@ -1,0 +1,54 @@
+-- =====================================================================
+-- Fase 5.3 — SEED de teste para permissoes_granular
+--
+-- Objetivo: validar manualmente o gate piloto de conteudos.html.
+-- Como admin (Bruno) sempre passa pelo curto-circuito em auth.js, e
+-- preciso um user nao-admin (role != 'admin') logar e ver:
+--  - sidebar com submenu "Conteudos" so com as abas liberadas
+--  - pagina conteudos.html abrindo na primeira aba liberada
+--  - abas bloqueadas escondidas
+--
+-- COMO USAR:
+--  1) Pega o uuid de um user de teste:
+--     select id, nome, role from public.perfis where role <> 'admin';
+--
+--  2) Substitui <UUID_USER_TESTE> pelo uuid abaixo, escolhe o cenario
+--     (A, B ou C) e roda no SQL Editor do projeto Prod (NAO no LMS).
+--
+--  3) Loga no app com esse user e valida.
+--
+--  4) Pra limpar:
+--     delete from public.permissoes_granular
+--     where user_id = '<UUID_USER_TESTE>' and pagina = 'conteudos';
+-- =====================================================================
+
+-- ─── Cenario A: so pregacoes (ver) ────────────────────────────────────
+-- insert into public.permissoes_granular
+--   (user_id, pagina, aba, ver, adicionar, editar, excluir)
+-- values
+--   ('<UUID_USER_TESTE>', 'conteudos', 'pregacoes', true, false, false, false)
+-- on conflict (user_id, pagina, aba) do update
+--   set ver=excluded.ver, adicionar=excluded.adicionar,
+--       editar=excluded.editar, excluir=excluded.excluir;
+
+-- ─── Cenario B: pregacoes (ver+editar) e cursos (ver) ─────────────────
+-- insert into public.permissoes_granular
+--   (user_id, pagina, aba, ver, adicionar, editar, excluir)
+-- values
+--   ('<UUID_USER_TESTE>', 'conteudos', 'pregacoes', true, false, true,  false),
+--   ('<UUID_USER_TESTE>', 'conteudos', 'cursos',    true, false, false, false)
+-- on conflict (user_id, pagina, aba) do update
+--   set ver=excluded.ver, adicionar=excluded.adicionar,
+--       editar=excluded.editar, excluir=excluded.excluir;
+
+-- ─── Cenario C: tudo liberado (4 abas com 4 acoes) ────────────────────
+-- insert into public.permissoes_granular
+--   (user_id, pagina, aba, ver, adicionar, editar, excluir)
+-- values
+--   ('<UUID_USER_TESTE>', 'conteudos', 'pregacoes',  true, true, true, true),
+--   ('<UUID_USER_TESTE>', 'conteudos', 'cursos',     true, true, true, true),
+--   ('<UUID_USER_TESTE>', 'conteudos', 'biblioteca', true, true, true, true),
+--   ('<UUID_USER_TESTE>', 'conteudos', 'playlists',  true, true, true, true)
+-- on conflict (user_id, pagina, aba) do update
+--   set ver=excluded.ver, adicionar=excluded.adicionar,
+--       editar=excluded.editar, excluir=excluded.excluir;

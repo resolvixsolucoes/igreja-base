@@ -1,0 +1,470 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="pagina-slug"  content="central_voluntarios">
+  <meta name="pagina-label" content="🎯 Central de Voluntários">
+  <title>Central de Voluntários — Sua Igreja</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .abas {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 24px;
+    }
+    .aba-btn {
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all .2s;
+    }
+    .aba-btn:hover  { color: #2BBFB3; }
+    .aba-btn.active { color: #2BBFB3; border-bottom-color: #2BBFB3; }
+    .aba-content        { display: none; }
+    .aba-content.active { display: block; }
+
+    .filtros-row {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .filtros-row input, .filtros-row select {
+      padding: 9px 12px;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    .filtros-row input { flex: 1; min-width: 200px; }
+    .filtros-row select { min-width: 180px; }
+
+    .vol-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .vol-card-info { flex: 1; min-width: 0; }
+    .vol-card-nome { font-weight: 700; color: #1a2e2d; font-size: 15px; }
+    .vol-card-tel  { font-size: 12px; color: #888; }
+    .vol-card-mins {
+      display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;
+    }
+    .vol-card-min-tag {
+      font-size: 10px;
+      background: #e8faf9;
+      color: #1a9e93;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .vol-card-status {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+    }
+    .vol-status-Ativo    { background: #D1FAE5; color: #065F46; }
+    .vol-status-Inativo  { background: #FEE2E2; color: #991B1B; }
+
+    .evento-bloco {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+    .evento-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .evento-head h3 {
+      font-size: 16px;
+      color: #1a2e2d;
+      margin: 0;
+    }
+    .evento-meta {
+      font-size: 12px;
+      color: #888;
+    }
+    .evento-resumo {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 10px;
+    }
+    .pill-conf { background: #D1FAE5; color: #065F46; }
+    .pill-pres { background: #DBEAFE; color: #1E40AF; }
+    .pill-pend { background: #FEF3C7; color: #92400E; }
+
+    .esc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .esc-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 6px 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 13px;
+    }
+    .esc-row .nome { flex: 1; min-width: 140px; color: #1a2e2d; }
+    .esc-row .min  { font-size: 11px; color: #1a9e93; font-weight: 600; }
+    .esc-row .pill { font-size: 10px; }
+
+    .btn-qr {
+      padding: 6px 12px;
+      background: #1a9e93;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-qr:hover { background: #168880; }
+
+    /* Modal QR */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-qr {
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.3);
+    }
+    .modal-qr h3 { color: #1a2e2d; margin-bottom: 4px; }
+    .modal-qr .ev-data {
+      font-size: 13px; color: #888; margin-bottom: 18px;
+    }
+    .modal-qr img {
+      width: 100%; max-width: 360px;
+      height: auto;
+      display: block;
+      margin: 0 auto 12px;
+      background: #fff;
+      padding: 8px;
+      border: 1px solid #eee;
+      border-radius: 12px;
+    }
+    .modal-qr .url {
+      font-size: 11px; color: #aaa;
+      word-break: break-all;
+      padding: 8px 12px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .modal-qr-acoes {
+      display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    }
+    .modal-qr-acoes button, .modal-qr-acoes a {
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-print  { background: #f0fffe; color: #1a9e93; border: 1px solid #2BBFB3; }
+    .btn-fechar { background: #eee; color: #555; }
+
+    .empty-state {
+      text-align: center;
+      color: #aaa;
+      padding: 40px 16px;
+      font-size: 14px;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      .modal-qr, .modal-qr * { visibility: visible; }
+      .modal-qr { position: absolute; inset: 0; box-shadow: none; }
+      .modal-qr-acoes, .url { display: none; }
+    }
+
+    /* ── SIDEBAR USER (perfil) — alinhado com as demais páginas ── */
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 6px 12px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sidebar-user {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: inherit; padding: 5px 10px;
+      border-radius: 10px; transition: background .2s; cursor: pointer;
+    }
+    .sidebar-user:hover { background: rgba(255,255,255,0.12); }
+    .sidebar-user-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0; overflow: hidden;
+    }
+    .sidebar-user-icon img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .sidebar-user-nome {
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sidebar-logout {
+      width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 600;
+      cursor: pointer; padding: 5px 10px; border-radius: 10px;
+      transition: background .2s, color .2s; text-align: left;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="logo.png" alt="Sua Igreja" />
+    </div>
+  <nav id="sidebar-nav">
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="membros.html">👥 Membros</a>
+    <a href="visitantes.html">🙋 Visitantes</a>
+    <a href="criancas.html">👶 Crianças</a>
+    <a href="pedido-de-oracao.html">🙏 Pedidos de Oração</a>
+    <a href="aniversariantes.html">🎂 Aniversariantes</a>
+
+    <!-- ITEM MINISTÉRIOS COM CASCATA -->
+    <div class="nav-ministerios" id="nav-ministerios">
+      <div class="nav-min-trigger" id="nav-min-trigger">
+        <span>✨ Ministérios</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+      <div id="nav-ministerios-lista">
+        <div class="nav-min-loading">Carregando...</div>
+      </div>
+    </div>
+
+    <a href="agenda.html">📅 Agenda</a>
+    <a href="inscricoes.html">📋 Inscrições</a>
+    <a href="central-voluntarios.html" class="active">🎯 Central de Voluntários</a>
+    <a href="mesas.html">🟤 Mesas</a>
+    <a href="financeiro.html">💰 Financeiro</a>
+    <a href="relatorios.html">📈 Relatórios</a>
+    <div class="nav-ministerios" id="nav-conteudos">
+      <div class="nav-min-trigger" id="nav-conteudos-trigger">
+        <span>📚 Conteúdos</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+        <div id="nav-conteudos-lista">
+          <a href="conteudos.html?aba=pregacoes"  class="nav-min-item" data-aba="pregacoes">🎙️ Pregações</a>
+          <a href="conteudos.html?aba=cursos"     class="nav-min-item" data-aba="cursos">🎓 Cursos</a>
+          <a href="conteudos.html?aba=biblioteca" class="nav-min-item" data-aba="biblioteca">📖 Biblioteca</a>
+        </div>
+    </div>
+    <a href="usuarios.html">⚙️ Usuários</a>
+  </nav>
+    <div class="sidebar-footer">
+      <a href="perfil.html" class="sidebar-user" title="Meu perfil">
+        <span class="sidebar-user-icon" id="sidebarUserIcon">👤</span>
+        <span class="sidebar-user-nome" id="sidebarUserNome">Carregando...</span>
+      </a>
+      <button class="sidebar-logout" onclick="fazerLogout ? fazerLogout() : db.auth.signOut().then(()=>location.href='index.html')">
+        🚪 Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO -->
+  <div class="main" data-aba="_default">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:6px;">
+      <h1 style="font-size:24px;color:#1a2e2d;">🎯 Central de Voluntários</h1>
+      <button class="btn-qr" onclick="abrirQRGeral()" style="background:#1a9e93;">
+        📱 QR de Check-in (geral)
+      </button>
+    </div>
+    <p style="color:#888;font-size:14px;margin-bottom:20px;">
+      Gestão consolidada de voluntários, escalas e check-ins.
+    </p>
+
+    <div class="abas">
+      <button class="aba-btn active" data-aba="voluntarios" onclick="trocarAba('voluntarios', this)">👥 Voluntários</button>
+      <button class="aba-btn"        data-aba="escalas"     onclick="trocarAba('escalas', this)">📋 Escalas / Programações</button>
+      <button class="aba-btn"        data-aba="materiais"   onclick="trocarAba('materiais', this)">📦 Materiais</button>
+    </div>
+
+    <!-- ABA VOLUNTÁRIOS -->
+    <div class="aba-content active" id="aba-voluntarios">
+      <div class="filtros-row">
+        <input type="text" id="busca-vol" placeholder="🔎 Buscar por nome ou telefone…" oninput="renderVoluntarios()" />
+        <select id="filtro-min" onchange="renderVoluntarios()">
+          <option value="">Todos os ministérios</option>
+        </select>
+        <select id="filtro-status" onchange="renderVoluntarios()">
+          <option value="Ativo">Apenas ativos</option>
+          <option value="">Todos (incl. inativos)</option>
+          <option value="Inativo">Apenas inativos</option>
+        </select>
+      </div>
+      <div id="contagem-vols" style="font-size:12px;color:#888;margin-bottom:10px;"></div>
+      <div id="lista-voluntarios"></div>
+    </div>
+
+    <!-- ABA ESCALAS -->
+    <div class="aba-content" id="aba-escalas">
+      <div class="filtros-row">
+        <select id="filtro-ev-quando" onchange="renderEscalas()">
+          <option value="hoje">Apenas hoje</option>
+          <option value="proximos" selected>Próximos 30 dias</option>
+          <option value="todos">Todos (próximos 90 dias)</option>
+        </select>
+        <select id="filtro-ev-min" onchange="renderEscalas()">
+          <option value="">Todos os ministérios</option>
+        </select>
+      </div>
+      <div id="lista-escalas"></div>
+    </div>
+
+    <!-- ABA MATERIAIS -->
+    <div class="aba-content" id="aba-materiais">
+      <div class="filtros-row">
+        <select id="filtro-mat-evento" onchange="renderMateriais()" style="flex:1;min-width:240px;">
+          <option value="">— escolha um evento —</option>
+        </select>
+        <button class="btn-qr" id="btn-novo-material" onclick="abrirModalMaterial()" disabled
+                style="background:#2BBFB3;">+ Adicionar material</button>
+      </div>
+      <div id="lista-materiais"></div>
+    </div>
+  </div>
+
+  <!-- MODAL CADASTRAR MATERIAL -->
+  <div class="modal-overlay" id="modal-mat-overlay" onclick="if(event.target===this)fecharModalMaterial()">
+    <div class="modal-qr" style="text-align:left;max-width:520px;">
+      <h3 style="text-align:center;margin-bottom:18px;">📦 Novo material</h3>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <label style="font-size:12px;font-weight:700;color:#1a9e93;">Tipo *</label>
+          <select id="mat-tipo" onchange="atualizarTipoMaterial()" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:10px;margin-top:4px;">
+            <option value="checklist">📝 Checklist (item textual)</option>
+            <option value="arquivo">📎 Arquivo (PDF, imagem, etc)</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:700;color:#1a9e93;">Título *</label>
+          <input id="mat-titulo" type="text" placeholder="Ex: Camiseta da equipe"
+                 style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:10px;margin-top:4px;" />
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:700;color:#1a9e93;">Descrição (opcional)</label>
+          <textarea id="mat-descricao" rows="2" placeholder="Detalhes/observação"
+                    style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:10px;margin-top:4px;font-family:inherit;"></textarea>
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:700;color:#1a9e93;">Ministério (opcional)</label>
+          <select id="mat-ministerio" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:10px;margin-top:4px;">
+            <option value="">— Todos os escalados —</option>
+          </select>
+        </div>
+        <div id="mat-arquivo-wrap" style="display:none;">
+          <label style="font-size:12px;font-weight:700;color:#1a9e93;">Arquivo *</label>
+          <input id="mat-arquivo" type="file"
+                 style="width:100%;padding:8px;border:1.5px solid #ddd;border-radius:10px;margin-top:4px;" />
+        </div>
+        <div id="mat-erro" style="color:#991B1B;font-size:13px;display:none;"></div>
+      </div>
+      <div class="modal-qr-acoes" style="margin-top:18px;">
+        <button class="btn-fechar" onclick="fecharModalMaterial()">Cancelar</button>
+        <button class="btn-print"  id="btn-salvar-material" onclick="salvarMaterial()" style="background:#2BBFB3;color:#fff;border:none;">💾 Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL QR -->
+  <div class="modal-overlay" id="modal-qr-overlay" onclick="if(event.target===this)fecharModalQR()">
+    <div class="modal-qr">
+      <h3 id="qr-evento-nome">Evento</h3>
+      <div class="ev-data" id="qr-evento-data"></div>
+      <img id="qr-img" alt="QR Code de check-in" />
+      <div class="url" id="qr-url"></div>
+      <div class="modal-qr-acoes">
+        <button class="btn-print"  onclick="window.print()">🖨️ Imprimir</button>
+        <button class="btn-fechar" onclick="fecharModalQR()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script src="auth.js"></script>
+  <script src="/pwa.js"></script>
+  <script src="permissions.js"></script>
+  <script src="escala-geral.js"></script>
+  <script src="central-voluntarios.js"></script>
+  <script src="ministerios-nav.js"></script>
+  <script src="conteudos-nav.js"></script>
+
+  <script>
+  (function() {
+    function preencherSidebarUser() {
+      const nomeEl = document.getElementById('sidebarUserNome')
+      const iconEl = document.getElementById('sidebarUserIcon')
+      if (!nomeEl || !iconEl) return
+      const perfil  = window.AUTH?.perfil
+      const user    = window.AUTH?.user
+      const nome    = perfil?.nome || user?.email?.split('@')[0] || 'Meu perfil'
+      const fotoUrl = perfil?.foto_url || null
+      nomeEl.textContent = nome
+      if (fotoUrl) {
+        iconEl.innerHTML = '<img src="' + fotoUrl + '" alt="avatar" />'
+      } else {
+        iconEl.textContent = (nome[0] || '👤').toUpperCase()
+      }
+    }
+    preencherSidebarUser()
+    let t = 0
+    const iv = setInterval(() => {
+      preencherSidebarUser()
+      if (window.AUTH?.perfil || ++t > 40) clearInterval(iv)
+    }, 150)
+  })()
+  </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Check-in de Voluntário — Sua Igreja</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #f0fffe;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      width: 100%;
+      padding: 18px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #2BBFB3;
+      box-shadow: 0 2px 16px rgba(43,191,179,0.30);
+    }
+    .header-logo img { height: 50px; object-fit: contain; }
+
+    .page-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 60px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 8px 40px rgba(43,191,179,0.10);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .icon-big { font-size: 64px; line-height: 1; }
+    .titulo   { font-size: 22px; font-weight: 800; color: #1a2e2d; }
+    .subtitulo{ font-size: 14px; color: #6b8b89; }
+
+    .info-bloco {
+      background: #f0fffe;
+      border: 1px solid #d0f0ee;
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .info-bloco .label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1a9e93;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .info-bloco .valor {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a2e2d;
+    }
+    .info-bloco .data {
+      font-size: 13px;
+      color: #6b8b89;
+    }
+
+    .btn-presente {
+      padding: 16px 24px;
+      background: #2BBFB3;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 800;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 6px 18px rgba(43,191,179,0.35);
+    }
+    .btn-presente:hover:not(:disabled)  { background: #25a89c; transform: translateY(-1px); }
+    .btn-presente:disabled              { opacity: 0.5; cursor: not-allowed; }
+
+    .alerta {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      text-align: left;
+    }
+    .erro {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-logo">
+      <img src="logo.png" alt="Sua Igreja" />
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="card" id="card">
+      <div class="icon-big" id="icone">⏳</div>
+      <div class="titulo" id="titulo">Carregando…</div>
+      <div class="subtitulo" id="subtitulo"></div>
+      <div id="conteudo"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script src="checkin-voluntario.js"></script>
+</body>
+</html>

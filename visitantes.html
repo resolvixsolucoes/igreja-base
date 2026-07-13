@@ -1,0 +1,457 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="pagina-slug"  content="visitantes">
+  <meta name="pagina-label" content="🙋 Visitantes">
+  <title>Visitantes — Sua Igreja</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .modal textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #fafafa;
+      resize: vertical;
+      min-height: 90px;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .modal textarea:focus {
+      outline: none;
+      border-color: #2BBFB3;
+      background: #fff;
+    }
+
+    .oracao-modal-box {
+      background: linear-gradient(135deg, #fff8f0 0%, #fff3e0 100%);
+      border: 1.5px solid #ffe0a0;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .oracao-modal-box label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #b8860b;
+    }
+    .oracao-modal-box textarea {
+      border-color: #ffe0a0;
+      background: #fffdf7;
+    }
+    .oracao-modal-box textarea:focus {
+      border-color: #f0a500;
+      background: #fff;
+    }
+    .oracao-modal-hint {
+      font-size: 11px;
+      color: #c8960b;
+      line-height: 1.5;
+    }
+
+    /* ── BOX DE CONTATO ── */
+    .contato-modal-box {
+      background: linear-gradient(135deg, #f0fbff 0%, #e0f5ff 100%);
+      border: 1.5px solid #b3e0f5;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .contato-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0d6e9c;
+      cursor: pointer;
+    }
+    .contato-check input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #2BBFB3;
+    }
+    .contato-modal-box textarea {
+      border-color: #b3e0f5;
+      background: #fbfdff;
+    }
+    .contato-modal-box textarea:focus {
+      border-color: #0d6e9c;
+      background: #fff;
+    }
+    .contato-modal-box textarea:disabled {
+      background: #f0f0f0;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    /* badge de status na tabela */
+    .badge-contato {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .badge-contato.sim { background: #d4f5e9; color: #0d8a5a; }
+    .badge-contato.nao { background: #ffe7e7; color: #b53636; }
+    .badge-contato {
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: filter 0.15s, border-color 0.15s;
+      font-family: inherit;
+    }
+    .badge-contato:hover { filter: brightness(0.95); border-color: rgba(0,0,0,0.15); }
+
+    /* ── BOTÕES DE AÇÃO DA TABELA ── */
+    .btn-acao {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 7px;
+      border: 1.5px solid transparent;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+      line-height: 1;
+    }
+    .btn-acao.editar {
+      background: #f0fffe;
+      border-color: #b2ece8;
+      color: #2BBFB3;
+    }
+    .btn-acao.editar:hover {
+      background: #2BBFB3;
+      color: #fff;
+      border-color: #2BBFB3;
+    }
+    .btn-acao.excluir {
+      background: #fff0f0;
+      border-color: #fecaca;
+      color: #e74c3c;
+    }
+    .btn-acao.excluir:hover {
+      background: #e74c3c;
+      color: #fff;
+      border-color: #e74c3c;
+    }
+
+    /* célula de ações com gap consistente */
+    .acoes-cell {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+  
+    /* ── SIDEBAR USER (perfil) ── */
+
+  </style>
+<style>
+  .sidebar-footer {
+
+      margin-top: auto;
+
+      padding: 6px 12px;
+
+      border-top: 1px solid rgba(255,255,255,0.12);
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 6px;
+
+    }
+
+    .sidebar-user {
+
+      display: flex; align-items: center; gap: 10px;
+
+      text-decoration: none; color: inherit; padding: 5px 10px;
+
+      border-radius: 10px; transition: background .2s; cursor: pointer;
+
+    }
+
+    .sidebar-user:hover { background: rgba(255,255,255,0.12); }
+
+    .sidebar-user-icon {
+
+      width: 24px; height: 24px; border-radius: 50%;
+
+      background: rgba(255,255,255,0.2);
+
+      display: flex; align-items: center; justify-content: center;
+
+      font-size: 17px; flex-shrink: 0; overflow: hidden;
+
+    }
+
+    .sidebar-user-icon img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+
+    .sidebar-user-nome {
+
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9);
+
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+
+    }
+
+    .sidebar-logout {
+
+      width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+
+      color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 600;
+
+      cursor: pointer; padding: 5px 10px; border-radius: 10px;
+
+      transition: background .2s, color .2s; text-align: left;
+
+      display: flex; align-items: center; gap: 8px;
+
+    }
+
+    .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
+</style>
+  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="logo.png" alt="Sua Igreja" />
+    </div>
+    <nav id="sidebar-nav">
+      <a href="dashboard.html">🏠 Dashboard</a>
+      <a href="membros.html">👥 Membros</a>
+      <a href="visitantes.html" class="active">🙋 Visitantes</a>
+      <a href="criancas.html">👶 Crianças</a>
+      <a href="pedido-de-oracao.html">🙏 Pedidos de Oração</a>
+      <a href="aniversariantes.html">🎂 Aniversariantes</a>
+
+      <!-- ITEM MINISTÉRIOS COM CASCATA -->
+      <div class="nav-ministerios" id="nav-ministerios">
+        <div class="nav-min-trigger" id="nav-min-trigger">
+          <span>✨ Ministérios</span>
+          <span class="nav-min-arrow">▾</span>
+        </div>
+        <div id="nav-ministerios-lista">
+          <div class="nav-min-loading">Carregando...</div>
+        </div>
+      </div>
+
+      <a href="agenda.html">📅 Agenda</a>
+    <a href="inscricoes.html">📋 Inscrições</a>
+    <a href="central-voluntarios.html">🎯 Central de Voluntários</a>
+      <a href="mesas.html">🟤 Mesas</a>
+      <a href="financeiro.html">💰 Financeiro</a>
+      <a href="relatorios.html">📈 Relatórios</a>
+    <div class="nav-ministerios" id="nav-conteudos">
+      <div class="nav-min-trigger" id="nav-conteudos-trigger">
+        <span>📚 Conteúdos</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+        <div id="nav-conteudos-lista">
+          <a href="conteudos.html?aba=pregacoes"  class="nav-min-item" data-aba="pregacoes">🎙️ Pregações</a>
+          <a href="conteudos.html?aba=cursos"     class="nav-min-item" data-aba="cursos">🎓 Cursos</a>
+          <a href="conteudos.html?aba=biblioteca" class="nav-min-item" data-aba="biblioteca">📖 Biblioteca</a>
+        </div>
+    </div>
+      <a href="usuarios.html">⚙️ Usuários</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="perfil.html" class="sidebar-user" title="Meu perfil">
+        <span class="sidebar-user-icon" id="sidebarUserIcon">👤</span>
+        <span class="sidebar-user-nome" id="sidebarUserNome">Carregando...</span>
+      </a>
+      <button class="sidebar-logout" onclick="fazerLogout ? fazerLogout() : db.auth.signOut().then(()=>location.href='index.html')">
+        🚪 Sair
+      </button>
+    </div>
+</aside>
+
+  <!-- MAIN -->
+  <div class="main" data-aba="_default">
+    <header>
+      <h1>🙋 Visitantes</h1>
+    </header>
+
+    <div class="table-container">
+      <div class="table-header">
+        <input type="text" class="search-bar" id="busca-visitante"
+          placeholder="🔍 Buscar visitante..." oninput="filtrarVisitantes()" />
+        <button class="btn btn-primary" data-acao="adicionar" onclick="abrirModal()">+ Novo Visitante</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th data-campo="telefone">Telefone</th>
+            <th>Como Conheceu</th>
+            <th>Data da Visita</th>
+            <th>Contactado</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-visitantes"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODAL CADASTRO / EDIÇÃO -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h2 id="modal-titulo">Novo Visitante</h2>
+
+      <label>Nome completo</label>
+      <input type="text" id="input-nome" placeholder="Ex: Maria Souza" />
+
+      <label data-campo="telefone">Telefone</label>
+      <input type="text" id="input-telefone" data-campo="telefone" placeholder="Ex: (31) 99999-9999" />
+
+      <label>Como conheceu a igreja?</label>
+      <input type="text" id="input-como-conheceu"
+        placeholder="Ex: Redes sociais, amigo..." />
+
+      <label>Data da visita</label>
+      <input type="date" id="input-data" />
+
+      <!-- ORAÇÃO -->
+      <div class="oracao-modal-box">
+        <label>🙏 Pedido de oração <span style="font-weight:400;font-size:11px;">(opcional)</span></label>
+        <textarea id="input-oracao"
+          placeholder="Escreva aqui o pedido de oração..."></textarea>
+        <span class="oracao-modal-hint">
+          ✨ O pedido será enviado diretamente para a aba Pedidos de Oração.
+        </span>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="salvarVisitante()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CONTATO -->
+  <div class="modal-overlay" id="modal-contato-overlay">
+    <div class="modal" style="max-width:480px;">
+      <h2>📞 Contato com visitante</h2>
+      <p style="font-size:13px;color:#666;margin:-6px 0 10px;" id="modal-contato-nome">—</p>
+
+      <div class="contato-modal-box">
+        <label class="contato-check">
+          <input type="checkbox" id="input-contactado"
+                 onchange="toggleDescricaoContato()" />
+          Visitante já foi contactado
+        </label>
+        <textarea id="input-descricao-contato"
+          placeholder="Descreva como foi o contato (quem ligou, resposta, observações...)"
+          disabled></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="fecharModalContato()">Cancelar</button>
+        <button class="btn btn-primary" onclick="salvarContato()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script src="auth.js"></script>
+<script>
+(function() {
+  function preencherSidebarUser() {
+    const nomeEl = document.getElementById('sidebarUserNome')
+    const iconEl = document.getElementById('sidebarUserIcon')
+    if (!nomeEl || !iconEl) return
+    const perfil  = window.AUTH?.perfil
+    const user    = window.AUTH?.user
+    const nome    = perfil?.nome || user?.email?.split('@')[0] || 'Meu perfil'
+    const fotoUrl = perfil?.foto_url || null
+    nomeEl.textContent = nome
+    if (fotoUrl) {
+      iconEl.innerHTML = '<img src="' + fotoUrl + '" alt="avatar" />'
+    } else {
+      iconEl.textContent = (nome[0] || '👤').toUpperCase()
+    }
+  }
+  preencherSidebarUser()
+  let t = 0
+  const iv = setInterval(() => {
+    preencherSidebarUser()
+    if (window.AUTH?.perfil || ++t > 40) clearInterval(iv)
+  }, 150)
+})()
+</script>
+
+<script>
+// Auto data-label + accordion para tabelas no mobile
+(function() {
+  function aplicarTudo() {
+    document.querySelectorAll('table').forEach(table => {
+      const headers = Array.from(table.querySelectorAll('thead th'))
+        .map(th => th.textContent.trim())
+      if (!headers.length) return
+
+      table.querySelectorAll('tbody tr').forEach(tr => {
+        // 1. Adiciona data-label em cada td
+        Array.from(tr.querySelectorAll('td')).forEach((td, i) => {
+          if (headers[i] && !td.getAttribute('data-label')) {
+            td.setAttribute('data-label', headers[i])
+          }
+        })
+
+        // 2. Adiciona toggle de expansão (só uma vez por tr)
+        if (!tr.dataset.acc) {
+          tr.dataset.acc = '1'
+          tr.addEventListener('click', function(e) {
+            if (window.innerWidth > 768) return
+            if (e.target.closest('button, a, input, select, textarea')) return
+            this.classList.toggle('expandido')
+          })
+        }
+      })
+    })
+  }
+
+  // Roda agora e sempre que o DOM mudar (tabelas renderizadas por JS)
+  aplicarTudo()
+  new MutationObserver(aplicarTudo).observe(document.body, {
+    childList: true, subtree: true
+  })
+})()
+</script>
+  <script src="/pwa.js"></script>
+  <script src="permissions.js"></script>
+  <script src="visitante.js"></script>
+  <script src="ministerios-nav.js"></script>
+  <script src="conteudos-nav.js"></script>
+</body>
+</html>

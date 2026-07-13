@@ -1,0 +1,702 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="pagina-slug"  content="membros">
+  <meta name="pagina-label" content="👥 Membros">
+  <title>Membros — Sua Igreja</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+
+    /* Botões de ação da tabela — tamanho uniforme e compacto */
+    #tabela-membros .btn {
+      font-size: 12px;
+      padding: 5px 10px;
+      white-space: nowrap;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    }
+
+    .modal h2 { margin: 0 0 8px; font-size: 20px; color: #222; }
+    .modal label { font-size: 13px; font-weight: 600; color: #555; margin-top: 4px; }
+
+    .modal input,
+    .modal select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+      background: #fafafa;
+    }
+    .modal input:focus,
+    .modal select:focus {
+      outline: none;
+      border-color: #2BBFB3;
+      background: #fff;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+    .input-row .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .input-row .input-group.flex-1 { flex: 1; }
+    .input-row .input-group.flex-2 { flex: 2; }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 12px;
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      padding-top: 12px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .ministerios-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #fafafa;
+    }
+    .ministerios-lista label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #333;
+      cursor: pointer;
+      margin: 0;
+    }
+    .ministerios-lista input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #2BBFB3;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .ministerios-lista label:hover { color: #2BBFB3; }
+
+    #secao-mapa {
+      display: none;
+      margin-top: 24px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      background: #fff;
+      border: 1px solid #eee;
+    }
+    #secao-mapa.active { display: block; }
+
+    .mapa-inline-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid #eee;
+      background: #fff;
+    }
+    .mapa-inline-header h2 {
+      font-size: 1rem;
+      color: #222;
+      margin: 0;
+    }
+    .mapa-inline-header button {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: #aaa;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .mapa-inline-header button:hover { color: #e74c3c; }
+
+    .mapa-inline-body {
+      display: flex;
+      height: 520px;
+    }
+
+    .mapa-sidebar {
+      width: 280px;
+      border-right: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #fafafa;
+      flex-shrink: 0;
+    }
+    .mapa-sidebar-search {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+    .mapa-sidebar-search input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      box-sizing: border-box;
+      outline: none;
+    }
+    .mapa-sidebar-search input:focus { border-color: #2BBFB3; }
+
+    .mapa-member-count {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      color: #999;
+      border-bottom: 1px solid #eee;
+      background: #f5f5f5;
+    }
+    .mapa-member-list {
+      overflow-y: auto;
+      flex: 1;
+    }
+    .mapa-member-card {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .mapa-member-card:hover { background: #f0fffe; }
+    .mapa-member-card.active {
+      background: #e0faf8;
+      border-left: 3px solid #2BBFB3;
+    }
+    .mapa-member-card h4 {
+      font-size: 0.85rem;
+      margin: 0 0 3px;
+      color: #222;
+    }
+    .mapa-member-card p {
+      font-size: 0.75rem;
+      color: #888;
+      margin: 0;
+    }
+    .mapa-member-card.sem-coords {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .mapa-area {
+      flex: 1;
+      position: relative;
+    }
+    #map-membros {
+      width: 100%;
+      height: 100%;
+    }
+    .mapa-loading {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: #555;
+      z-index: 5;
+    }
+    .mapa-spinner {
+      width: 22px;
+      height: 22px;
+      border: 3px solid #ccc;
+      border-top-color: #2BBFB3;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .map-info-box { min-width: 190px; font-family: 'Segoe UI', sans-serif; }
+    .map-info-box h3 { font-size: 0.95rem; color: #2BBFB3; margin: 0 0 6px; }
+    .map-info-box p  { font-size: 0.82rem; color: #555; margin: 3px 0; }
+    .map-info-box .map-badge {
+      display: inline-block;
+      background: #e0faf8;
+      color: #2BBFB3;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.72rem;
+      margin-top: 5px;
+      margin-right: 4px;
+    }
+
+    @media (max-width: 700px) {
+      .mapa-inline-body { flex-direction: column; height: auto; }
+      .mapa-sidebar { width: 100%; height: 200px; border-right: none; border-bottom: 1px solid #eee; }
+      #map-membros { height: 320px; }
+    }
+
+    .autocomplete-lista {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      z-index: 9999;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .autocomplete-item {
+      padding: 9px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      border-bottom: 1px solid #f5f5f5;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.12s;
+    }
+    .autocomplete-item:last-child { border-bottom: none; }
+    .autocomplete-item:hover { background: #f0fffe; color: #2BBFB3; }
+    .autocomplete-item small { color: #aaa; font-size: 11px; margin-left: 4px; }
+    .autocomplete-item .autocomplete-nasc { margin-left: auto; color: #bbb; font-size: 11px; }
+
+    /* ── CEP AUTOCOMPLETE ── */
+    .cep-wrapper {
+      position: relative;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .cep-wrapper input {
+      flex: 1;
+    }
+    .cep-spinner {
+      font-size: 16px;
+      animation: spin 0.8s linear infinite;
+      display: none;
+      flex-shrink: 0;
+    }
+    .cep-ok  { color: #10b981; font-size: 16px; display: none; flex-shrink: 0; }
+    .cep-err { color: #ef4444; font-size: 16px; display: none; flex-shrink: 0; }
+
+  
+    /* ── SIDEBAR USER (perfil) ── */
+
+  </style>
+<style>
+  .sidebar-footer {
+
+      margin-top: auto;
+
+      padding: 6px 12px;
+
+      border-top: 1px solid rgba(255,255,255,0.12);
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 6px;
+
+    }
+
+    .sidebar-user {
+
+      display: flex; align-items: center; gap: 10px;
+
+      text-decoration: none; color: inherit; padding: 5px 10px;
+
+      border-radius: 10px; transition: background .2s; cursor: pointer;
+
+    }
+
+    .sidebar-user:hover { background: rgba(255,255,255,0.12); }
+
+    .sidebar-user-icon {
+
+      width: 24px; height: 24px; border-radius: 50%;
+
+      background: rgba(255,255,255,0.2);
+
+      display: flex; align-items: center; justify-content: center;
+
+      font-size: 17px; flex-shrink: 0; overflow: hidden;
+
+    }
+
+    .sidebar-user-icon img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+
+    .sidebar-user-nome {
+
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9);
+
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+
+    }
+
+    .sidebar-logout {
+
+      width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+
+      color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 600;
+
+      cursor: pointer; padding: 5px 10px; border-radius: 10px;
+
+      transition: background .2s, color .2s; text-align: left;
+
+      display: flex; align-items: center; gap: 8px;
+
+    }
+
+    .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
+</style>
+  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="logo.png" alt="Sua Igreja" />
+    </div>
+  <nav id="sidebar-nav">
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="membros.html" class="active">👥 Membros</a>
+    <a href="visitantes.html">🙋 Visitantes</a>
+    <a href="criancas.html">👶 Crianças</a>
+    <a href="pedido-de-oracao.html">🙏 Pedidos de Oração</a>
+    <a href="aniversariantes.html">🎂 Aniversariantes</a>
+
+    <!-- ITEM MINISTÉRIOS COM CASCATA -->
+    <div class="nav-ministerios" id="nav-ministerios">
+      <div class="nav-min-trigger" id="nav-min-trigger">
+        <span>✨ Ministérios</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+      <div id="nav-ministerios-lista">
+        <div class="nav-min-loading">Carregando...</div>
+      </div>
+    </div>
+
+    <a href="agenda.html">📅 Agenda</a>
+    <a href="inscricoes.html">📋 Inscrições</a>
+    <a href="central-voluntarios.html">🎯 Central de Voluntários</a>
+    <a href="mesas.html">🟤 Mesas</a>
+    <a href="financeiro.html">💰 Financeiro</a>
+    <a href="relatorios.html">📈 Relatórios</a>
+    <div class="nav-ministerios" id="nav-conteudos">
+      <div class="nav-min-trigger" id="nav-conteudos-trigger">
+        <span>📚 Conteúdos</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+        <div id="nav-conteudos-lista">
+          <a href="conteudos.html?aba=pregacoes"  class="nav-min-item" data-aba="pregacoes">🎙️ Pregações</a>
+          <a href="conteudos.html?aba=cursos"     class="nav-min-item" data-aba="cursos">🎓 Cursos</a>
+          <a href="conteudos.html?aba=biblioteca" class="nav-min-item" data-aba="biblioteca">📖 Biblioteca</a>
+        </div>
+    <a href="usuarios.html">⚙️ Usuários</a>
+  </nav>
+    <div class="sidebar-footer">
+      <a href="perfil.html" class="sidebar-user" title="Meu perfil">
+        <span class="sidebar-user-icon" id="sidebarUserIcon">👤</span>
+        <span class="sidebar-user-nome" id="sidebarUserNome">Carregando...</span>
+      </a>
+      <button class="sidebar-logout" onclick="fazerLogout ? fazerLogout() : db.auth.signOut().then(()=>location.href='index.html')">
+        🚪 Sair
+      </button>
+    </div>
+</aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header>
+      <h1>👥 Membros</h1>
+    </header>
+
+    <div class="table-container" data-aba="_default">
+      <div class="table-header">
+        <input type="text" class="search-bar" id="busca-membro"
+          placeholder="🔍 Buscar membro..." oninput="filtrarMembros()" />
+        <button class="btn btn-secondary" onclick="toggleMapa()">🗺️ Ver Mapa</button>
+        <button class="btn btn-primary" data-acao="adicionar" onclick="abrirModal()">+ Novo Membro</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th data-campo="telefone">Telefone</th>
+            <th data-campo="endereco">Endereço</th>
+            <th data-campo="estado_civil">Estado Civil</th>
+            <th>Mesa</th>
+            <th>Ministérios</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-membros"></tbody>
+      </table>
+    </div>
+
+    <!-- MAPA INLINE -->
+    <div id="secao-mapa">
+      <div class="mapa-inline-header">
+        <h2>🗺️ Mapa de Membros</h2>
+        <button onclick="fecharMapa()" title="Fechar mapa">✕</button>
+      </div>
+      <div class="mapa-inline-body">
+
+        <div class="mapa-sidebar">
+          <div class="mapa-sidebar-search">
+            <input type="text" id="mapa-busca"
+              placeholder="🔍 Buscar membro..." oninput="filtrarMapaMembros()" />
+          </div>
+          <div class="mapa-member-count" id="mapa-member-count">—</div>
+          <div class="mapa-member-list" id="mapa-member-list"></div>
+        </div>
+
+        <div class="mapa-area">
+          <div class="mapa-loading" id="mapa-loading">
+            <div class="mapa-spinner"></div> Geocodificando endereços...
+          </div>
+          <div id="map-membros"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL CADASTRO/EDIÇÃO -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h2 id="modal-titulo">Novo Membro</h2>
+
+      <label>Nome completo *</label>
+      <input type="text" id="input-nome" placeholder="Ex: João Silva" />
+
+      <label>Data de Nascimento</label>
+      <input type="date" id="input-data-nascimento" />
+
+      <label data-campo="telefone">Telefone</label>
+      <input type="text" id="input-telefone" data-campo="telefone" placeholder="Ex: (31) 99999-9999" />
+
+      <label data-campo="endereco">CEP</label>
+      <div class="cep-wrapper" data-campo="endereco">
+        <input type="text" id="input-cep" placeholder="Ex: 35160-158"
+          maxlength="9" oninput="mascaraCep(this)" />
+        <span class="cep-spinner" id="cep-spinner">⏳</span>
+        <span class="cep-ok"  id="cep-ok">✅</span>
+        <span class="cep-err" id="cep-err">❌</span>
+      </div>
+
+
+      <label data-campo="endereco">Rua</label>
+      <input type="text" id="input-rua" data-campo="endereco" placeholder="Ex: Rua das Flores" />
+
+      <div class="input-row" data-campo="endereco">
+        <div class="input-group flex-1">
+          <label>Número</label>
+          <input type="text" id="input-numero" placeholder="Ex: 123" />
+        </div>
+        <div class="input-group flex-2">
+          <label>Complemento</label>
+          <input type="text" id="input-complemento" placeholder="Ex: Apto 2, Casa B" />
+        </div>
+      </div>
+
+      <label data-campo="endereco">Bairro</label>
+      <input type="text" id="input-bairro" data-campo="endereco" placeholder="Ex: Centro" />
+
+      <label data-campo="endereco">Cidade</label>
+      <input type="text" id="input-cidade" data-campo="endereco" placeholder="Ex: Sua Cidade" />
+
+      <label data-campo="estado_civil">Estado Civil</label>
+      <select id="input-estado-civil" data-campo="estado_civil" onchange="toggleConjuge()">
+        <option value="Solteiro">Solteiro(a)</option>
+        <option value="Casado">Casado(a)</option>
+        <option value="Divorciado">Divorciado(a)</option>
+        <option value="Viúvo">Viúvo(a)</option>
+      </select>
+
+      <div id="campo-conjuge" data-campo="estado_civil" style="display:none; flex-direction:column; gap:4px;">  
+        <label>Nome do cônjuge</label>
+        <div style="position:relative;">
+          <input type="text" id="input-conjuge" placeholder="Ex: Maria Silva" autocomplete="off" />
+          <div class="autocomplete-lista" id="autocomplete-conjuge" style="display:none;"></div>
+        </div>
+      </div>
+
+      <label data-campo="filhos">Possui filhos?</label>
+      <select id="input-possui-filhos" data-campo="filhos" onchange="toggleFilhos()">
+        <option value="Não">Não</option>
+        <option value="Sim">Sim</option>
+      </select>
+
+      <div id="campo-filhos" data-campo="filhos" style="display:none;">
+        <label>Filhos <small>(Nome e data de nascimento)</small></label>
+        <div id="lista-filhos"></div>
+        <button type="button" class="btn btn-secondary"
+          onclick="adicionarFilho()" style="margin-top:8px;">+ Adicionar Filho</button>
+      </div>
+
+      <label>Participa de alguma mesa?</label>
+      <select id="input-participa-mesa" onchange="toggleMesa()">
+        <option value="Não">Não</option>
+        <option value="Sim">Sim</option>
+      </select>
+
+      <div id="campo-mesa" style="display:none; flex-direction:column; gap:4px;">
+        <label>Selecione a mesa</label>
+        <select id="input-mesa-id">
+          <option value="">Carregando mesas...</option>
+        </select>
+      </div>
+
+      <label>É voluntário da Leve?</label>
+      <select id="input-voluntario" onchange="toggleMinisterio()">
+        <option value="Não">Não</option>
+        <option value="Sim">Sim</option>
+      </select>
+
+      <div id="campo-ministerio" style="display:none; flex-direction:column; gap:4px;">
+        <label>Selecione os ministérios <small>(pode marcar mais de um)</small></label>
+        <div class="ministerios-lista" id="lista-ministerios-checks"></div>
+      </div>
+
+      <label>Status</label>
+      <select id="input-status">
+        <option value="Ativo">Ativo</option>
+        <option value="Inativo">Inativo</option>
+      </select>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="salvarMembro()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_LONI09s3KD44rKPHH2FcRpHTXM49rTA&language=pt-BR"
+    defer>
+  </script>
+
+<script>
+(function() {
+  function preencherSidebarUser() {
+    const nomeEl = document.getElementById('sidebarUserNome')
+    const iconEl = document.getElementById('sidebarUserIcon')
+    if (!nomeEl || !iconEl) return
+    const perfil  = window.AUTH?.perfil
+    const user    = window.AUTH?.user
+    const nome    = perfil?.nome || user?.email?.split('@')[0] || 'Meu perfil'
+    const fotoUrl = perfil?.foto_url || null
+    nomeEl.textContent = nome
+    if (fotoUrl) {
+      iconEl.innerHTML = '<img src="' + fotoUrl + '" alt="avatar" />'
+    } else {
+      iconEl.textContent = (nome[0] || '👤').toUpperCase()
+    }
+  }
+  preencherSidebarUser()
+  let t = 0
+  const iv = setInterval(() => {
+    preencherSidebarUser()
+    if (window.AUTH?.perfil || ++t > 40) clearInterval(iv)
+  }, 150)
+})()
+</script>
+
+<script>
+// Auto data-label + accordion para tabelas no mobile
+(function() {
+  function aplicarTudo() {
+    document.querySelectorAll('table').forEach(table => {
+      const headers = Array.from(table.querySelectorAll('thead th'))
+        .map(th => th.textContent.trim())
+      if (!headers.length) return
+
+      table.querySelectorAll('tbody tr').forEach(tr => {
+        // 1. Adiciona data-label em cada td
+        Array.from(tr.querySelectorAll('td')).forEach((td, i) => {
+          if (headers[i] && !td.getAttribute('data-label')) {
+            td.setAttribute('data-label', headers[i])
+          }
+        })
+
+        // 2. Adiciona toggle de expansão (só uma vez por tr)
+        if (!tr.dataset.acc) {
+          tr.dataset.acc = '1'
+          tr.addEventListener('click', function(e) {
+            if (window.innerWidth > 768) return
+            if (e.target.closest('button, a, input, select, textarea')) return
+            this.classList.toggle('expandido')
+          })
+        }
+      })
+    })
+  }
+
+  // Roda agora e sempre que o DOM mudar (tabelas renderizadas por JS)
+  aplicarTudo()
+  new MutationObserver(aplicarTudo).observe(document.body, {
+    childList: true, subtree: true
+  })
+})()
+</script>
+  <script src="/pwa.js"></script>
+  <script src="permissions.js"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script src="auth.js"></script>
+  <script src="membros.js"></script>
+  <script src="ministerios-nav.js"></script>
+  <script src="conteudos-nav.js"></script>
+</body>
+</html>
+<!-- v2 -->

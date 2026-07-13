@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Sua Igreja</title>
+  <link rel="stylesheet" href="style.css" />
+<style>
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 6px 12px;  
+      border-top: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sidebar-user {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: inherit; padding: 5px 10px;
+      border-radius: 10px; transition: background .2s; cursor: pointer;
+    }
+    .sidebar-user:hover { background: rgba(255,255,255,0.12); }
+    .sidebar-user-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0; overflow: hidden;
+    }
+    .sidebar-user-icon img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .sidebar-user-nome {
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sidebar-logout {
+      width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 600;
+      cursor: pointer; padding: 5px 10px; border-radius: 10px;
+      transition: background .2s, color .2s; text-align: left;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
+  </style>
+  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="logo.png" alt="Sua Igreja" />
+    </div>
+  <nav id="sidebar-nav">
+    <a href="dashboard.html" class="active">🏠 Dashboard</a>
+    <a href="membros.html">👥 Membros</a>
+    <a href="visitantes.html">🙋 Visitantes</a>
+    <a href="criancas.html">👶 Crianças</a>
+    <a href="pedido-de-oracao.html">🙏 Pedidos de Oração</a>
+    <a href="aniversariantes.html">🎂 Aniversariantes</a>
+
+    <!-- ITEM MINISTÉRIOS COM CASCATA -->
+    <div class="nav-ministerios" id="nav-ministerios">
+      <div class="nav-min-trigger" id="nav-min-trigger">
+        <span>✨ Ministérios</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+      <div id="nav-ministerios-lista">
+        <div class="nav-min-loading">Carregando...</div>
+      </div>
+    </div>
+
+    <a href="agenda.html">📅 Agenda</a>
+    <a href="inscricoes.html">📋 Inscrições</a>
+    <a href="central-voluntarios.html">🎯 Central de Voluntários</a>
+    <a href="mesas.html">🟤 Mesas</a>
+    <a href="financeiro.html">💰 Financeiro</a>
+    <a href="relatorios.html">📈 Relatórios</a>
+    <div class="nav-ministerios" id="nav-conteudos">
+      <div class="nav-min-trigger" id="nav-conteudos-trigger">
+        <span>📚 Conteúdos</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+        <div id="nav-conteudos-lista">
+          <a href="conteudos.html?aba=pregacoes"  class="nav-min-item" data-aba="pregacoes">🎙️ Pregações</a>
+          <a href="conteudos.html?aba=cursos"     class="nav-min-item" data-aba="cursos">🎓 Cursos</a>
+          <a href="conteudos.html?aba=biblioteca" class="nav-min-item" data-aba="biblioteca">📖 Biblioteca</a>
+        </div>
+    </div>
+    <a href="usuarios.html">⚙️ Usuários</a>
+  </nav>
+    <div class="sidebar-footer">
+      <a href="perfil.html" class="sidebar-user" title="Meu perfil">
+        <span class="sidebar-user-icon" id="sidebarUserIcon">👤</span>
+        <span class="sidebar-user-nome" id="sidebarUserNome">Carregando...</span>
+      </a>
+      <button class="sidebar-logout" onclick="fazerLogout ? fazerLogout() : db.auth.signOut().then(()=>location.href='index.html')">
+        🚪 Sair
+      </button>
+    </div>
+</aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header>
+      <h1>🏠 Dashboard</h1>
+    </header>
+
+    <!-- Card de mensagens não-lidas (preenchido por comunicacao-badges.js) -->
+    <a id="com-dashboard-card" href="#" style="text-decoration:none;color:inherit;"></a>
+
+    <!-- CARDS -->
+    <div class="cards">
+      <div class="card">
+        <h3>👥 Membros</h3>
+        <p id="total-membros">—</p>
+      </div>
+      <div class="card">
+        <h3>🙋 Visitantes</h3>
+        <p id="total-visitantes">—</p>
+      </div>
+      <div class="card">
+        <h3>🟤 Mesas</h3>
+        <p id="total-mesas">—</p>
+      </div>
+      <div class="card">
+        <h3>🙌 Voluntários</h3>
+        <p id="total-voluntarios">—</p>
+      </div>
+      <div class="card">
+        <h3>👶 Crianças</h3>
+        <p id="total-criancas">—</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script src="auth.js"></script>
+  <script src="dashboard.js"></script>
+<script>
+(function() {
+  function preencherSidebarUser() {
+    const nomeEl = document.getElementById('sidebarUserNome')
+    const iconEl = document.getElementById('sidebarUserIcon')
+    if (!nomeEl || !iconEl) return
+    const perfil  = window.AUTH?.perfil
+    const user    = window.AUTH?.user
+    const nome    = perfil?.nome || user?.email?.split('@')[0] || 'Meu perfil'
+    const fotoUrl = perfil?.foto_url || null
+    nomeEl.textContent = nome
+    if (fotoUrl) {
+      iconEl.innerHTML = '<img src="' + fotoUrl + '" alt="avatar" />'
+    } else {
+      iconEl.textContent = (nome[0] || '👤').toUpperCase()
+    }
+  }
+  preencherSidebarUser()
+  let t = 0
+  const iv = setInterval(() => {
+    preencherSidebarUser()
+    if (window.AUTH?.perfil || ++t > 40) clearInterval(iv)
+  }, 150)
+})()
+</script>
+  <script src="/pwa.js"></script>
+  <script src="comunicacao-badges.js"></script>
+  <script src="ministerios-nav.js"></script>
+  <script src="conteudos-nav.js"></script>
+</body>
+</html>

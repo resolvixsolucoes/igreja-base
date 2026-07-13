@@ -1,0 +1,201 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a9e93 0%, #2BBFB3 50%, #3dd6c8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ===== WRAPPER ===== */
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+/* ===== CARD ===== */
+.login-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* ===== LOGO ===== */
+.login-logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-logo img {
+  width: 160px;
+  object-fit: contain;
+}
+
+/* ===== TÍTULOS ===== */
+h2 {
+  font-size: 22px;
+  color: #1a2e2d;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.login-sub {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* ===== FORM ===== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input {
+  padding: 11px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  background: #fafafa;
+  transition: border 0.2s, background 0.2s;
+  outline: none;
+  width: 100%;
+}
+
+.form-group input:focus {
+  border-color: #2BBFB3;
+  background: #fff;
+}
+
+/* ===== INPUT SENHA COM OLHO ===== */
+.input-senha-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-senha-wrap input {
+  padding-right: 44px;
+}
+
+.btn-olho {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #aaa;
+  padding: 4px;
+  line-height: 1;
+}
+
+.btn-olho:hover {
+  color: #2BBFB3;
+}
+
+/* ===== BOTÃO PRINCIPAL ===== */
+.btn-login {
+  width: 100%;
+  padding: 13px;
+  background: #2BBFB3;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 4px;
+}
+
+.btn-login:hover {
+  background: #1fa89d;
+  transform: translateY(-1px);
+}
+
+.btn-login:active {
+  transform: translateY(0);
+}
+
+.btn-login:disabled {
+  background: #a0d9d5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== LINK BUTTON ===== */
+.link-btn {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  background: none;
+  border: none;
+  color: #2BBFB3;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.2s;
+}
+
+.link-btn:hover {
+  color: #1a9e93;
+  text-decoration: underline;
+}
+
+/* ===== MENSAGEM DE ERRO / SUCESSO ===== */
+.erro-msg {
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.erro-msg.erro {
+  background: #fdecea;
+  color: #c0392b;
+  border: 1px solid #f5c6cb;
+}
+
+.erro-msg.sucesso {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* ===== FOOTER ===== */
+.login-footer {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 22px;
+  }
+}

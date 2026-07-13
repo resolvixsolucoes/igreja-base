@@ -1,0 +1,3246 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="pagina-slug"        content="conteudos">
+  <meta name="pagina-label"       content="📚 Conteúdos">
+  <meta name="pagina-sem-default" content="true">
+  <title>Conteúdos — Sua Igreja</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+  <style>
+
+    /* ── ABAS ─────────────────────────────────────── */
+    .abas {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 28px;
+    }
+    .aba-btn {
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all .2s;
+    }
+    .aba-btn:hover  { color: #2BBFB3; }
+    .aba-btn.active { color: #2BBFB3; border-bottom-color: #2BBFB3; }
+    .aba-content        { display: none; }
+    .aba-content.active { display: block; }
+
+    /* ── TOOLBAR ─────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .toolbar-esq {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    /* ── BUSCA ───────────────────────────────────── */
+    .busca-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 180px;
+      max-width: 320px;
+    }
+    .busca-wrap input {
+      width: 100%;
+      padding: 8px 12px 8px 34px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .busca-wrap input:focus { border-color: #2BBFB3; }
+    .busca-wrap .busca-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #bbb;
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    /* ── SELECT FILTRO ───────────────────────────── */
+    .filtro-sel {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      background: white;
+      cursor: pointer;
+      transition: border-color .2s;
+    }
+    .filtro-sel:focus { border-color: #2BBFB3; }
+
+    /* ── CONTADOR ────────────────────────────────── */
+    .contador {
+      font-size: 12px;
+      color: #aaa;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ── TABELA ──────────────────────────────────── */
+    .table-wrap {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      overflow: hidden;
+    }
+    .table-wrap table { width: 100%; border-collapse: collapse; }
+    .table-wrap thead th {
+      background: #f8f8f8;
+      padding: 11px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      border-bottom: 1px solid #f0f0f0;
+      white-space: nowrap;
+    }
+    .table-wrap tbody tr {
+      border-bottom: 1px solid #f5f5f5;
+      transition: background .15s;
+    }
+    .table-wrap tbody tr:last-child { border-bottom: none; }
+    .table-wrap tbody tr:hover { background: #fafffe; }
+    .table-wrap tbody td {
+      padding: 12px 14px;
+      vertical-align: middle;
+      font-size: 14px;
+      color: #333;
+    }
+
+    /* ── THUMBNAIL ───────────────────────────────── */
+    .thumb-cell { width: 52px; }
+    .thumb-img {
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #f0f0f0;
+      display: block;
+    }
+    .thumb-placeholder {
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      background: #f0fffe;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+
+    /* ── TITULO TABELA ───────────────────────────── */
+    .td-titulo .titulo-main { font-weight: 600; color: #1a2e2d; margin-bottom: 2px; }
+    .td-titulo .titulo-sub  { font-size: 12px; color: #aaa; }
+
+    /* ── BADGES ──────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 700; white-space: nowrap;
+    }
+    .badge-pub      { background: #d4edda; color: #155724; }
+    .badge-rascunho { background: #f0f0f0; color: #888; }
+    .badge-dest     { background: #fff3cd; color: #856404; }
+    .badge-tipo     { background: #e8faf9; color: #1a9e93; }
+
+    /* ── AÇÕES ───────────────────────────────────── */
+    .td-acoes { display: flex; gap: 6px; justify-content: flex-end; }
+    .btn-sm {
+      padding: 5px 12px; font-size: 12px; border-radius: 7px;
+      border: none; cursor: pointer; font-weight: 600; transition: all .15s;
+    }
+    .btn-sm-edit   { background: #f0fffe; color: #1a9e93; }
+    .btn-sm-edit:hover { background: #2BBFB3; color: white; }
+    .btn-sm-danger { background: #ffeaea; color: #c0392b; }
+    .btn-sm-danger:hover { background: #c0392b; color: white; }
+
+    /* ── EMPTY / LOADING ─────────────────────────── */
+    .empty-state {
+      text-align: center; padding: 52px 20px;
+      color: #bbb; font-size: 15px;
+      background: white; border-radius: 14px;
+    }
+    .empty-state .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .loading-row td { text-align: center; padding: 52px; color: #bbb; font-size: 14px; }
+
+    /* ── MODAL ───────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.45); z-index: 1000;
+      align-items: flex-start; justify-content: center;
+      padding: 40px 16px; overflow-y: auto;
+    }
+    .modal-overlay.aberto { display: flex; }
+    .modal {
+      background: white; border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.18);
+      width: 100%; max-width: 620px; margin: auto;
+      animation: slideDown .18s ease;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-14px); opacity: 0; }
+      to   { transform: translateY(0);     opacity: 1; }
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px; border-bottom: 1px solid #f0f0f0;
+    }
+    .modal-header h2 { font-size: 16px; font-weight: 700; color: #1a2e2d; margin: 0; }
+    .modal-fechar {
+      background: none; border: none; font-size: 20px; color: #aaa;
+      cursor: pointer; padding: 2px 6px; border-radius: 6px;
+      transition: background .15s; line-height: 1;
+    }
+    .modal-fechar:hover { background: #f0f0f0; color: #333; }
+    .modal-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; }
+    .modal-footer {
+      display: flex; gap: 10px; justify-content: flex-end;
+      padding: 16px 22px; border-top: 1px solid #f0f0f0;
+    }
+
+    /* ── FORM ────────────────────────────────────── */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field label {
+      font-size: 12px; font-weight: 700; color: #555;
+      text-transform: uppercase; letter-spacing: .04em;
+    }
+    .field label .req { color: #e74c3c; margin-left: 2px; }
+    .field input, .field select, .field textarea {
+      padding: 9px 12px; border: 1px solid #ddd; border-radius: 8px;
+      font-size: 14px; color: #333; background: white;
+      outline: none; transition: border-color .2s; font-family: inherit;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: #2BBFB3; }
+    .field textarea { resize: vertical; min-height: 76px; }
+    .field .dica { font-size: 11px; color: #bbb; margin-top: 2px; }
+
+    /* ── FONTE TOGGLE ────────────────────────────── */
+    .fonte-toggle {
+      display: flex; border: 1px solid #ddd;
+      border-radius: 8px; overflow: hidden; margin-bottom: 2px;
+    }
+    .fonte-toggle button {
+      flex: 1; padding: 9px; border: none; background: white;
+      font-size: 13px; font-weight: 600; color: #888;
+      cursor: pointer; transition: all .15s;
+      border-right: 1px solid #ddd;
+    }
+    .fonte-toggle button:last-child { border-right: none; }
+    .fonte-toggle button.active { background: #2BBFB3; color: white; }
+
+    /* ── UPLOAD ──────────────────────────────────── */
+    .upload-zona {
+      border: 2px dashed #ddd; border-radius: 8px; padding: 22px;
+      text-align: center; cursor: pointer; transition: all .2s; background: #fafafa;
+    }
+    .upload-zona:hover { border-color: #2BBFB3; background: #f0fffe; }
+    .upload-zona.tem-arquivo { border-color: #2BBFB3; background: #e8faf9; }
+    .upload-zona input { display: none; }
+    .upload-zona .upload-icon { font-size: 26px; margin-bottom: 6px; }
+    .upload-zona .upload-txt  { font-size: 13px; color: #888; }
+    .upload-zona .upload-nome { font-size: 12px; color: #1a9e93; font-weight: 600; margin-top: 4px; }
+    .upload-zona .upload-hint { font-size: 11px; color: #bbb; margin-top: 2px; }
+    .progress-bar {
+      height: 4px; background: #eee; border-radius: 2px;
+      margin-top: 8px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: #2BBFB3; border-radius: 2px;
+      width: 0%; transition: width .3s;
+    }
+
+    /* ── TOGGLE SWITCH ───────────────────────────── */
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; background: #f8f8f8; border-radius: 8px;
+    }
+    .toggle-row-label { font-size: 13px; font-weight: 600; color: #333; }
+    .toggle-row-desc  { font-size: 11px; color: #aaa; margin-top: 1px; }
+    .toggle {
+      position: relative; width: 38px; height: 22px;
+      display: inline-block; cursor: pointer; flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: #ddd;
+      border-radius: 22px; transition: .2s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; bottom: 3px; left: 3px;
+      background: white; border-radius: 50%; transition: .2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+    .toggle input:checked + .toggle-slider { background: #2BBFB3; }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(16px); }
+
+    /* ── SECTION DIVIDER ─────────────────────────── */
+    .section-div {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: #bbb;
+      padding-bottom: 8px; border-bottom: 1px solid #f0f0f0; margin-top: 4px;
+    }
+
+    /* ── TOAST ───────────────────────────────────── */
+    .toast-wrap {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+    }
+    .toast {
+      padding: 12px 18px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0,0,0,.15); animation: toastIn .2s ease;
+      pointer-events: all; display: flex; align-items: center; gap: 8px; max-width: 300px;
+    }
+    .toast-ok  { background: #1a9e93; color: white; }
+    .toast-err { background: #e74c3c; color: white; }
+    @keyframes toastIn {
+      from { transform: translateY(8px); opacity: 0; }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── SIDEBAR USER ────────────────────────────── */
+    .sidebar-footer {
+      margin-top: auto; padding: 6px 12px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .sidebar-user {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: inherit; padding: 5px 10px;
+      border-radius: 10px; transition: background .2s; cursor: pointer;
+    }
+    .sidebar-user:hover { background: rgba(255,255,255,0.12); }
+    .sidebar-user-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0; overflow: hidden;
+    }
+    .sidebar-user-icon img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .sidebar-user-nome {
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sidebar-logout {
+      width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 600;
+      cursor: pointer; padding: 5px 10px; border-radius: 10px;
+      transition: background .2s, color .2s; text-align: left;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
+
+    /* ── ORDEM ───────────────────────────────────── */
+    .ordem-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #f0fffe; color: #1a9e93;
+      font-size: 12px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: auto;
+    }
+    .ordem-drag-list { display: flex; flex-direction: column; gap: 8px; }
+    .ordem-drag-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 12px; background: #f8f8f8;
+      border-radius: 10px; cursor: grab; user-select: none;
+      border: 2px solid transparent; transition: border-color .15s, background .15s;
+    }
+    .ordem-drag-item:active { cursor: grabbing; }
+    .ordem-drag-item.drag-over { border-color: #2BBFB3; background: #f0fffe; }
+    .ordem-drag-item.dragging { opacity: .4; }
+    .ordem-drag-handle { font-size: 18px; color: #ccc; flex-shrink: 0; }
+    .ordem-drag-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #2BBFB3; color: white;
+      font-size: 11px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .ordem-drag-thumb {
+      width: 48px; height: 32px; border-radius: 6px;
+      object-fit: cover; background: #eee; flex-shrink: 0;
+    }
+    .ordem-drag-titulo { font-size: 13px; font-weight: 600; color: #1a2e2d; flex: 1; }
+
+    /* ── PLAYLIST SELECT ROW ─────────────────────── */
+    .pl-select-row {
+      display: flex; gap: 8px; align-items: center;
+    }
+    .pl-select-row select { flex: 1; }
+    .btn-pl-novo {
+      padding: 9px 12px; border-radius: 8px; border: 1px dashed #2BBFB3;
+      background: #f0fffe; color: #1a9e93; font-size: 12px; font-weight: 700;
+      cursor: pointer; white-space: nowrap; transition: all .15s; flex-shrink: 0;
+    }
+    .btn-pl-novo:hover { background: #2BBFB3; color: white; border-style: solid; }
+
+    /* ── MINI-MODAL NOVA PLAYLIST (inline no form) ── */
+    .pl-inline-box {
+      display: none;
+      background: #f8fffe; border: 1px solid #c8f0ed;
+      border-radius: 10px; padding: 14px 16px;
+      margin-top: 4px;
+      animation: slideDown .15s ease;
+    }
+    .pl-inline-box.aberto { display: block; }
+    .pl-inline-box .pl-inline-titulo {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: #1a9e93; margin-bottom: 10px;
+    }
+    .pl-inline-box .pl-inline-row {
+      display: flex; gap: 8px; align-items: flex-end;
+    }
+    .pl-inline-box .field { flex: 1; margin: 0; }
+    .pl-inline-acoes { display: flex; gap: 6px; flex-shrink: 0; }
+
+    /* ── PREVIEW YOUTUBE ─────────────────────────── */
+    .thumb-yt {
+      position: relative;
+      width: 72px; height: 44px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .thumb-yt img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity .2s;
+    }
+    .thumb-yt:hover img { opacity: .75; }
+    .thumb-yt .yt-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; opacity: 0;
+      transition: opacity .2s;
+    }
+    .thumb-yt:hover .yt-play { opacity: 1; }
+    .thumb-cell { width: 84px; }
+
+    /* ── BTN VISUALIZAR ──────────────────────────── */
+    .btn-sm-view { background: #eef5ff; color: #1a5fb4; }
+    .btn-sm-view:hover { background: #1a5fb4; color: white; }
+
+    /* ── PLAYLISTS ───────────────────────────────── */
+    .playlist-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .playlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .playlist-card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      overflow: hidden;
+      transition: box-shadow .2s, transform .15s;
+      cursor: pointer;
+    }
+    .playlist-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.12); transform: translateY(-2px); }
+    .playlist-card-thumb {
+      width: 100%; aspect-ratio: 16/9;
+      background: linear-gradient(135deg,#1a2e2d,#2BBFB3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px; color: white; position: relative; overflow: hidden;
+    }
+    .playlist-card-thumb img {
+      width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;
+    }
+    .playlist-card-thumb .pl-count {
+      position: absolute; bottom: 6px; right: 8px;
+      background: rgba(0,0,0,.65); color: white;
+      font-size: 11px; font-weight: 700;
+      padding: 2px 8px; border-radius: 10px;
+    }
+    .playlist-card-info { padding: 12px 14px; }
+    .playlist-card-nome { font-weight: 700; font-size: 14px; color: #1a2e2d; margin-bottom: 4px; }
+    .playlist-card-desc { font-size: 12px; color: #aaa; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .playlist-card-acoes { display: flex; gap: 6px; }
+
+    /* ── MODAL PLAYLIST ──────────────────────────── */
+    .modal-pl { max-width: 480px; }
+
+    /* ── BADGE PLAYLIST ──────────────────────────── */
+    .badge-pl {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 20px;
+      font-size: 11px; font-weight: 700;
+      background: #f0fffe; color: #1a9e93;
+      white-space: nowrap; margin-left: 4px;
+    }
+
+    /* ── DRAG PLAYLIST CARDS ─────────────────────── */
+    .playlist-card.drag-over-card {
+      outline: 2px dashed #2BBFB3;
+      outline-offset: 2px;
+      transform: scale(1.01);
+    }
+    .playlist-card.dragging-card { opacity: .4; transform: scale(.97); }
+    .playlist-card-drag-handle {
+      position: absolute; top: 8px; left: 8px;
+      background: rgba(0,0,0,.45); color: white;
+      border-radius: 6px; padding: 2px 6px;
+      font-size: 14px; cursor: grab; z-index: 2;
+      opacity: 0; transition: opacity .15s;
+    }
+    .playlist-card:hover .playlist-card-drag-handle { opacity: 1; }
+
+    /* ── SETAS ORDEM VÍDEOS ──────────────────────── */
+    .btn-ordem {
+      background: none; border: none; cursor: pointer;
+      color: #ccc; font-size: 14px; padding: 2px 4px;
+      border-radius: 4px; line-height: 1;
+      transition: color .15s, background .15s;
+    }
+    .btn-ordem:hover:not(:disabled) { color: #2BBFB3; background: #f0fffe; }
+    .btn-ordem:disabled { opacity: .25; cursor: default; }
+    .col-ordem-ctrl {
+      display: flex; align-items: center; gap: 2px; justify-content: center;
+    }
+    /* drag nas linhas da tabela */
+    tr.drag-over-row td { background: #f0fffe !important; }
+    tr.dragging-row { opacity: .4; }
+
+    /* ── MÓDULOS / AULAS ─────────────────────────── */
+    .modulo-wrap {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .modulo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e5e7eb;
+      gap: 10px;
+    }
+    .modulo-titulo {
+      font-weight: 600;
+      font-size: 14px;
+      color: #1e293b;
+    }
+    .aula-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13px;
+    }
+    .aula-item:last-child { border-bottom: none; }
+    .aula-num {
+      width: 22px;
+      text-align: center;
+      font-size: 11px;
+      color: #94a3b8;
+      flex-shrink: 0;
+    }
+    .aula-titulo { flex: 1; color: #374151; }
+    .aula-dur { flex-shrink: 0; }
+
+    /* ── DRAG CURSOS / MÓDULOS / AULAS ───────────── */
+    .curso-drag-cell {
+      width: 28px; text-align: center;
+      color: #cbd5e1; font-size: 16px;
+      cursor: grab; user-select: none;
+    }
+    .curso-drag-cell:active { cursor: grabbing; }
+    tr.curso-dragging { opacity: .4; }
+    tr.curso-drag-over td { background: #f0fffe !important; box-shadow: inset 0 2px 0 #2BBFB3; }
+
+    .modulo-drag-handle {
+      cursor: grab; font-size: 18px; color: #94a3b8;
+      user-select: none; flex-shrink: 0;
+    }
+    .modulo-drag-handle:active { cursor: grabbing; }
+    .modulo-wrap.dragging-modulo { opacity: .4; }
+    .modulo-wrap.drag-over-modulo {
+      border-color: #2BBFB3;
+      box-shadow: 0 0 0 2px rgba(43,191,179,.25);
+    }
+    .modulo-wrap.drag-over-modulo-aula {
+      border-color: #2BBFB3;
+      box-shadow: inset 0 0 0 2px rgba(43,191,179,.4);
+      background: #f0fffe;
+    }
+
+    .aula-drag-handle {
+      font-size: 14px; color: #cbd5e1;
+      cursor: grab; user-select: none; flex-shrink: 0;
+    }
+    .aula-drag-handle:active { cursor: grabbing; }
+    .aula-item.dragging-aula { opacity: .4; }
+    .aula-item.drag-over-aula {
+      background: #f0fffe;
+      box-shadow: inset 0 2px 0 #2BBFB3;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 768px) {
+      .aba-btn { font-size: 11px; padding: 7px 10px; white-space: nowrap; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .toolbar .btn { width: 100%; text-align: center; justify-content: center; }
+      .busca-wrap { max-width: 100%; }
+      .form-row { grid-template-columns: 1fr; }
+      .td-acoes { flex-wrap: wrap; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="logo.png" alt="Sua Igreja" />
+    </div>
+    <nav id="sidebar-nav">
+      <a href="dashboard.html">🏠 Dashboard</a>
+      <a href="membros.html">👥 Membros</a>
+      <a href="visitantes.html">🙋 Visitantes</a>
+      <a href="criancas.html">👶 Crianças</a>
+      <a href="pedido-de-oracao.html">🙏 Pedidos de Oração</a>
+      <a href="aniversariantes.html">🎂 Aniversariantes</a>
+
+      <!-- MINISTÉRIOS COM CASCATA -->
+      <div class="nav-ministerios" id="nav-ministerios">
+        <div class="nav-min-trigger" id="nav-min-trigger">
+          <span>✨ Ministérios</span>
+          <span class="nav-min-arrow">▾</span>
+        </div>
+        <div id="nav-ministerios-lista">
+          <div class="nav-min-loading">Carregando...</div>
+        </div>
+      </div>
+
+      <a href="agenda.html">📅 Agenda</a>
+    <a href="inscricoes.html">📋 Inscrições</a>
+    <a href="central-voluntarios.html">🎯 Central de Voluntários</a>
+      <a href="mesas.html">🟤 Mesas</a>
+      <a href="financeiro.html">💰 Financeiro</a>
+
+      <a href="relatorios.html">📈 Relatórios</a>
+      <!-- CONTEÚDOS COM CASCATA -->
+      <div class="nav-ministerios" id="nav-conteudos">
+        <div class="nav-min-trigger" id="nav-conteudos-trigger">
+          <span>📚 Conteúdos</span>
+          <span class="nav-min-arrow">▾</span>
+        </div>
+        <div id="nav-conteudos-lista">
+          <a href="conteudos.html?aba=pregacoes"  class="nav-min-item" data-aba="pregacoes">🎙️ Pregações</a>
+          <a href="conteudos.html?aba=cursos"     class="nav-min-item" data-aba="cursos">🎓 Cursos</a>
+          <a href="conteudos.html?aba=biblioteca" class="nav-min-item" data-aba="biblioteca">📖 Biblioteca</a>
+        </div>
+      </div>
+
+      <a href="usuarios.html">⚙️ Usuários</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="perfil.html" class="sidebar-user" title="Meu perfil">
+        <span class="sidebar-user-icon" id="sidebarUserIcon">👤</span>
+        <span class="sidebar-user-nome" id="sidebarUserNome">Carregando...</span>
+      </a>
+      <button class="sidebar-logout" onclick="fazerLogout ? fazerLogout() : db.auth.signOut().then(()=>location.href='index.html')">
+        🚪 Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <div class="page-header">
+      <h1 id="page-title">📚 Conteúdos</h1>
+    </div>
+
+    <!-- ABAS -->
+    <div class="abas">
+      <button class="aba-btn" id="btn-aba-pregacoes" data-aba="pregacoes" onclick="trocarAba('pregacoes', this)">
+        🎙️ Pregações <span id="cnt-pregacoes" style="font-size:11px;font-weight:400;color:#aaa"></span>
+      </button>
+      <button class="aba-btn" id="btn-aba-cursos" data-aba="cursos" onclick="trocarAba('cursos', this)">
+        🎓 Cursos <span id="cnt-cursos" style="font-size:11px;font-weight:400;color:#aaa"></span>
+      </button>
+      <button class="aba-btn" id="btn-aba-biblioteca" data-aba="biblioteca" onclick="trocarAba('biblioteca', this)">
+        📖 Biblioteca <span id="cnt-biblioteca" style="font-size:11px;font-weight:400;color:#aaa"></span>
+      </button>
+      <button class="aba-btn" id="btn-aba-playlists" data-aba="playlists" onclick="trocarAba('playlists', this)" style="display:none">
+        🎞️ Playlists <span id="cnt-playlists" style="font-size:11px;font-weight:400;color:#aaa"></span>
+      </button>
+    </div>
+
+    <!-- ══ ABA: PREGAÇÕES ══ -->
+    <div class="aba-content" id="aba-pregacoes" data-aba="pregacoes">
+
+      <!-- MODO: grade de playlists -->
+      <div id="preg-modo-playlists">
+        <div class="toolbar">
+          <div class="toolbar-esq">
+            <span class="contador" id="contador-pregacoes"></span>
+          </div>
+          <button class="btn btn-primary" data-acao="adicionar" onclick="abrirModal('pregacao')">+ Nova Pregação</button>
+        </div>
+        <!-- Cards de playlist -->
+        <div class="playlist-grid" id="preg-playlist-grid">
+          <div style="color:#bbb;font-size:14px;padding:40px 0">Carregando...</div>
+        </div>
+        <!-- Pregações sem playlist -->
+        <div id="preg-sem-playlist-wrap" style="display:none">
+          <div class="section-div" style="margin:24px 0 14px">Sem playlist</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th class="thumb-cell"></th>
+                <th>Título / Série</th>
+                <th>Tipo</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th style="text-align:right">Ações</th>
+              </tr></thead>
+              <tbody id="tbody-sem-playlist"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODO: vídeos de uma playlist -->
+      <div id="preg-modo-videos" style="display:none">
+        <div class="toolbar">
+          <div class="toolbar-esq">
+            <button class="btn btn-secondary" style="gap:6px;display:flex;align-items:center" onclick="voltarParaPlaylists()">
+              ← Playlists
+            </button>
+            <h2 id="preg-pl-nome-titulo" style="font-size:16px;font-weight:700;color:#1a2e2d;margin:0"></h2>
+            <span class="contador" id="preg-pl-contador"></span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-secondary" data-acao="editar" onclick="abrirGerenciarOrdem()" title="Reordenar vídeos">⇅ Ordenar</button>
+            <button class="btn btn-primary" data-acao="adicionar" onclick="abrirModal('pregacao')">+ Nova Pregação</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:36px;text-align:center">#</th>
+              <th class="thumb-cell"></th>
+              <th>Título / Série</th>
+              <th>Tipo</th>
+              <th>Data</th>
+              <th>Status</th>
+              <th style="text-align:right">Ações</th>
+            </tr></thead>
+            <tbody id="tbody-pregacoes"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ ABA: CURSOS ══ -->
+    <div class="aba-content" id="aba-cursos" data-aba="cursos">
+
+      <!-- LISTA DE CURSOS -->
+      <div id="cursos-lista-view">
+        <div class="toolbar">
+          <div class="toolbar-esq">
+            <div class="busca-wrap">
+              <span class="busca-icon">🔍</span>
+              <input type="text" placeholder="Buscar cursos..." oninput="filtrar('cursos', this.value)">
+            </div>
+            <select class="filtro-sel" id="filtro-cat-curso" onchange="filtrarPorCampo('cursos', 'categoria', this.value)">
+              <option value="">Todas as categorias</option>
+            </select>
+            <span class="contador" id="contador-cursos"></span>
+          </div>
+          <button class="btn btn-primary" data-acao="adicionar" onclick="abrirModal('curso')">+ Novo Curso</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th class="curso-drag-cell" title="Arraste para reordenar"></th>
+              <th class="thumb-cell"></th>
+              <th>Título</th>
+              <th>Categoria</th>
+              <th>Nível</th>
+              <th>Status</th>
+              <th style="text-align:right">Ações</th>
+            </tr></thead>
+            <tbody id="tbody-cursos">
+              <tr class="loading-row"><td colspan="7">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DRILL-DOWN: MÓDULOS E AULAS -->
+      <div id="cursos-aulas-view" style="display:none">
+        <div class="toolbar">
+          <button class="btn btn-secondary" style="gap:6px" onclick="voltarParaCursos()">← Voltar</button>
+          <span id="aulas-curso-titulo" style="font-weight:700;font-size:16px;flex:1;padding-left:12px"></span>
+          <button class="btn btn-primary" data-acao="adicionar" onclick="abrirFormAulaCurso()">+ Nova aula</button>
+          <button class="btn btn-primary" data-acao="adicionar" onclick="abrirFormModulo()">+ Novo módulo</button>
+        </div>
+        <div id="aulas-lista" style="display:flex;flex-direction:column;gap:12px;margin-top:8px"></div>
+      </div>
+
+    </div>
+
+    <!-- ══ ABA: BIBLIOTECA ══ -->
+    <div class="aba-content" id="aba-biblioteca" data-aba="biblioteca">
+      <div class="toolbar">
+        <div class="toolbar-esq">
+          <div class="busca-wrap">
+            <span class="busca-icon">🔍</span>
+            <input type="text" placeholder="Buscar na biblioteca..." oninput="filtrar('biblioteca', this.value)">
+          </div>
+          <select class="filtro-sel" id="filtro-subtipo-bib" onchange="filtrarPorCampo('biblioteca', 'subtipo', this.value)">
+            <option value="">Todos os tipos</option>
+            <option value="ebook">📄 Ebooks</option>
+            <option value="devocional">✝️ Devocionais</option>
+            <option value="artigo">📝 Artigos</option>
+            <option value="audio">🎧 Áudios</option>
+          </select>
+          <span class="contador" id="contador-biblioteca"></span>
+        </div>
+        <button class="btn btn-primary" data-acao="adicionar" onclick="abrirModal('biblioteca')">+ Novo Item</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th class="thumb-cell"></th>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Data</th>
+            <th>Status</th>
+            <th style="text-align:right">Ações</th>
+          </tr></thead>
+          <tbody id="tbody-biblioteca">
+            <tr class="loading-row"><td colspan="6">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ ABA: PLAYLISTS ══ -->
+    <div class="aba-content" id="aba-playlists" data-aba="playlists">
+      <div class="playlist-header">
+        <span class="contador" id="contador-playlists"></span>
+        <button class="btn btn-primary" data-acao="adicionar" onclick="abrirModalPlaylist()">+ Nova Playlist</button>
+      </div>
+      <div class="playlist-grid" id="playlist-grid">
+        <div style="color:#bbb;font-size:14px;padding:40px 0">Carregando playlists...</div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- ══ MODAL PLAYLIST ══ -->
+  <div class="modal-overlay" id="modal-playlist">
+    <div class="modal modal-pl">
+      <div class="modal-header">
+        <h2 id="modal-pl-titulo">Nova Playlist</h2>
+        <button class="modal-fechar" onclick="fecharModalPlaylist()">×</button>
+      </div>
+      <div class="modal-body" id="modal-pl-body" style="gap:14px;display:flex;flex-direction:column">
+        <div class="field">
+          <label>Nome <span class="req">*</span></label>
+          <input id="pl-nome" placeholder="Ex: Série Fé Viva">
+        </div>
+        <div class="field">
+          <label>Descrição</label>
+          <textarea id="pl-desc" placeholder="Breve descrição da playlist..." style="min-height:70px"></textarea>
+        </div>
+
+        <!-- IMAGEM DE CAPA -->
+        <div class="field">
+          <label>Imagem de capa</label>
+
+          <!-- Preview -->
+          <div id="pl-capa-preview-wrap" style="display:none;position:relative;margin-bottom:8px">
+            <img id="pl-thumb-preview" src="" alt="Capa"
+              style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;border:1px solid #eee;display:block">
+            <button onclick="removerCapaPl()" title="Remover imagem"
+              style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.55);border:none;
+                     color:white;border-radius:50%;width:26px;height:26px;font-size:14px;
+                     cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">×</button>
+          </div>
+
+          <!-- Zona de upload -->
+          <div id="pl-upload-zona" class="upload-zona" onclick="document.getElementById('pl-file-input').click()"
+            style="padding:18px">
+            <input type="file" id="pl-file-input" accept="image/jpeg,image/png,image/webp,image/gif"
+              style="display:none" onchange="onCapaFileChange(event)">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-txt">Clique para enviar uma imagem</div>
+            <div class="upload-hint">JPG, PNG, WEBP — máx. 2MB</div>
+          </div>
+
+          <!-- Barra de progresso -->
+          <div class="progress-bar" id="pl-progress-bar" style="display:none;margin-top:6px">
+            <div class="progress-fill" id="pl-progress-fill"></div>
+          </div>
+
+          <!-- URL manual (alternativa) -->
+          <details style="margin-top:8px">
+            <summary style="font-size:11px;color:#aaa;cursor:pointer;user-select:none">
+              Ou informe uma URL externa
+            </summary>
+            <input id="pl-thumb" placeholder="https://..." style="margin-top:6px;width:100%;padding:8px 12px;
+              border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box"
+              oninput="onCapaUrlChange(this.value)">
+          </details>
+          <span class="dica">Deixe vazio para usar a thumbnail do 1º vídeo automaticamente</span>
+
+          <!-- Campo oculto com a URL final -->
+          <input type="hidden" id="pl-thumb-final">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="fecharModalPlaylist()">Cancelar</button>
+        <button class="btn btn-primary" id="btn-salvar-pl" onclick="salvarPlaylist()">💾 Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL CONTEÚDO ══ -->
+  <div class="modal-overlay" id="modal-conteudo">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-titulo">Novo Conteúdo</h2>
+        <button class="modal-fechar" onclick="fecharModal()">×</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- preenchido via JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+        <button class="btn btn-primary" id="btn-salvar" onclick="salvar()">💾 Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOASTS -->
+  <div class="toast-wrap" id="toast-wrap"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script src="auth.js"></script>
+
+  <script>
+  /* ── SIDEBAR USER ───────────────────────────────── */
+  (function() {
+    function preencherSidebarUser() {
+      const nomeEl = document.getElementById('sidebarUserNome')
+      const iconEl = document.getElementById('sidebarUserIcon')
+      if (!nomeEl || !iconEl) return
+      const perfil  = window.AUTH?.perfil
+      const user    = window.AUTH?.user
+      const nome    = perfil?.nome || user?.email?.split('@')[0] || 'Meu perfil'
+      const fotoUrl = perfil?.foto_url || null
+      nomeEl.textContent = nome
+      if (fotoUrl) {
+        iconEl.innerHTML = '<img src="' + fotoUrl + '" alt="avatar" />'
+      } else {
+        iconEl.textContent = (nome[0] || '👤').toUpperCase()
+      }
+    }
+    preencherSidebarUser()
+    let t = 0
+    const iv = setInterval(() => {
+      preencherSidebarUser()
+      if (window.AUTH?.perfil || ++t > 40) clearInterval(iv)
+    }, 150)
+  })()
+  </script>
+
+  <script>
+  /* ── MENU CONTEÚDOS: toggle cascata ─────────────── */
+  document.addEventListener('DOMContentLoaded', function() {
+    var trigger = document.getElementById('nav-conteudos-trigger');
+    var lista   = document.getElementById('nav-conteudos-lista');
+    if (!trigger || !lista) return;
+
+    var emConteudos = window.location.pathname.includes('conteudos');
+
+    if (emConteudos) {
+      trigger.classList.add('active');
+      lista.style.display = 'block';
+
+      // Marca o subitem ativo
+      var abaAtual = new URLSearchParams(window.location.search).get('aba') || 'pregacoes';
+      lista.querySelectorAll('.nav-min-item').forEach(function(a) {
+        a.classList.toggle('active', a.dataset.aba === abaAtual);
+      });
+    }
+
+    // Toggle ao clicar — mesmo padrão do ministerios-nav.js
+    trigger.addEventListener('click', function() {
+      var aberto = lista.style.display !== 'none';
+      lista.style.display = aberto ? 'none' : 'block';
+      trigger.classList.toggle('open', !aberto);
+      trigger.classList.toggle('active', emConteudos || !aberto);
+    });
+  });
+  </script>
+
+  <script>
+  /* ── MOBILE: data-label em tabelas ─────────────── */
+  (function() {
+    function aplicarTudo() {
+      document.querySelectorAll('table').forEach(table => {
+        const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim())
+        if (!headers.length) return
+        table.querySelectorAll('tbody tr').forEach(tr => {
+          Array.from(tr.querySelectorAll('td')).forEach((td, i) => {
+            if (headers[i] && !td.getAttribute('data-label')) td.setAttribute('data-label', headers[i])
+          })
+          if (!tr.dataset.acc) {
+            tr.dataset.acc = '1'
+            tr.addEventListener('click', function(e) {
+              if (window.innerWidth > 768) return
+              if (e.target.closest('button, a, input, select, textarea')) return
+              this.classList.toggle('expandido')
+            })
+          }
+        })
+      })
+    }
+    aplicarTudo()
+    new MutationObserver(aplicarTudo).observe(document.body, { childList: true, subtree: true })
+  })()
+  </script>
+
+  <script>
+  /* ── CONTEÚDOS ──────────────────────────────────── */
+
+  const BUCKET = 'conteudos-arquivos';
+
+  // Extrai bucket+path de uma URL pública do Storage do Prod. Retorna null
+  // para URLs externas (Drive, etc.) ou de outros projetos — nesses casos
+  // o auto-delete vira no-op.
+  function parseStorageUrl(url) {
+    if (!url) return null;
+    const m = url.match(/\/storage\/v1\/object\/(?:public|sign)\/([^/]+)\/(.+?)(?:\?|$)/);
+    if (!m) return null;
+    return { bucket: m[1], path: decodeURIComponent(m[2]) };
+  }
+
+  async function excluirArquivoStorage(url) {
+    const parsed = parseStorageUrl(url);
+    if (!parsed) return; // externo (Drive etc.) ou nao-identificavel — nada a remover
+    const { data, error } = await db.storage.from(parsed.bucket).remove([parsed.path]);
+    if (error) {
+      console.warn('Erro ao remover do bucket:', error.message);
+    } else if (!data || data.length === 0) {
+      console.warn(`Bucket nao removeu nada (RLS ou path inexistente): ${parsed.bucket}/${parsed.path}`);
+    } else {
+      console.log(`Arquivo removido do bucket: ${parsed.bucket}/${parsed.path}`);
+    }
+  }
+
+  let editandoId   = null;
+  let uploadFile   = null;
+  let modoFonte    = 'link';
+  let editandoPlId = null;
+  let playlistAtiva = null;   // {id, nome} — playlist aberta no drill-down
+  let ordemItens    = [];     // para drag-and-drop
+  let dados = { pregacoes: [], cursos: [], biblioteca: [] };
+  let playlists = [];            // [{id, nome, descricao, thumbnail_url}]
+  let pregPorPlaylist = {};      // {playlist_id: [{conteudo_id, ordem}]}
+
+  // LMS — cursos
+  let editandoCursoId = null;
+  let cursoAtivoId    = null;
+  let cursoAtivoTitulo = '';
+  let modulosDoAtivo  = [];
+  let aulasDoAtivo    = [];
+  let moduloEditando  = null;
+  let materiaisPorAula = {};   // { aula_id: [...materiais] }
+  let materiaisAulaId  = null; // aula_id atualmente aberto no modal de materiais
+  let materialUploadFile = null;
+
+  /* ── TÍTULOS POR ABA ─────────────────────────────── */
+  const TITULOS_ABA = {
+    pregacoes:  '🎙️ Pregações',
+    cursos:     '🎓 Cursos',
+    biblioteca: '📖 Biblioteca',
+    playlists:  '🎞️ Playlists',
+  };
+
+  /* ── Fase 5.3: gate de abas por permissoes_granular ─ */
+  // Esconde botao + container das abas que o user nao tem ver=true.
+  // Admin curto-circuita em temPermissaoAba (sempre true).
+  // Retorna a primeira aba visivel para servir de fallback quando o
+  // ?aba= apontar para uma aba bloqueada.
+  function aplicarGateAbasConteudos() {
+    const abas = ['pregacoes', 'cursos', 'biblioteca', 'playlists'];
+    let primeiraVisivel = null;
+    for (const aba of abas) {
+      const liberada = (typeof temPermissaoAba === 'function')
+        ? temPermissaoAba('conteudos', aba, 'ver')
+        : true; // se auth.js nao carregou (perfil.html etc.), nao filtra
+      const btn = document.getElementById('btn-aba-' + aba);
+      const pnl = document.getElementById('aba-' + aba);
+      if (!liberada) {
+        if (btn) btn.style.display = 'none';
+        if (pnl) pnl.style.display = 'none';
+      } else if (!primeiraVisivel) {
+        primeiraVisivel = aba;
+      }
+    }
+    return primeiraVisivel;
+  }
+
+  /* ── Fase 5.4b: gate de acoes (adicionar/editar/excluir) por aba ── */
+  // Para cada `.aba-content[data-aba=X]`, esconde botoes com [data-acao]
+  // que o user nao tem permissao em (conteudos, X, acao). Reaplicado via
+  // MutationObserver porque tabelas/cards sao re-renderizados ao trocar
+  // de aba ou ao recarregar dados.
+  function aplicarGateAcoesConteudos() {
+    if (window.AUTH?.isAdmin) return; // admin ve tudo
+    document.querySelectorAll('.aba-content[data-aba]').forEach(painel => {
+      const aba = painel.dataset.aba;
+      painel.querySelectorAll('[data-acao]').forEach(btn => {
+        const ok = (typeof temPermissaoAba === 'function')
+          ? temPermissaoAba('conteudos', aba, btn.dataset.acao)
+          : true;
+        btn.style.display = ok ? '' : 'none';
+      });
+    });
+  }
+
+  /* ── INIT ───────────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Espera o auth.js terminar antes de aplicar gates (IIFE assincrona).
+    // Aguarda AUTH._initDone (setado apos popular AUTH.permissoesGranular,
+    // ~5 awaits depois de AUTH.perfil ser setado).
+    if (!window.AUTH?._initDone) {
+      await new Promise(resolve => {
+        const onReady = () => { window.removeEventListener('auth:ready', onReady); resolve() }
+        window.addEventListener('auth:ready', onReady)
+        // Fallback de 3s caso o evento ja tenha disparado antes do listener
+        const iv = setInterval(() => {
+          if (window.AUTH?._initDone) { clearInterval(iv); onReady() }
+        }, 50)
+        setTimeout(() => { clearInterval(iv); onReady() }, 3000)
+      })
+    }
+
+    carregarAba('pregacao');
+    carregarAba('curso');
+    carregarAba('biblioteca');
+    carregarPlaylists();
+
+    // Gate Fase 5.3/5.4b — esconde abas e botoes de acao
+    const primeiraVisivel = aplicarGateAbasConteudos();
+    aplicarGateAcoesConteudos();
+
+    // Reaplica gate de acoes quando tabelas sao re-renderizadas
+    document.querySelectorAll('.aba-content[data-aba]').forEach(painel => {
+      new MutationObserver(() => aplicarGateAcoesConteudos())
+        .observe(painel, { childList: true, subtree: true });
+    });
+
+    const params   = new URLSearchParams(window.location.search);
+    const abaParam = params.get('aba');
+    const abasValidas = ['pregacoes', 'cursos', 'biblioteca', 'playlists'];
+    let abaAlvo = abasValidas.includes(abaParam) ? abaParam : 'pregacoes';
+
+    // Se a aba pedida (ou o default) estiver bloqueada, cai pra primeira liberada.
+    const liberada = (typeof temPermissaoAba === 'function')
+      ? temPermissaoAba('conteudos', abaAlvo, 'ver')
+      : true;
+    if (!liberada && primeiraVisivel) abaAlvo = primeiraVisivel;
+
+    ativarAba(abaAlvo);
+  });
+
+  /* ── ATIVAR ABA (sem depender de clique) ─────────── */
+  function ativarAba(aba) {
+    document.querySelectorAll('.aba-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.aba-content').forEach(p => {
+      p.classList.remove('active');
+      p.style.display = '';
+    });
+
+    const btn = document.getElementById('btn-aba-' + aba);
+    const pnl = document.getElementById('aba-' + aba);
+    if (btn) btn.classList.add('active');
+    if (pnl) pnl.classList.add('active');
+
+    // Atualiza título da página
+    const titulo = document.getElementById('page-title');
+    if (titulo) titulo.textContent = TITULOS_ABA[aba] || '📚 Conteúdos';
+
+    // Atualiza URL sem recarregar
+    const url = new URL(window.location);
+    url.searchParams.set('aba', aba);
+    history.replaceState(null, '', url);
+
+    // Sincroniza item ativo no submenu da sidebar
+    document.querySelectorAll('#nav-conteudos-lista .nav-min-item').forEach(a => {
+      a.classList.toggle('active', a.dataset.aba === aba);
+    });
+  }
+
+  /* ── TROCAR ABA (via clique nos botões das abas) ─── */
+  function trocarAba(aba, btn) {
+    ativarAba(aba);
+  }
+
+  /* ── CARREGAR ────────────────────────────────────── */
+  async function carregarAba(tipo) {
+    if (tipo === 'curso') { await carregarCursos(); return; }
+
+    const chave = tipoParaChave(tipo);
+    const { data, error } = await db
+      .from('conteudos')
+      .select('*')
+      .eq('tipo', tipo)
+      .order('data_publicacao', { ascending: false });
+
+    if (error) { toast('Erro ao carregar dados', 'err'); return; }
+    dados[chave] = data || [];
+    if (chave === 'pregacoes') {
+      renderPregacoesAba();
+      renderPlaylists();
+    } else {
+      renderTabela(chave, dados[chave]);
+    }
+    atualizarContador(chave, dados[chave].length);
+    popularFiltros(chave, dados[chave]);
+  }
+
+  /* ── CURSOS LMS ──────────────────────────────────── */
+  async function carregarCursos() {
+    const { data, error } = await db.from('cursos_lms')
+      .select('*')
+      .order('ordem', { ascending: true })
+      .order('titulo', { ascending: true });
+    if (error) { toast('Erro ao carregar cursos: ' + error.message, 'err'); return; }
+    dados.cursos = data || [];
+    renderCursos();
+    atualizarContador('cursos', dados.cursos.length);
+    popularFiltrosCursos();
+  }
+
+  function renderCursos(lista) {
+    lista = lista ?? dados.cursos;
+    const tbody = document.getElementById('tbody-cursos');
+    if (!lista.length) {
+      tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📭</div>Nenhum curso cadastrado ainda.</div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = lista.map(c => linhaCursoHtml(c)).join('');
+  }
+
+  function linhaCursoHtml(c) {
+    const thumb = c.thumbnail_url
+      ? `<img class="thumb-img" src="${esc(c.thumbnail_url)}" alt="">`
+      : `<div class="thumb-placeholder">🎓</div>`;
+    const badgeStatus = c.publicado
+      ? `<span class="badge badge-pub">✅ Publicado</span>`
+      : `<span class="badge badge-rascunho">Rascunho</span>`;
+    const badgeDest = c.destaque ? `<span class="badge badge-dest" style="margin-left:4px">⭐ Destaque</span>` : '';
+    const ch = c.carga_horaria_min
+      ? (c.carga_horaria_min >= 60 ? Math.round(c.carga_horaria_min / 60) + 'h' : c.carga_horaria_min + 'min')
+      : '—';
+    const itemJson = JSON.stringify(c).replace(/'/g, '&#39;');
+    return `<tr draggable="true" data-curso-id="${c.id}"
+        ondragstart="dragStartCursoRow(event)"
+        ondragover="dragOverCursoRow(event)"
+        ondrop="dragDropCursoRow(event)"
+        ondragend="dragEndCursoRow()">
+      <td class="curso-drag-cell" title="Arrastar para reordenar">⠿</td>
+      <td class="thumb-cell">${thumb}</td>
+      <td class="td-titulo">
+        <div class="titulo-main">${esc(c.titulo)}</div>
+        <div class="titulo-sub">🏷️ ${esc(c.categoria || '—')} · ⏱️ ${ch}</div>
+      </td>
+      <td>${esc(c.categoria || '—')}</td>
+      <td style="color:#888">${esc(c.nivel || '—')}</td>
+      <td>${badgeStatus}${badgeDest}</td>
+      <td><div class="td-acoes">
+        <button class="btn-sm btn-sm-edit" data-acao="editar" onclick='abrirFormCurso(${itemJson})'>✏️ Editar</button>
+        <button class="btn-sm" style="background:#eef4ff;color:#2563eb;border:1px solid #bfd0f7" onclick="abrirAulas('${c.id}','${esc(c.titulo)}')">📚 Aulas</button>
+        <button class="btn-sm btn-sm-danger" data-acao="excluir" onclick="excluirCurso('${c.id}')">🗑️</button>
+      </div></td>
+    </tr>`;
+  }
+
+  function popularFiltrosCursos() {
+    const sel = document.getElementById('filtro-cat-curso');
+    if (!sel) return;
+    const cats = [...new Set(dados.cursos.map(c => c.categoria).filter(Boolean))];
+    sel.innerHTML = `<option value="">Todas as categorias</option>` +
+      cats.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  }
+
+  /* ── FORM CURSO ──────────────────────────────────── */
+  function abrirFormCurso(item = null) {
+    editandoCursoId = item ? item.id : null;
+    const titulo = item ? 'Editar Curso' : 'Novo Curso';
+    document.getElementById('modal-titulo').textContent = titulo;
+    document.getElementById('modal-body').innerHTML = construirFormCurso(item);
+    document.getElementById('modal-conteudo').classList.add('aberto');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function construirFormCurso(c) {
+    const v   = f => c ? (c[f] ?? '') : '';
+    const chk = (f, def = false) => (c ? c[f] : def) ? 'checked' : '';
+    const niveis = ['Iniciante','Intermediário','Avançado'];
+    return `
+      <div class="section-div">Informações básicas</div>
+      <div class="field">
+        <label>Título <span class="req">*</span></label>
+        <input name="titulo" value="${esc(v('titulo'))}" placeholder="Título do curso" required>
+      </div>
+      <div class="field">
+        <label>Descrição curta</label>
+        <textarea name="descricao" placeholder="Resumo de 1-2 linhas que aparece no catálogo e no topo da página do curso." style="min-height:60px">${esc(v('descricao'))}</textarea>
+      </div>
+      <div class="field">
+        <label>Sobre o curso (descrição completa)</label>
+        <textarea name="descricao_longa" placeholder="Descreva o que o aluno vai aprender, para quem é o curso, pré-requisitos, etc. Aparece em destaque na página do curso." style="min-height:140px">${esc(v('descricao_longa'))}</textarea>
+        <span class="dica">Visível para todos antes da matrícula — é a "vitrine" que ajuda o aluno a decidir.</span>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Categoria</label>
+          <input name="categoria" value="${esc(v('categoria'))}" placeholder="Ex: Discipulado">
+        </div>
+        <div class="field">
+          <label>Nível</label>
+          <select name="nivel">
+            <option value="">Selecione...</option>
+            ${niveis.map(n => `<option value="${n}" ${v('nivel')===n?'selected':''}>${n}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Carga horária (min)</label>
+          <input type="number" min="0" name="carga_horaria_min" value="${v('carga_horaria_min')}" placeholder="Calculada automaticamente">
+          <span class="dica">Atualiza automaticamente conforme as aulas são adicionadas/editadas.</span>
+        </div>
+        <div class="field">
+          <label>Preço (R$)</label>
+          <input type="text" inputmode="decimal" name="preco" value="${v('preco') ? Number(v('preco')).toFixed(2).replace('.', ',') : '0,00'}" placeholder="0,00 (gratuito)">
+          <span class="dica">Pago para não-membros. Membros acessam grátis se "Gratuito para membros" estiver ligado.</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Thumbnail (URL)</label>
+        <input name="thumbnail_url" value="${esc(v('thumbnail_url'))}" placeholder="https://...">
+      </div>
+      <div class="field">
+        <label>Link de pagamento (PagBank)</label>
+        <input name="pagamento_url" value="${esc(v('pagamento_url'))}" placeholder="https://pag.ae/...">
+        <span class="dica">Link gerado no painel PagBank em "Vender com Link". Não-membros são redirecionados pra cá ao se matricular.</span>
+      </div>
+
+      <div class="section-div">Visibilidade</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-row-label">Gratuito para membros</div>
+            <div class="toggle-row-desc">Membros da igreja acessam sem pagar</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" name="gratuito_para_membros" ${chk('gratuito_para_membros', true)}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-row-label">Publicar</div>
+            <div class="toggle-row-desc">Aparece no catálogo de cursos</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" name="publicado" ${chk('publicado')}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-row-label">Destaque</div>
+            <div class="toggle-row-desc">Aparece em posição de destaque</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" name="destaque" ${chk('destaque')}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <input type="hidden" name="tipo" value="curso">
+    `;
+  }
+
+  async function salvarCurso() {
+    const body = document.getElementById('modal-body');
+    const get  = n => body.querySelector(`[name="${n}"]`);
+    const titulo = get('titulo').value.trim();
+    if (!titulo) { toast('Título é obrigatório', 'err'); return; }
+
+    const btn = document.getElementById('btn-salvar');
+    btn.disabled = true; btn.textContent = 'Salvando...';
+
+    const payload = {
+      titulo,
+      descricao:             get('descricao')?.value || null,
+      descricao_longa:       get('descricao_longa')?.value || null,
+      categoria:             get('categoria')?.value || null,
+      nivel:                 get('nivel')?.value     || null,
+      carga_horaria_min:     parseInt(get('carga_horaria_min')?.value) || null,
+      thumbnail_url:         get('thumbnail_url')?.value || null,
+      preco:                 parseFloat(String(get('preco')?.value || '0').replace(',', '.')) || 0,
+      pagamento_url:         get('pagamento_url')?.value?.trim() || null,
+      gratuito_para_membros: get('gratuito_para_membros')?.checked || false,
+      publicado:             get('publicado')?.checked || false,
+      destaque:              get('destaque')?.checked  || false,
+    };
+
+    let error;
+    if (editandoCursoId) {
+      ({ error } = await db.from('cursos_lms').update(payload).eq('id', editandoCursoId));
+    } else {
+      payload.ordem = dados.cursos.length;
+      ({ error } = await db.from('cursos_lms').insert(payload));
+    }
+
+    btn.disabled = false; btn.textContent = '💾 Salvar';
+    if (error) { toast('Erro ao salvar: ' + error.message, 'err'); return; }
+
+    toast(editandoCursoId ? 'Curso atualizado!' : 'Curso criado!', 'ok');
+    fecharModal();
+    await carregarCursos();
+  }
+
+  async function excluirCurso(id) {
+    if (!confirm('Excluir este curso? Esta ação não pode ser desfeita.')) return;
+    const { error } = await db.from('cursos_lms').delete().eq('id', id);
+    if (error) { toast('Erro ao excluir: ' + error.message, 'err'); return; }
+    toast('Curso excluído.', 'ok');
+    await carregarCursos();
+  }
+
+  /* ── AULAS: drill-down ───────────────────────────── */
+  async function abrirAulas(cursoId, cursoTitulo) {
+    cursoAtivoId    = cursoId;
+    cursoAtivoTitulo = cursoTitulo;
+    document.getElementById('cursos-lista-view').style.display   = 'none';
+    document.getElementById('cursos-aulas-view').style.display   = 'block';
+    document.getElementById('aulas-curso-titulo').textContent    = cursoTitulo;
+    await carregarModulosAulas(cursoId);
+  }
+
+  function voltarParaCursos() {
+    cursoAtivoId = null;
+    document.getElementById('cursos-lista-view').style.display = 'block';
+    document.getElementById('cursos-aulas-view').style.display = 'none';
+  }
+
+  async function carregarModulosAulas(cursoId) {
+    const { data: modulos } = await db.from('modulos_lms').select('id,titulo,ordem').eq('curso_id', cursoId).order('ordem');
+    const { data: aulas   } = modulos?.length
+      ? await db.from('aulas_lms').select('*').in('modulo_id', modulos.map(m => m.id)).order('ordem')
+      : { data: [] };
+    modulosDoAtivo = modulos || [];
+    aulasDoAtivo   = aulas   || [];
+    materiaisPorAula = {};
+    if (aulasDoAtivo.length) {
+      const { data: mats } = await db.from('materiais_lms')
+        .select('*')
+        .in('aula_id', aulasDoAtivo.map(a => a.id))
+        .order('ordem');
+      (mats || []).forEach(m => {
+        (materiaisPorAula[m.aula_id] = materiaisPorAula[m.aula_id] || []).push(m);
+      });
+    }
+    renderListaAulas();
+  }
+
+  function renderListaAulas() {
+    const lista = document.getElementById('aulas-lista');
+    if (!modulosDoAtivo.length) {
+      lista.innerHTML = `<div style="color:#aaa;font-size:14px;padding:20px 0">Nenhum módulo ainda. Clique em "+ Novo módulo" para começar.</div>`;
+      return;
+    }
+    const modulosOrdenados = [...modulosDoAtivo].sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+    lista.innerHTML = modulosOrdenados.map(mod => {
+      const aulasDoMod = aulasDoAtivo
+        .filter(a => a.modulo_id === mod.id)
+        .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+      return `<div class="modulo-wrap" draggable="true" data-mod-id="${mod.id}"
+          ondragstart="dragStartModulo(event)"
+          ondragover="dragOverModulo(event)"
+          ondrop="dragDropModulo(event)"
+          ondragend="dragEndModulo()">
+        <div class="modulo-header">
+          <span class="modulo-drag-handle" title="Arrastar para reordenar módulos">⠿</span>
+          <span class="modulo-titulo">📂 ${esc(mod.titulo)}</span>
+          <div style="display:flex;gap:6px;flex-shrink:0;margin-left:auto">
+            <button class="btn-sm btn-sm-edit" data-acao="editar" onclick="abrirFormModulo('${mod.id}','${esc(mod.titulo)}')">✏️</button>
+            <button class="btn-sm btn-sm-danger" data-acao="excluir" onclick="excluirModulo('${mod.id}')">🗑️</button>
+            <button class="btn-sm" style="background:#eef4ff;color:#2563eb;border:1px solid #bfd0f7" data-acao="adicionar" onclick="abrirFormAula(null,'${mod.id}')">+ Aula</button>
+          </div>
+        </div>
+        ${aulasDoMod.length
+          ? aulasDoMod.map((a, i) => aulaItemHtml(a, i, mod.id)).join('')
+          : `<div class="aula-empty-slot" data-mod-id="${mod.id}"
+                  ondragover="dragOverEmptyModSlot(event)"
+                  ondrop="dragDropEmptyModSlot(event)"
+                  style="color:#bbb;font-size:13px;padding:8px 16px">Nenhuma aula neste módulo.</div>`
+        }
+      </div>`;
+    }).join('');
+  }
+
+  function aulaItemHtml(a, idx, moduloId) {
+    const dur = a.duracao_min ? a.duracao_min + ' min' : '—';
+    const status = a.publicado ? '✅' : '⚫';
+    const qtdMat = (materiaisPorAula[a.id] || []).length;
+    const matLabel = qtdMat ? `📎 Materiais (${qtdMat})` : '📎 Materiais';
+    return `<div class="aula-item" draggable="true"
+        data-aula-id="${a.id}" data-mod-id="${moduloId}"
+        ondragstart="dragStartAula(event)"
+        ondragover="dragOverAula(event)"
+        ondrop="dragDropAula(event)"
+        ondragend="dragEndAula()">
+      <span class="aula-drag-handle" title="Arrastar para reordenar / mover">⠿</span>
+      <span class="aula-num">${idx + 1}</span>
+      <span class="aula-titulo">${esc(a.titulo)}</span>
+      <span class="aula-dur" style="color:#888;font-size:12px">${dur}</span>
+      <span title="${a.publicado ? 'Publicada' : 'Rascunho'}">${status}</span>
+      <div style="display:flex;gap:4px;margin-left:auto">
+        <button class="btn-sm" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa"
+          onclick="abrirMateriaisAula('${a.id}','${esc(a.titulo)}')">${matLabel}</button>
+        <button class="btn-sm btn-sm-edit" data-acao="editar" onclick='abrirFormAula(${JSON.stringify(a).replace(/'/g,"&#39;")}, "${moduloId}")'>✏️</button>
+        <button class="btn-sm btn-sm-danger" data-acao="excluir" onclick="excluirAula('${a.id}','${moduloId}')">🗑️</button>
+      </div>
+    </div>`;
+  }
+
+  /* ── FORM MÓDULO ─────────────────────────────────── */
+  function abrirFormModulo(id = null, tituloAtual = '') {
+    moduloEditando = id;
+    const titulo = prompt(id ? 'Novo título do módulo:' : 'Título do módulo:', tituloAtual);
+    if (titulo === null) return;
+    salvarModulo(titulo.trim());
+  }
+
+  async function salvarModulo(titulo) {
+    if (!titulo) { toast('Título é obrigatório', 'err'); return; }
+    let error;
+    if (moduloEditando) {
+      ({ error } = await db.from('modulos_lms').update({ titulo }).eq('id', moduloEditando));
+    } else {
+      const proxOrdem = modulosDoAtivo.length;
+      ({ error } = await db.from('modulos_lms').insert({ curso_id: cursoAtivoId, titulo, ordem: proxOrdem }));
+    }
+    moduloEditando = null;
+    if (error) { toast('Erro ao salvar módulo: ' + error.message, 'err'); return; }
+    toast('Módulo salvo!', 'ok');
+    await carregarModulosAulas(cursoAtivoId);
+  }
+
+  async function excluirModulo(id) {
+    if (!confirm('Excluir este módulo e todas as suas aulas?')) return;
+    await db.from('aulas_lms').delete().eq('modulo_id', id);
+    const { error } = await db.from('modulos_lms').delete().eq('id', id);
+    if (error) { toast('Erro ao excluir módulo: ' + error.message, 'err'); return; }
+    toast('Módulo excluído.', 'ok');
+    await carregarModulosAulas(cursoAtivoId);
+  }
+
+  /* ── FORM AULA ───────────────────────────────────── */
+  async function abrirFormAulaCurso() {
+    if (!modulosDoAtivo.length) {
+      const { data: novo, error } = await db.from('modulos_lms')
+        .insert({ curso_id: cursoAtivoId, titulo: 'Aulas', ordem: 0 })
+        .select().single();
+      if (error) { toast('Erro ao criar módulo padrão: ' + error.message, 'err'); return; }
+      modulosDoAtivo = [novo];
+    }
+    abrirFormAula(null, modulosDoAtivo[0].id);
+  }
+
+  function abrirFormAula(aula = null, moduloId) {
+    const isEdit = !!aula;
+    document.getElementById('modal-titulo').textContent = isEdit ? 'Editar Aula' : 'Nova Aula';
+    document.getElementById('modal-body').innerHTML = construirFormAula(aula, moduloId);
+    document.getElementById('modal-conteudo').classList.add('aberto');
+    document.body.style.overflow = 'hidden';
+    // redireciona o botão salvar para salvarAula
+    document.getElementById('btn-salvar').onclick = () => salvarAula(aula?.id, moduloId);
+  }
+
+  function construirFormAula(a, moduloId) {
+    const v   = f => a ? (a[f] ?? '') : '';
+    const chk = (f, def = false) => (a ? a[f] : def) ? 'checked' : '';
+    const moduloField = modulosDoAtivo.length > 1
+      ? `<div class="field">
+           <label>Módulo</label>
+           <select name="modulo_id">
+             ${modulosDoAtivo.map(m => `<option value="${m.id}" ${m.id === moduloId ? 'selected' : ''}>${esc(m.titulo)}</option>`).join('')}
+           </select>
+         </div>`
+      : `<input type="hidden" name="modulo_id" value="${moduloId}">`;
+    return `
+      <div class="section-div">Dados da aula</div>
+      ${moduloField}
+      <div class="field">
+        <label>Título <span class="req">*</span></label>
+        <input name="titulo" value="${esc(v('titulo'))}" placeholder="Título da aula" required>
+      </div>
+      <div class="field">
+        <label>Descrição</label>
+        <textarea name="descricao" placeholder="Breve descrição...">${esc(v('descricao'))}</textarea>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Duração (min)</label>
+          <input type="number" min="0" name="duracao_min" value="${v('duracao_min')}" placeholder="Ex: 15">
+        </div>
+        <div class="field">
+          <label>Ordem</label>
+          <input type="number" min="0" name="ordem" value="${v('ordem') || aulasDoAtivo.filter(x => x.modulo_id === moduloId).length}" placeholder="0">
+        </div>
+      </div>
+      <div class="field">
+        <label>Link do vídeo (YouTube/Vimeo)</label>
+        <input name="link_video" value="${esc(v('link_video'))}" placeholder="https://youtube.com/watch?v=...">
+      </div>
+      <div class="section-div">Visibilidade</div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-row-label">Publicar</div>
+          <div class="toggle-row-desc">Aula visível para alunos</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" name="publicado" ${chk('publicado')}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    `;
+  }
+
+  async function salvarAula(aulaId, moduloId) {
+    const body  = document.getElementById('modal-body');
+    const get   = n => body.querySelector(`[name="${n}"]`);
+    const titulo = get('titulo').value.trim();
+    if (!titulo) { toast('Título é obrigatório', 'err'); return; }
+
+    const btn = document.getElementById('btn-salvar');
+    btn.disabled = true; btn.textContent = 'Salvando...';
+
+    const moduloIdFinal = get('modulo_id')?.value || moduloId;
+    const payload = {
+      modulo_id:   moduloIdFinal,
+      titulo,
+      descricao:   get('descricao')?.value  || null,
+      duracao_min: parseInt(get('duracao_min')?.value) || null,
+      ordem:       parseInt(get('ordem')?.value) || 0,
+      link_video:  get('link_video')?.value  || null,
+      publicado:   get('publicado')?.checked || false,
+    };
+
+    let error;
+    if (aulaId) {
+      ({ error } = await db.from('aulas_lms').update(payload).eq('id', aulaId));
+    } else {
+      ({ error } = await db.from('aulas_lms').insert(payload));
+    }
+
+    btn.disabled = false; btn.textContent = '💾 Salvar';
+    if (error) { toast('Erro ao salvar aula: ' + error.message, 'err'); return; }
+
+    toast(aulaId ? 'Aula atualizada!' : 'Aula criada!', 'ok');
+    fecharModal();
+    // restaura onclick padrão
+    document.getElementById('btn-salvar').onclick = salvar;
+    await carregarModulosAulas(cursoAtivoId);
+  }
+
+  async function excluirAula(aulaId, moduloId) {
+    if (!confirm('Excluir esta aula?')) return;
+    const { error } = await db.from('aulas_lms').delete().eq('id', aulaId);
+    if (error) { toast('Erro ao excluir aula: ' + error.message, 'err'); return; }
+    toast('Aula excluída.', 'ok');
+    await carregarModulosAulas(cursoAtivoId);
+  }
+
+  /* ── MATERIAIS POR AULA ──────────────────────────── */
+  const TIPO_MAT_LABEL = { pdf:'📄 PDF', link:'🔗 Link', arquivo:'📎 Arquivo', video:'🎬 Vídeo', audio:'🎵 Áudio' };
+
+  function abrirMateriaisAula(aulaId, aulaTitulo) {
+    materiaisAulaId = aulaId;
+    materialUploadFile = null;
+    document.getElementById('modal-titulo').textContent = `📎 Materiais — ${aulaTitulo}`;
+    document.getElementById('modal-body').innerHTML = renderMateriaisModal();
+    document.getElementById('modal-conteudo').classList.add('aberto');
+    document.body.style.overflow = 'hidden';
+    // Esconde o botão "Salvar" do rodapé — este modal salva por ação
+    document.getElementById('btn-salvar').style.display = 'none';
+  }
+
+  function renderMateriaisModal() {
+    const lista = (materiaisPorAula[materiaisAulaId] || []);
+    const itens = lista.length
+      ? lista.map((m, i) => `
+        <div class="aula-item" style="border-bottom:1px solid #f1f5f9">
+          <span class="aula-num">${i + 1}</span>
+          <span style="flex-shrink:0">${(TIPO_MAT_LABEL[m.tipo] || '📎').split(' ')[0]}</span>
+          <span class="aula-titulo">
+            <a href="${esc(m.url)}" target="_blank" rel="noopener" style="color:#1a9e93;font-weight:600;text-decoration:none">
+              ${esc(m.titulo)}
+            </a>
+            ${m.descricao ? `<div style="font-size:11.5px;color:#94a3b8;margin-top:2px">${esc(m.descricao)}</div>` : ''}
+          </span>
+          <span style="color:#888;font-size:11.5px;flex-shrink:0">${TIPO_MAT_LABEL[m.tipo] || m.tipo || ''}</span>
+          <button class="btn-sm btn-sm-danger" data-acao="excluir" onclick="excluirMaterial('${m.id}')">🗑️</button>
+        </div>`).join('')
+      : `<div style="color:#bbb;font-size:13px;padding:18px 4px;text-align:center">
+           Nenhum material cadastrado para esta aula ainda.
+         </div>`;
+
+    return `
+      <div class="section-div">Materiais existentes</div>
+      <div style="border:1px solid #eef2f7;border-radius:10px;overflow:hidden;background:#fff">
+        ${itens}
+      </div>
+
+      <div class="section-div" style="margin-top:18px">Adicionar novo material</div>
+      <div class="field">
+        <label>Título <span class="req">*</span></label>
+        <input id="mat-titulo" placeholder="Ex: Apostila do módulo 1">
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Tipo</label>
+          <select id="mat-tipo">
+            <option value="pdf">📄 PDF</option>
+            <option value="link">🔗 Link</option>
+            <option value="arquivo">📎 Arquivo</option>
+            <option value="video">🎬 Vídeo</option>
+            <option value="audio">🎵 Áudio</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Descrição (opcional)</label>
+          <input id="mat-descricao" placeholder="Breve descrição">
+        </div>
+      </div>
+
+      <div class="fonte-toggle" style="margin-top:4px">
+        <button id="btn-mat-link"   class="active" onclick="setModoMaterial('link')">🔗 Link externo</button>
+        <button id="btn-mat-upload" onclick="setModoMaterial('upload')">📁 Upload de arquivo</button>
+      </div>
+
+      <div id="mat-area-link">
+        <div class="field">
+          <label>URL do material</label>
+          <input id="mat-url" placeholder="https://...">
+          <span class="dica">Cole um link público (Drive, YouTube, PDF online, etc.)</span>
+        </div>
+      </div>
+
+      <div id="mat-area-upload" style="display:none">
+        <div class="field">
+          <label>Arquivo</label>
+          <div class="upload-zona" id="mat-upload-zona" onclick="document.getElementById('mat-file-input').click()">
+            <input type="file" id="mat-file-input" accept=".pdf,.mp3,.mp4,.wav,.m4a,.docx,.pptx,.zip" onchange="onMatFileChange(event)">
+            <div class="upload-icon">📁</div>
+            <div class="upload-txt">Clique para selecionar</div>
+            <div class="upload-hint">PDF, MP3, MP4, DOCX, PPTX, ZIP — máx. 50MB</div>
+            <div class="upload-nome" id="mat-nome-arquivo"></div>
+          </div>
+          <div class="progress-bar" id="mat-progress-bar" style="display:none">
+            <div class="progress-fill" id="mat-progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">
+        <button class="btn btn-secondary" onclick="fecharModalMateriais()">Fechar</button>
+        <button class="btn btn-primary" id="btn-mat-add" onclick="adicionarMaterial()">+ Adicionar material</button>
+      </div>
+    `;
+  }
+
+  function fecharModalMateriais() {
+    document.getElementById('btn-salvar').style.display = '';
+    fecharModal();
+    materiaisAulaId = null;
+    materialUploadFile = null;
+  }
+
+  function setModoMaterial(modo) {
+    document.getElementById('mat-area-link').style.display   = modo === 'link'   ? '' : 'none';
+    document.getElementById('mat-area-upload').style.display = modo === 'upload' ? '' : 'none';
+    document.getElementById('btn-mat-link').classList.toggle('active',   modo === 'link');
+    document.getElementById('btn-mat-upload').classList.toggle('active', modo === 'upload');
+  }
+
+  function onMatFileChange(e) {
+    materialUploadFile = e.target.files[0];
+    if (!materialUploadFile) return;
+    document.getElementById('mat-nome-arquivo').textContent = materialUploadFile.name;
+    document.getElementById('mat-upload-zona').classList.add('tem-arquivo');
+    // Sugere o título com base no nome do arquivo se vazio
+    const titEl = document.getElementById('mat-titulo');
+    if (titEl && !titEl.value) titEl.value = materialUploadFile.name.replace(/\.[^.]+$/, '');
+  }
+
+  async function uploadMaterialArquivo(file) {
+    const bar  = document.getElementById('mat-progress-bar');
+    const fill = document.getElementById('mat-progress-fill');
+    bar.style.display = 'block'; fill.style.width = '30%';
+
+    const ext  = file.name.split('.').pop();
+    const path = `materiais/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+    const { error } = await db.storage.from(BUCKET)
+      .upload(path, file, { cacheControl: '3600', upsert: false });
+
+    fill.style.width = '100%';
+    if (error) {
+      toast('Erro no upload: ' + error.message, 'err');
+      bar.style.display = 'none';
+      return null;
+    }
+    const { data: { publicUrl } } = db.storage.from(BUCKET).getPublicUrl(path);
+    return { url: publicUrl, nome: file.name, tamanho: file.size };
+  }
+
+  async function adicionarMaterial() {
+    const titulo = document.getElementById('mat-titulo').value.trim();
+    if (!titulo) { toast('Informe o título do material', 'err'); return; }
+
+    const tipo      = document.getElementById('mat-tipo').value;
+    const descricao = document.getElementById('mat-descricao').value.trim() || null;
+    const ehUpload  = document.getElementById('mat-area-upload').style.display !== 'none';
+
+    let url = null, nomeArquivo = null, tamanho = null;
+
+    const btn = document.getElementById('btn-mat-add');
+    btn.disabled = true; btn.textContent = 'Salvando...';
+
+    if (ehUpload) {
+      if (!materialUploadFile) {
+        toast('Selecione um arquivo', 'err');
+        btn.disabled = false; btn.textContent = '+ Adicionar material'; return;
+      }
+      const up = await uploadMaterialArquivo(materialUploadFile);
+      if (!up) { btn.disabled = false; btn.textContent = '+ Adicionar material'; return; }
+      url = up.url; nomeArquivo = up.nome; tamanho = up.tamanho;
+    } else {
+      url = document.getElementById('mat-url').value.trim();
+      if (!url) {
+        toast('Informe a URL do material', 'err');
+        btn.disabled = false; btn.textContent = '+ Adicionar material'; return;
+      }
+    }
+
+    const proxOrdem = (materiaisPorAula[materiaisAulaId] || []).length;
+    const payload = {
+      aula_id: materiaisAulaId,
+      titulo, tipo, url,
+      descricao,
+      tamanho_bytes: tamanho,
+      nome_arquivo:  nomeArquivo,
+      ordem: proxOrdem,
+    };
+
+    const { data, error } = await db.from('materiais_lms').insert(payload).select().single();
+    btn.disabled = false; btn.textContent = '+ Adicionar material';
+
+    if (error) { toast('Erro ao salvar: ' + error.message, 'err'); return; }
+
+    (materiaisPorAula[materiaisAulaId] = materiaisPorAula[materiaisAulaId] || []).push(data);
+    materialUploadFile = null;
+    toast('Material adicionado!', 'ok');
+
+    // Re-render do modal e da lista de aulas (atualiza badge de contagem)
+    document.getElementById('modal-body').innerHTML = renderMateriaisModal();
+    renderListaAulas();
+  }
+
+  async function excluirMaterial(matId) {
+    if (!confirm('Excluir este material?')) return;
+
+    // localiza url em memoria antes de apagar a linha
+    let mat = null;
+    for (const arr of Object.values(materiaisPorAula)) {
+      mat = arr.find(m => m.id === matId);
+      if (mat) break;
+    }
+    if (mat?.url) await excluirArquivoStorage(mat.url); // best-effort
+
+    const { error } = await db.from('materiais_lms').delete().eq('id', matId);
+    if (error) { toast('Erro ao excluir: ' + error.message, 'err'); return; }
+
+    // Atualiza estado local
+    Object.keys(materiaisPorAula).forEach(aId => {
+      materiaisPorAula[aId] = (materiaisPorAula[aId] || []).filter(m => m.id !== matId);
+    });
+    toast('Material excluído.', 'ok');
+    document.getElementById('modal-body').innerHTML = renderMateriaisModal();
+    renderListaAulas();
+  }
+
+  /* ── DRAG & DROP: CURSOS / MÓDULOS / AULAS ───────── */
+  let dragCursoIdValue = null;
+  let dragLmsKind = null;        // 'modulo' | 'aula'
+  let dragLmsId = null;
+  let dragLmsSourceModId = null; // modulo_id de origem (para aulas)
+
+  function limparDragVisual() {
+    document.querySelectorAll('#tbody-cursos tr').forEach(el =>
+      el.classList.remove('curso-dragging', 'curso-drag-over'));
+    document.querySelectorAll('.modulo-wrap').forEach(el =>
+      el.classList.remove('dragging-modulo', 'drag-over-modulo', 'drag-over-modulo-aula'));
+    document.querySelectorAll('.aula-item').forEach(el =>
+      el.classList.remove('dragging-aula', 'drag-over-aula'));
+  }
+
+  /* — Cursos (linhas da tabela) — */
+  function dragStartCursoRow(e) {
+    dragCursoIdValue = e.currentTarget.dataset.cursoId;
+    e.currentTarget.classList.add('curso-dragging');
+    if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+  }
+  function dragOverCursoRow(e) {
+    if (!dragCursoIdValue) return;
+    e.preventDefault();
+    const tr = e.currentTarget;
+    if (tr.dataset.cursoId === dragCursoIdValue) return;
+    document.querySelectorAll('#tbody-cursos tr.curso-drag-over')
+      .forEach(r => r.classList.remove('curso-drag-over'));
+    tr.classList.add('curso-drag-over');
+  }
+  async function dragDropCursoRow(e) {
+    e.preventDefault();
+    const targetId = e.currentTarget.dataset.cursoId;
+    if (!dragCursoIdValue || dragCursoIdValue === targetId) return;
+    const fromIdx = dados.cursos.findIndex(c => c.id === dragCursoIdValue);
+    const toIdx   = dados.cursos.findIndex(c => c.id === targetId);
+    if (fromIdx < 0 || toIdx < 0) return;
+    const [moved] = dados.cursos.splice(fromIdx, 1);
+    dados.cursos.splice(toIdx, 0, moved);
+    dados.cursos.forEach((c, i) => { c.ordem = i; });
+    renderCursos();
+    const updates = dados.cursos.map(c =>
+      db.from('cursos_lms').update({ ordem: c.ordem }).eq('id', c.id)
+    );
+    const results = await Promise.all(updates);
+    const erro = results.find(r => r.error);
+    if (erro) { toast('Erro ao salvar ordem: ' + erro.error.message, 'err'); return; }
+    toast('Ordem dos cursos atualizada', 'ok');
+  }
+  function dragEndCursoRow() {
+    dragCursoIdValue = null;
+    document.querySelectorAll('#tbody-cursos tr').forEach(r =>
+      r.classList.remove('curso-dragging', 'curso-drag-over'));
+  }
+
+  /* — Módulos (drag pelo wrap inteiro, exceto aulas) — */
+  function dragStartModulo(e) {
+    dragLmsKind = 'modulo';
+    dragLmsId = e.currentTarget.dataset.modId;
+    dragLmsSourceModId = null;
+    e.currentTarget.classList.add('dragging-modulo');
+    if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+  }
+  function dragOverModulo(e) {
+    if (!dragLmsKind) return;
+    e.preventDefault();
+    const wrap = e.currentTarget;
+    if (dragLmsKind === 'modulo') {
+      if (wrap.dataset.modId === dragLmsId) return;
+      document.querySelectorAll('.modulo-wrap.drag-over-modulo')
+        .forEach(r => r.classList.remove('drag-over-modulo'));
+      wrap.classList.add('drag-over-modulo');
+    } else if (dragLmsKind === 'aula') {
+      document.querySelectorAll('.modulo-wrap.drag-over-modulo-aula')
+        .forEach(r => r.classList.remove('drag-over-modulo-aula'));
+      wrap.classList.add('drag-over-modulo-aula');
+    }
+  }
+  async function dragDropModulo(e) {
+    e.preventDefault();
+    const targetModId = e.currentTarget.dataset.modId;
+
+    if (dragLmsKind === 'modulo') {
+      if (!dragLmsId || dragLmsId === targetModId) { dragEndModulo(); return; }
+      const ordenados = [...modulosDoAtivo].sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+      const fromIdx = ordenados.findIndex(m => m.id === dragLmsId);
+      const toIdx   = ordenados.findIndex(m => m.id === targetModId);
+      if (fromIdx < 0 || toIdx < 0) { dragEndModulo(); return; }
+      const [moved] = ordenados.splice(fromIdx, 1);
+      ordenados.splice(toIdx, 0, moved);
+      ordenados.forEach((m, i) => { m.ordem = i; });
+      modulosDoAtivo = ordenados;
+      renderListaAulas();
+      const updates = ordenados.map(m =>
+        db.from('modulos_lms').update({ ordem: m.ordem }).eq('id', m.id)
+      );
+      const results = await Promise.all(updates);
+      const erro = results.find(r => r.error);
+      if (erro) { toast('Erro ao salvar ordem: ' + erro.error.message, 'err'); return; }
+      toast('Ordem dos módulos atualizada', 'ok');
+    } else if (dragLmsKind === 'aula') {
+      if (!dragLmsId) { dragEndModulo(); return; }
+      const tgtList = aulasDoAtivo.filter(a => a.modulo_id === targetModId && a.id !== dragLmsId);
+      await moverAula(dragLmsId, targetModId, tgtList.length);
+    }
+    dragEndModulo();
+  }
+  function dragEndModulo() {
+    dragLmsKind = null; dragLmsId = null; dragLmsSourceModId = null;
+    limparDragVisual();
+  }
+
+  /* — Aulas — */
+  function dragStartAula(e) {
+    e.stopPropagation();
+    dragLmsKind = 'aula';
+    dragLmsId = e.currentTarget.dataset.aulaId;
+    dragLmsSourceModId = e.currentTarget.dataset.modId;
+    e.currentTarget.classList.add('dragging-aula');
+    if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+  }
+  function dragOverAula(e) {
+    if (!dragLmsKind) return;
+    // Permite drop também quando arrastando módulo (deixa o evento subir p/ wrap)
+    if (dragLmsKind !== 'aula') { e.preventDefault(); return; }
+    e.preventDefault();
+    e.stopPropagation();
+    const item = e.currentTarget;
+    if (item.dataset.aulaId === dragLmsId) return;
+    document.querySelectorAll('.aula-item.drag-over-aula')
+      .forEach(r => r.classList.remove('drag-over-aula'));
+    item.classList.add('drag-over-aula');
+  }
+  async function dragDropAula(e) {
+    if (dragLmsKind !== 'aula') return;
+    e.preventDefault();
+    e.stopPropagation();
+    const targetAulaId = e.currentTarget.dataset.aulaId;
+    const targetModId  = e.currentTarget.dataset.modId;
+    if (!dragLmsId || dragLmsId === targetAulaId) { dragEndAula(); return; }
+    const tgtList = aulasDoAtivo
+      .filter(a => a.modulo_id === targetModId)
+      .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+    const targetIdx = tgtList.findIndex(a => a.id === targetAulaId);
+    await moverAula(dragLmsId, targetModId, targetIdx);
+    dragEndAula();
+  }
+  function dragEndAula() {
+    dragLmsKind = null; dragLmsId = null; dragLmsSourceModId = null;
+    limparDragVisual();
+  }
+
+  /* — Drop em módulo vazio (placeholder "Nenhuma aula neste módulo") — */
+  function dragOverEmptyModSlot(e) {
+    if (dragLmsKind !== 'aula') return;
+    e.preventDefault();
+    e.stopPropagation();
+    const wrap = e.currentTarget.closest('.modulo-wrap');
+    if (wrap) {
+      document.querySelectorAll('.modulo-wrap.drag-over-modulo-aula')
+        .forEach(r => r.classList.remove('drag-over-modulo-aula'));
+      wrap.classList.add('drag-over-modulo-aula');
+    }
+  }
+  async function dragDropEmptyModSlot(e) {
+    if (dragLmsKind !== 'aula') return;
+    e.preventDefault();
+    e.stopPropagation();
+    const targetModId = e.currentTarget.dataset.modId;
+    if (!dragLmsId || !targetModId) { dragEndAula(); return; }
+    await moverAula(dragLmsId, targetModId, 0);
+    dragEndAula();
+  }
+
+  /* — Mover aula (entre/dentro de módulos) e persistir — */
+  async function moverAula(aulaId, targetModId, targetIdx) {
+    const aula = aulasDoAtivo.find(a => a.id === aulaId);
+    if (!aula) return;
+    const sourceModId = aula.modulo_id;
+    const sameMod = sourceModId === targetModId;
+
+    const sourceList = aulasDoAtivo
+      .filter(a => a.modulo_id === sourceModId)
+      .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+    const srcIdx = sourceList.indexOf(aula);
+    sourceList.splice(srcIdx, 1);
+
+    aula.modulo_id = targetModId;
+
+    let listasModificadas;
+    if (sameMod) {
+      const adjusted = srcIdx < targetIdx ? targetIdx - 1 : targetIdx;
+      sourceList.splice(adjusted, 0, aula);
+      sourceList.forEach((a, i) => { a.ordem = i; });
+      listasModificadas = [sourceList];
+    } else {
+      const targetList = aulasDoAtivo
+        .filter(a => a.modulo_id === targetModId && a.id !== aulaId)
+        .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+      targetList.splice(Math.min(targetIdx, targetList.length), 0, aula);
+      sourceList.forEach((a, i) => { a.ordem = i; });
+      targetList.forEach((a, i) => { a.ordem = i; });
+      listasModificadas = [sourceList, targetList];
+    }
+
+    renderListaAulas();
+
+    const aulasParaAtualizar = listasModificadas.flat();
+    const updates = aulasParaAtualizar.map(a =>
+      db.from('aulas_lms')
+        .update({ modulo_id: a.modulo_id, ordem: a.ordem })
+        .eq('id', a.id)
+    );
+    const results = await Promise.all(updates);
+    const erro = results.find(r => r.error);
+    if (erro) { toast('Erro ao salvar ordem: ' + erro.error.message, 'err'); return; }
+    toast('Ordem das aulas atualizada', 'ok');
+  }
+
+  function tipoParaChave(tipo) {
+    return tipo === 'pregacao' ? 'pregacoes' : tipo === 'curso' ? 'cursos' : 'biblioteca';
+  }
+
+  /* ── RENDER ──────────────────────────────────────── */
+  function renderTabela(chave, itens) {
+    const tbody = document.getElementById('tbody-' + chave);
+    const colspan = chave === 'pregacoes' ? 7 : 6;
+    if (!itens.length) {
+      const labels = { pregacoes:'pregação', cursos:'curso', biblioteca:'item' };
+      tbody.innerHTML = `<tr><td colspan="${colspan}">
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          Nenhum ${labels[chave]} cadastrado ainda.
+        </div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = itens.map(item => linhaHtml(chave, item)).join('');
+  }
+
+  function linhaHtml(chave, item, ordem = null) {
+    // ── Thumbnail: YouTube preview ou placeholder
+    let thumb;
+    const ytId = extrairYtId(item.link_externo);
+    if (ytId) {
+      thumb = `<div class="thumb-yt" onclick="window.open('https://youtu.be/${ytId}','_blank')" title="Assistir no YouTube">
+        <img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg" alt="" loading="lazy">
+        <div class="yt-play">▶️</div>
+      </div>`;
+    } else if (item.thumbnail_url) {
+      thumb = `<img class="thumb-img" src="${esc(item.thumbnail_url)}" alt="">`;
+    } else {
+      thumb = `<div class="thumb-placeholder">${iconeItem(item)}</div>`;
+    }
+
+    const sub = item.serie
+      ? `<div class="titulo-sub">📌 ${esc(item.serie)}</div>`
+      : item.categoria
+      ? `<div class="titulo-sub">🏷️ ${esc(item.categoria)}</div>` : '';
+
+    const badgeStatus = item.publicado
+      ? `<span class="badge badge-pub">✅ Publicado</span>`
+      : `<span class="badge badge-rascunho">Rascunho</span>`;
+
+    const badgeDest = item.destaque
+      ? `<span class="badge badge-dest" style="margin-left:4px">⭐ Destaque</span>` : '';
+
+    const colTipo = chave === 'biblioteca'
+      ? `<span class="badge badge-tipo">${labelSubtipo(item.subtipo)}</span>`
+      : chave === 'cursos'
+      ? esc(item.categoria || '—')
+      : `<span class="badge badge-tipo">${labelSubtipo(item.subtipo) || 'Vídeo'}</span>`;
+
+    // ── Coluna # de ordem (só no drill-down de playlist)
+    const total = playlistAtiva ? (pregPorPlaylist[playlistAtiva.id] || []).length : 0;
+    const colOrdem = ordem !== null
+      ? `<td style="text-align:center;width:64px">
+          <div class="col-ordem-ctrl">
+            <span style="cursor:grab;color:#ccc;font-size:16px;padding:2px"
+              draggable="true"
+              ondragstart="dragStartRow(event,${ordem - 1})"
+              ondragover="dragOverRow(event)"
+              ondrop="dragDropRow(event,${ordem - 1})"
+              ondragend="dragEndRow()">⠿</span>
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <button class="btn-ordem" onclick="moverVideo(${ordem - 1},-1)" ${ordem === 1 ? 'disabled' : ''}>▲</button>
+              <button class="btn-ordem" onclick="moverVideo(${ordem - 1},+1)" ${ordem === total ? 'disabled' : ''}>▼</button>
+            </div>
+            <div class="ordem-num">${ordem}</div>
+          </div>
+        </td>`
+      : '';
+
+    // ── Botão visualizar
+    const btnVisualizar = item.link_externo
+      ? `<button class="btn-sm btn-sm-view" onclick="window.open('${esc(item.link_externo)}','_blank')">▶ Ver</button>`
+      : item.arquivo_url
+      ? `<button class="btn-sm btn-sm-view" onclick="window.open('${esc(item.arquivo_url)}','_blank')">▶ Ver</button>`
+      : '';
+
+    const itemJson = JSON.stringify(item).replace(/'/g, '&#39;');
+
+    return `<tr>
+      ${colOrdem}
+      <td class="thumb-cell">${thumb}</td>
+      <td class="td-titulo">
+        <div class="titulo-main">${esc(item.titulo)}</div>
+        ${sub}
+      </td>
+      <td>${colTipo}</td>
+      <td style="color:#888;white-space:nowrap">${formatarData(item.data_publicacao)}</td>
+      <td>${badgeStatus}${badgeDest}</td>
+      <td><div class="td-acoes">
+        ${btnVisualizar}
+        <button class="btn-sm btn-sm-edit" data-acao="editar" onclick='editar(${itemJson})'>✏️ Editar</button>
+        <button class="btn-sm btn-sm-danger" data-acao="excluir" onclick="excluir('${item.id}','${chave}')">🗑️</button>
+      </div></td>
+    </tr>`;
+  }
+
+  /* ── EXTRAI ID DO YOUTUBE ────────────────────────── */
+  function extrairYtId(url) {
+    if (!url) return null;
+    const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    return m ? m[1] : null;
+  }
+
+  function iconeItem(item) {
+    const m = { pregacao:'🎙️', curso:'🎓', biblioteca:'📖',
+                ebook:'📄', devocional:'✝️', artigo:'📝', audio:'🎧', video:'🎬' };
+    return m[item.subtipo] || m[item.tipo] || '📄';
+  }
+
+  function labelSubtipo(s) {
+    const m = { ebook:'Ebook', devocional:'Devocional', artigo:'Artigo', audio:'Áudio', video:'Vídeo' };
+    return m[s] || s || '—';
+  }
+
+  function formatarData(d) {
+    if (!d) return '—';
+    const [y, m, dia] = d.split('-');
+    return `${dia}/${m}/${y}`;
+  }
+
+  function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function atualizarContador(chave, n) {
+    const cnt = document.getElementById('cnt-' + chave);
+    if (cnt) cnt.textContent = n ? `(${n})` : '';
+    const ctr = document.getElementById('contador-' + chave);
+    if (ctr) ctr.textContent = n + ' registro' + (n !== 1 ? 's' : '');
+  }
+
+  function popularFiltros(chave, itens) {
+    if (chave === 'biblioteca') return;
+    const campo = chave === 'pregacoes' ? 'serie' : 'categoria';
+    const selId = chave === 'pregacoes' ? 'filtro-serie-preg' : 'filtro-cat-curso';
+    const sel   = document.getElementById(selId);
+    if (!sel) return;
+    const vals  = [...new Set(itens.map(i => i[campo]).filter(Boolean))];
+    const label = chave === 'pregacoes' ? 'Todas as séries' : 'Todas as categorias';
+    sel.innerHTML = `<option value="">${label}</option>` +
+      vals.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  }
+
+  /* ── FILTROS ─────────────────────────────────────── */
+  function filtrar(chave, q) {
+    const lq = q.toLowerCase();
+    if (chave === 'cursos') {
+      renderCursos(dados.cursos.filter(c =>
+        (c.titulo||'').toLowerCase().includes(lq) ||
+        (c.descricao||'').toLowerCase().includes(lq) ||
+        (c.categoria||'').toLowerCase().includes(lq)
+      ));
+      return;
+    }
+    renderTabela(chave, dados[chave].filter(i =>
+      (i.titulo||'').toLowerCase().includes(lq) ||
+      (i.descricao||'').toLowerCase().includes(lq) ||
+      (i.serie||'').toLowerCase().includes(lq) ||
+      (i.categoria||'').toLowerCase().includes(lq)
+    ));
+  }
+
+  function filtrarPorCampo(chave, campo, val) {
+    if (chave === 'cursos') {
+      renderCursos(val ? dados.cursos.filter(c => c[campo] === val) : null);
+      return;
+    }
+    if (!val) { renderTabela(chave, dados[chave]); return; }
+    renderTabela(chave, dados[chave].filter(i => i[campo] === val));
+  }
+
+  /* ── MODAL ───────────────────────────────────────── */
+  function abrirModal(tipo, item = null) {
+    if (tipo === 'curso') { abrirFormCurso(item); return; }
+
+    editandoId = item ? item.id : null;
+    uploadFile = null;
+    modoFonte  = item?.arquivo_url && !item?.link_externo ? 'upload' : 'link';
+
+    const labels = { pregacao:'Pregação', curso:'Curso', biblioteca:'Item de Biblioteca' };
+    document.getElementById('modal-titulo').textContent = (item ? 'Editar ' : 'Nova ') + labels[tipo];
+    document.getElementById('modal-body').innerHTML = construirForm(tipo, item);
+    // garante que salvar() usa o handler padrão
+    document.getElementById('btn-salvar').onclick = salvar;
+    document.getElementById('modal-conteudo').classList.add('aberto');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function fecharModal() {
+    document.getElementById('modal-conteudo').classList.remove('aberto');
+    document.body.style.overflow = '';
+    editandoId      = null;
+    editandoCursoId = null;
+    uploadFile      = null;
+    materiaisAulaId = null;
+    materialUploadFile = null;
+    const btnSalvar = document.getElementById('btn-salvar');
+    btnSalvar.onclick = salvar;
+    btnSalvar.style.display = '';
+  }
+
+  function construirForm(tipo, item) {
+    const v   = f => item ? (item[f] ?? '') : '';
+    const chk = (f, def = false) => (item ? item[f] : def) ? 'checked' : '';
+
+    let campoSubtipo = '';
+    if (tipo === 'pregacao') {
+      campoSubtipo = `<div class="field">
+        <label>Tipo de mídia</label>
+        <select name="subtipo">
+          <option value="video"  ${v('subtipo')==='video' ?'selected':''}>🎬 Vídeo</option>
+          <option value="audio"  ${v('subtipo')==='audio' ?'selected':''}>🎧 Áudio</option>
+        </select></div>`;
+    } else if (tipo === 'biblioteca') {
+      campoSubtipo = `<div class="field">
+        <label>Tipo de material <span class="req">*</span></label>
+        <select name="subtipo" required>
+          <option value="">Selecione...</option>
+          <option value="ebook"      ${v('subtipo')==='ebook'     ?'selected':''}>📄 Ebook (PDF)</option>
+          <option value="devocional" ${v('subtipo')==='devocional'?'selected':''}>✝️ Devocional</option>
+          <option value="artigo"     ${v('subtipo')==='artigo'    ?'selected':''}>📝 Artigo</option>
+          <option value="audio"      ${v('subtipo')==='audio'     ?'selected':''}>🎧 Áudio / Podcast</option>
+        </select></div>`;
+    }
+
+    const campoSerieOuCat = tipo === 'pregacao'
+      ? `<div class="field"><label>Série</label>
+          <input name="serie" value="${esc(v('serie'))}" placeholder="Ex: Série Fé Viva"></div>`
+      : `<div class="field"><label>Categoria</label>
+          <input name="categoria" value="${esc(v('categoria'))}" placeholder="Ex: Discipulado"></div>`;
+
+    // ── Campo playlist (só para pregações)
+    const plAtual = item ? Object.entries(pregPorPlaylist).find(([pid, ids]) => ids.includes(item.id))?.[0] || '' : '';
+    const campoPlaylist = tipo === 'pregacao' ? `
+      <div class="field" style="grid-column:1/-1">
+        <label>Playlist</label>
+        <div class="pl-select-row">
+          <select name="playlist_id" id="select-playlist-form">
+            <option value="">— Sem playlist —</option>
+            ${playlists.map(p => `<option value="${p.id}" ${plAtual === p.id ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}
+          </select>
+          <button type="button" class="btn-pl-novo" onclick="toggleNovaPlaylistInline()">+ Nova playlist</button>
+        </div>
+        <div class="pl-inline-box" id="pl-inline-box">
+          <div class="pl-inline-titulo">➕ Criar nova playlist</div>
+          <div class="pl-inline-row">
+            <div class="field">
+              <label>Nome da playlist <span class="req">*</span></label>
+              <input id="pl-inline-nome" placeholder="Ex: Série Fé Viva" oninput="this.style.borderColor=''">
+            </div>
+            <div class="pl-inline-acoes">
+              <button type="button" class="btn btn-primary" style="padding:9px 14px;font-size:13px" onclick="criarPlaylistInline()">Criar</button>
+              <button type="button" class="btn btn-secondary" style="padding:9px 12px;font-size:13px" onclick="toggleNovaPlaylistInline(false)">✕</button>
+            </div>
+          </div>
+        </div>
+      </div>` : '';
+
+    return `
+      <div class="section-div">Informações básicas</div>
+      <div class="field">
+        <label>Título <span class="req">*</span></label>
+        <input name="titulo" value="${esc(v('titulo'))}" placeholder="Título do conteúdo" required>
+      </div>
+      <div class="field">
+        <label>Descrição / Resumo</label>
+        <textarea name="descricao" placeholder="Breve descrição...">${esc(v('descricao'))}</textarea>
+      </div>
+      <div class="form-row">
+        ${campoSubtipo}
+        <div class="field">
+          <label>Data de publicação</label>
+          <input type="date" name="data_publicacao" value="${v('data_publicacao') || new Date().toISOString().slice(0,10)}">
+        </div>
+      </div>
+      <div class="form-row">
+        ${campoSerieOuCat}
+        <div class="field">
+          <label>Thumbnail (URL)</label>
+          <input name="thumbnail_url" value="${esc(v('thumbnail_url'))}" placeholder="https://...">
+        </div>
+      </div>
+      ${campoPlaylist}
+
+      <div class="section-div">Fonte do conteúdo</div>
+      <div class="fonte-toggle">
+        <button id="btn-fonte-link"   class="${modoFonte==='link'  ?'active':''}" onclick="setModoFonte('link')">🔗 Link externo</button>
+        <button id="btn-fonte-upload" class="${modoFonte==='upload'?'active':''}" onclick="setModoFonte('upload')">📁 Upload de arquivo</button>
+      </div>
+
+      <div id="area-link" style="${modoFonte!=='link'?'display:none':''}">
+        <div class="field">
+          <label>Link externo</label>
+          <input name="link_externo" value="${esc(v('link_externo'))}" placeholder="https://youtube.com/watch?v=...">
+          <span class="dica">YouTube, Spotify, Google Drive, etc.</span>
+        </div>
+      </div>
+
+      <div id="area-upload" style="${modoFonte!=='upload'?'display:none':''}">
+        <div class="field">
+          <label>Arquivo</label>
+          <div class="upload-zona ${v('arquivo_nome')?'tem-arquivo':''}" onclick="document.getElementById('file-input').click()">
+            <input type="file" id="file-input" accept=".pdf,.mp3,.mp4,.wav,.m4a" onchange="handleFile(event)">
+            <div class="upload-icon">📁</div>
+            <div class="upload-txt">Clique para selecionar</div>
+            <div class="upload-hint">PDF, MP3, MP4, WAV — máx. 50MB</div>
+            <div class="upload-nome" id="nome-arquivo">${esc(v('arquivo_nome'))}</div>
+          </div>
+          <div class="progress-bar" id="progress-bar" style="display:none">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-div">Visibilidade</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-row-label">Publicar</div>
+            <div class="toggle-row-desc">Aparece na página pública da igreja</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" name="publicado" ${chk('publicado')}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-row-label">Destaque</div>
+            <div class="toggle-row-desc">Aparece em posição de destaque no site</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" name="destaque" ${chk('destaque')}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <input type="hidden" name="tipo"         value="${tipo}">
+      <input type="hidden" name="arquivo_url"  value="${esc(v('arquivo_url'))}">
+      <input type="hidden" name="arquivo_nome" value="${esc(v('arquivo_nome'))}">
+    `;
+  }
+
+  function setModoFonte(modo) {
+    modoFonte = modo;
+    document.getElementById('area-link').style.display   = modo === 'link'   ? '' : 'none';
+    document.getElementById('area-upload').style.display = modo === 'upload' ? '' : 'none';
+    document.getElementById('btn-fonte-link').classList.toggle('active',   modo === 'link');
+    document.getElementById('btn-fonte-upload').classList.toggle('active', modo === 'upload');
+  }
+
+  function handleFile(e) {
+    uploadFile = e.target.files[0];
+    if (!uploadFile) return;
+    document.getElementById('nome-arquivo').textContent = uploadFile.name;
+    document.querySelector('.upload-zona').classList.add('tem-arquivo');
+  }
+
+  /* ── SALVAR ──────────────────────────────────────── */
+  async function salvar() {
+    const body = document.getElementById('modal-body');
+    const get  = n => body.querySelector(`[name="${n}"]`);
+
+    const titulo = get('titulo').value.trim();
+    if (!titulo) { toast('Título é obrigatório', 'err'); return; }
+
+    const tipo = get('tipo').value;
+    if (tipo === 'curso') { await salvarCurso(); return; }
+    if (tipo === 'biblioteca' && !get('subtipo')?.value) {
+      toast('Selecione o tipo de material', 'err'); return;
+    }
+
+    const btn = document.getElementById('btn-salvar');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+
+    let arquivo_url  = get('arquivo_url')?.value  || '';
+    let arquivo_nome = get('arquivo_nome')?.value || '';
+
+    if (modoFonte === 'upload' && uploadFile) {
+      const res = await fazerUpload(uploadFile);
+      if (!res) { btn.disabled = false; btn.textContent = '💾 Salvar'; return; }
+      arquivo_url  = res.url;
+      arquivo_nome = uploadFile.name;
+    }
+
+    const payload = {
+      tipo,
+      subtipo:         get('subtipo')?.value         || null,
+      titulo,
+      descricao:       get('descricao')?.value        || null,
+      serie:           get('serie')?.value            || null,
+      categoria:       get('categoria')?.value        || null,
+      thumbnail_url:   get('thumbnail_url')?.value    || null,
+      link_externo:    modoFonte === 'link'   ? (get('link_externo')?.value || null) : null,
+      arquivo_url:     modoFonte === 'upload' ? (arquivo_url  || null)               : null,
+      arquivo_nome:    modoFonte === 'upload' ? (arquivo_nome || null)               : null,
+      data_publicacao: get('data_publicacao')?.value  || new Date().toISOString().slice(0,10),
+      publicado:       get('publicado')?.checked  || false,
+      destaque:        get('destaque')?.checked   || false,
+    };
+
+    let error, novoId;
+    if (editandoId) {
+      ({ error } = await db.from('conteudos').update(payload).eq('id', editandoId));
+    } else {
+      const { data: { user } } = await db.auth.getUser();
+      payload.criado_por = user?.id;
+      const { data: inserido, error: errIns } = await db.from('conteudos').insert(payload).select('id').single();
+      error   = errIns;
+      novoId  = inserido?.id;
+    }
+
+    btn.disabled = false;
+    btn.textContent = '💾 Salvar';
+
+    if (error) { toast('Erro ao salvar: ' + error.message, 'err'); return; }
+
+    // ── Salva relação com playlist (só pregações)
+    if (tipo === 'pregacao') {
+      const plSel = get('playlist_id')?.value || '';
+      const cid   = editandoId || novoId;
+      if (cid) {
+        await db.from('pregacao_playlist_itens').delete().eq('conteudo_id', cid);
+        if (plSel) {
+          const proximaOrdem = (pregPorPlaylist[plSel] || []).length;
+          await db.from('pregacao_playlist_itens').insert({ playlist_id: plSel, conteudo_id: cid, ordem: proximaOrdem });
+        }
+        await carregarPlaylists();
+      }
+    }
+
+    toast(editandoId ? 'Conteúdo atualizado!' : 'Conteúdo salvo!', 'ok');
+    fecharModal();
+    await carregarAba(tipo);
+  }
+
+  async function fazerUpload(file) {
+    const bar  = document.getElementById('progress-bar');
+    const fill = document.getElementById('progress-fill');
+    bar.style.display = 'block';
+    fill.style.width  = '30%';
+
+    const ext  = file.name.split('.').pop();
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+    const { error } = await db.storage
+      .from(BUCKET)
+      .upload(path, file, { cacheControl: '3600', upsert: false });
+
+    fill.style.width = '100%';
+
+    if (error) {
+      toast('Erro no upload: ' + error.message, 'err');
+      bar.style.display = 'none';
+      return null;
+    }
+
+    const { data: { publicUrl } } = db.storage.from(BUCKET).getPublicUrl(path);
+    return { url: publicUrl };
+  }
+
+  /* ── EDITAR ──────────────────────────────────────── */
+  function editar(item) { abrirModal(item.tipo, item); }
+
+  /* ── EXCLUIR ─────────────────────────────────────── */
+  async function excluir(id, chave) {
+    if (chave === 'cursos') { await excluirCurso(id); return; }
+    if (!confirm('Confirma a exclusão? Esta ação não pode ser desfeita.')) return;
+    if (chave === 'pregacoes') {
+      await db.from('pregacao_playlist_itens').delete().eq('conteudo_id', id);
+    }
+    const { error } = await db.from('conteudos').delete().eq('id', id);
+    if (error) { toast('Erro ao excluir: ' + error.message, 'err'); return; }
+    toast('Conteúdo excluído.', 'ok');
+    const tipoMap = { pregacoes:'pregacao', cursos:'curso', biblioteca:'biblioteca' };
+    await carregarAba(tipoMap[chave]);
+    if (chave === 'pregacoes') await carregarPlaylists();
+  }
+
+  /* ── FILTRAR POR PLAYLIST ────────────────────────── */
+  function filtrarPorPlaylist(plId) {
+    if (!plId) { renderPregacoesAba(); return; }
+    abrirPlaylist(plId);
+  }
+
+  /* ── CARREGAR PLAYLISTS ──────────────────────────── */
+  async function carregarPlaylists() {
+    const { data: pls, error } = await db.from('pregacao_playlists').select('*').order('ordem', { ascending: true }).order('nome');
+    if (error) { console.error('Erro playlists:', error); return; }
+    playlists = pls || [];
+
+    // Carrega relações COM ordem
+    const { data: rels } = await db.from('pregacao_playlist_itens')
+      .select('playlist_id, conteudo_id, ordem')
+      .order('ordem', { ascending: true });
+
+    pregPorPlaylist = {};
+    (rels || []).forEach(r => {
+      if (!pregPorPlaylist[r.playlist_id]) pregPorPlaylist[r.playlist_id] = [];
+      pregPorPlaylist[r.playlist_id].push({ conteudo_id: r.conteudo_id, ordem: r.ordem });
+    });
+
+    renderPregacoesAba();
+    atualizarContador('playlists', playlists.length);
+    renderPlaylists(); // sempre renderiza a aba playlists
+  }
+
+  /* ── RENDER ABA PREGAÇÕES (modo grade de playlists) ─ */
+  function renderPregacoesAba() {
+    // Se estiver com playlist aberta, re-renderiza o drill-down
+    if (playlistAtiva) { abrirPlaylist(playlistAtiva.id); return; }
+
+    const grid = document.getElementById('preg-playlist-grid');
+    if (!grid) return;
+
+    if (!playlists.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">🎞️</div>
+        Nenhuma playlist criada ainda.<br>
+        <button class="btn btn-primary" style="margin-top:14px" onclick="abrirModalPlaylist()">+ Criar primeira playlist</button>
+      </div>`;
+    } else {
+      grid.innerHTML = playlists.map(pl => cardPlaylistHtml(pl)).join('');
+    }
+
+    // Pregações sem playlist
+    const idsComPl = new Set(
+      Object.values(pregPorPlaylist).flatMap(arr => arr.map(r => r.conteudo_id))
+    );
+    const semPl = dados.pregacoes.filter(p => !idsComPl.has(p.id));
+    const wrapSemPl = document.getElementById('preg-sem-playlist-wrap');
+    const tbodySemPl = document.getElementById('tbody-sem-playlist');
+    if (wrapSemPl && tbodySemPl) {
+      wrapSemPl.style.display = semPl.length ? '' : 'none';
+      tbodySemPl.innerHTML = semPl.map(item => linhaHtml('pregacoes', item, null)).join('');
+    }
+
+    atualizarContador('pregacoes', dados.pregacoes.length);
+  }
+
+  /* ── CARD DE PLAYLIST ────────────────────────────── */
+  function cardPlaylistHtml(pl) {
+    const itens = pregPorPlaylist[pl.id] || [];
+    const count = itens.length;
+
+    let capaUrl = pl.thumbnail_url || null;
+    if (!capaUrl && itens.length) {
+      const primeiro = dados.pregacoes.find(p => p.id === itens[0].conteudo_id);
+      if (primeiro) {
+        const ytId = extrairYtId(primeiro.link_externo);
+        capaUrl = ytId
+          ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`
+          : primeiro.thumbnail_url || null;
+      }
+    }
+
+    const thumbHtml = capaUrl
+      ? `<img src="${esc(capaUrl)}" alt="" onerror="this.style.display='none'">`
+      : `<span>🎞️</span>`;
+
+    return `<div class="playlist-card" draggable="true" data-plid="${pl.id}"
+      onclick="abrirPlaylist('${pl.id}')"
+      ondragstart="dragStartCard(event)" ondragover="dragOverCard(event)"
+      ondrop="dragDropCard(event)" ondragend="dragEndCard(event)">
+      <div class="playlist-card-thumb">
+        <span class="playlist-card-drag-handle" title="Arrastar para reordenar">⠿</span>
+        ${thumbHtml}
+        <span class="pl-count">${count} vídeo${count !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="playlist-card-info">
+        <div class="playlist-card-nome">${esc(pl.nome)}</div>
+        <div class="playlist-card-desc">${esc(pl.descricao || 'Clique para ver os vídeos')}</div>
+        <div class="playlist-card-acoes" onclick="event.stopPropagation()">
+          <button class="btn-sm btn-sm-edit" data-acao="editar" data-plid="${pl.id}" onclick="editarPlaylistPorId(this.dataset.plid)">✏️ Editar</button>
+          <button class="btn-sm btn-sm-danger" data-acao="excluir" onclick="excluirPlaylist('${pl.id}')">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  /* ── ABRIR PLAYLIST (drill-down) ─────────────────── */
+  function abrirPlaylist(plId) {
+    const pl = playlists.find(p => p.id === plId);
+    if (!pl) return;
+    playlistAtiva = pl;
+
+    document.getElementById('preg-modo-playlists').style.display = 'none';
+    document.getElementById('preg-modo-videos').style.display    = 'block';
+
+    document.getElementById('preg-pl-nome-titulo').textContent = pl.nome;
+
+    const itens = (pregPorPlaylist[pl.id] || []).slice().sort((a, b) => a.ordem - b.ordem);
+    const videos = itens.map((it, idx) => {
+      const p = dados.pregacoes.find(x => x.id === it.conteudo_id);
+      return p ? { ...p, _ordem: idx + 1 } : null;
+    }).filter(Boolean);
+
+    document.getElementById('preg-pl-contador').textContent = videos.length + ' vídeo' + (videos.length !== 1 ? 's' : '');
+    document.getElementById('tbody-pregacoes').innerHTML = videos.length
+      ? videos.map(item => linhaHtml('pregacoes', item, item._ordem)).join('')
+      : `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📭</div>Nenhuma pregação nesta playlist ainda.</div></td></tr>`;
+  }
+
+  /* ── VOLTAR PARA GRADE DE PLAYLISTS ──────────────── */
+  function voltarParaPlaylists() {
+    playlistAtiva = null;
+    document.getElementById('preg-modo-playlists').style.display = 'block';
+    document.getElementById('preg-modo-videos').style.display    = 'none';
+    renderPregacoesAba();
+  }
+
+  /* ── RENDER ABA PLAYLISTS (aba separada) ────────────*/
+  function renderPlaylists() {
+    const grid = document.getElementById('playlist-grid');
+    if (!grid) return;
+    if (!playlists.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">🎞️</div>Nenhuma playlist criada ainda.
+      </div>`;
+      return;
+    }
+    grid.innerHTML = playlists.map(pl => cardPlaylistHtml(pl)).join('');
+  }
+
+  /* ── MODAL PLAYLIST ──────────────────────────────── */
+  function editarPlaylistPorId(id) {
+    const pl = playlists.find(p => p.id === id);
+    if (pl) abrirModalPlaylist(pl);
+  }
+
+  function abrirModalPlaylist(pl = null) {
+    editandoPlId = pl ? pl.id : null;
+    document.getElementById('modal-pl-titulo').textContent = pl ? 'Editar Playlist' : 'Nova Playlist';
+    document.getElementById('pl-nome').value  = pl?.nome  || '';
+    document.getElementById('pl-desc').value  = pl?.descricao || '';
+
+    // Reset campos de imagem
+    const thumbFinal = document.getElementById('pl-thumb-final');
+    const thumbUrl   = document.getElementById('pl-thumb');
+    const preview    = document.getElementById('pl-thumb-preview');
+    const previewWrap= document.getElementById('pl-capa-preview-wrap');
+    const zona       = document.getElementById('pl-upload-zona');
+    const fileInp    = document.getElementById('pl-file-input');
+
+    if (thumbUrl)  thumbUrl.value  = pl?.thumbnail_url || '';
+    thumbFinal.value = pl?.thumbnail_url || '';
+    fileInp.value = '';
+
+    if (pl?.thumbnail_url) {
+      preview.src = pl.thumbnail_url;
+      previewWrap.style.display = 'block';
+      zona.style.display = 'none';
+    } else {
+      previewWrap.style.display = 'none';
+      zona.style.display = '';
+    }
+
+    document.getElementById('modal-playlist').classList.add('aberto');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function fecharModalPlaylist() {
+    document.getElementById('modal-playlist').classList.remove('aberto');
+    document.body.style.overflow = '';
+    editandoPlId = null;
+    document.getElementById('pl-file-input').value = '';
+  }
+
+  /* ── CAPA: handlers de arquivo e URL ─────────────── */
+  /* ── REDIMENSIONA IMAGEM PARA 16:9 COM FUNDO DESFOCADO ─ */
+  function redimensionarCapa(file) {
+    return new Promise((resolve) => {
+      const TARGET_W = 1280, TARGET_H = 720;
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const canvas = document.createElement('canvas');
+        canvas.width  = TARGET_W;
+        canvas.height = TARGET_H;
+        const ctx = canvas.getContext('2d');
+
+        // Fundo: versão desfocada e escurecida da própria imagem
+        ctx.filter = 'blur(24px) brightness(0.5)';
+        ctx.drawImage(img, -40, -40, TARGET_W + 80, TARGET_H + 80);
+        ctx.filter = 'none';
+
+        // Imagem centralizada sem corte (fit)
+        const scale = Math.min(TARGET_W / img.width, TARGET_H / img.height);
+        const dw = img.width  * scale;
+        const dh = img.height * scale;
+        const dx = (TARGET_W - dw) / 2;
+        const dy = (TARGET_H - dh) / 2;
+        ctx.drawImage(img, dx, dy, dw, dh);
+
+        canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.88);
+      };
+      img.src = url;
+    });
+  }
+
+  function onCapaFileChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) { toast('Imagem muito grande. Máximo 10MB.', 'err'); return; }
+
+    // Preview imediato com a imagem original (antes do crop)
+    const reader = new FileReader();
+    reader.onload = ev => mostrarPreviewCapa(ev.target.result);
+    reader.readAsDataURL(file);
+
+    document.getElementById('pl-thumb-final').value = '__upload__';
+  }
+
+  function onCapaUrlChange(url) {
+    document.getElementById('pl-thumb-final').value = url;
+    if (url) mostrarPreviewCapa(url);
+    else removerCapaPl();
+  }
+
+  function mostrarPreviewCapa(src) {
+    const preview     = document.getElementById('pl-thumb-preview');
+    const previewWrap = document.getElementById('pl-capa-preview-wrap');
+    const zona        = document.getElementById('pl-upload-zona');
+    preview.src = src;
+    previewWrap.style.display = 'block';
+    zona.style.display = 'none';
+  }
+
+  function removerCapaPl() {
+    document.getElementById('pl-thumb-preview').src = '';
+    document.getElementById('pl-capa-preview-wrap').style.display = 'none';
+    document.getElementById('pl-upload-zona').style.display = '';
+    document.getElementById('pl-thumb-final').value = '';
+    document.getElementById('pl-thumb').value = '';
+    document.getElementById('pl-file-input').value = '';
+  }
+
+  async function uploadCapaPlaylist(file) {
+    const bar  = document.getElementById('pl-progress-bar');
+    const fill = document.getElementById('pl-progress-fill');
+    bar.style.display = 'block';
+    fill.style.width  = '20%';
+
+    // Redimensiona para 1280×720 antes de enviar
+    const blob = await redimensionarCapa(file);
+    fill.style.width = '50%';
+
+    const path = `capa-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
+
+    const { error } = await db.storage
+      .from('playlist-capas')
+      .upload(path, blob, { contentType: 'image/jpeg', cacheControl: '3600', upsert: false });
+
+    fill.style.width = '100%';
+    setTimeout(() => { bar.style.display = 'none'; fill.style.width = '0%'; }, 600);
+
+    if (error) { toast('Erro no upload: ' + error.message, 'err'); return null; }
+
+    const { data: { publicUrl } } = db.storage.from('playlist-capas').getPublicUrl(path);
+    return publicUrl;
+  }
+
+  async function salvarPlaylist() {
+    const nome = document.getElementById('pl-nome').value.trim();
+    if (!nome) { toast('Nome é obrigatório', 'err'); return; }
+
+    const btn = document.getElementById('btn-salvar-pl');
+    btn.disabled = true; btn.textContent = 'Salvando...';
+
+    // Resolve thumbnail_url — upload, url externa ou null
+    let thumbnail_url = document.getElementById('pl-thumb-final').value.trim() || null;
+    if (thumbnail_url === '__upload__') {
+      const file = document.getElementById('pl-file-input').files[0];
+      if (file) {
+        thumbnail_url = await uploadCapaPlaylist(file);
+        if (!thumbnail_url) { btn.disabled = false; btn.textContent = '💾 Salvar'; return; }
+      } else {
+        thumbnail_url = null;
+      }
+    }
+
+    const payload = {
+      nome,
+      descricao:     document.getElementById('pl-desc').value.trim() || null,
+      thumbnail_url,
+    };
+
+    let error;
+    if (editandoPlId) {
+      ({ error } = await db.from('pregacao_playlists').update(payload).eq('id', editandoPlId));
+    } else {
+      ({ error } = await db.from('pregacao_playlists').insert(payload));
+    }
+
+    btn.disabled = false; btn.textContent = '💾 Salvar';
+    if (error) { toast('Erro: ' + error.message, 'err'); return; }
+    toast(editandoPlId ? 'Playlist atualizada!' : 'Playlist criada!', 'ok');
+    fecharModalPlaylist();
+    await carregarPlaylists();
+  }
+
+  async function excluirPlaylist(id) {
+    if (!confirm('Excluir esta playlist? As pregações não serão excluídas.')) return;
+    await db.from('pregacao_playlist_itens').delete().eq('playlist_id', id);
+    const { error } = await db.from('pregacao_playlists').delete().eq('id', id);
+    if (error) { toast('Erro ao excluir', 'err'); return; }
+    toast('Playlist excluída.', 'ok');
+    await carregarPlaylists();
+  }
+
+  /* ── ORDENAR VÍDEOS DA PLAYLIST (drag-and-drop) ──── */
+  function abrirGerenciarOrdem() {
+    if (!playlistAtiva) return;
+    const pl = playlistAtiva;
+    const itens = (pregPorPlaylist[pl.id] || []).slice().sort((a, b) => a.ordem - b.ordem);
+    ordemItens  = itens.map(it => {
+      const p = dados.pregacoes.find(x => x.id === it.conteudo_id);
+      return p ? { ...it, titulo: p.titulo, link_externo: p.link_externo } : null;
+    }).filter(Boolean);
+
+    const listaHtml = ordemItens.map((it, i) => {
+      const ytId = extrairYtId(it.link_externo);
+      const thumbSrc = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
+      const thumbEl  = thumbSrc
+        ? `<img class="ordem-drag-thumb" src="${thumbSrc}" alt="">`
+        : `<div class="ordem-drag-thumb" style="display:flex;align-items:center;justify-content:center;font-size:18px">🎬</div>`;
+      return `<div class="ordem-drag-item" draggable="true" data-idx="${i}"
+          ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="dragDrop(event)" ondragend="dragEnd()">
+        <span class="ordem-drag-handle">⠿</span>
+        <div class="ordem-drag-num">${i + 1}</div>
+        ${thumbEl}
+        <div class="ordem-drag-titulo">${esc(it.titulo)}</div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('modal-titulo').textContent = '⇅ Ordenar vídeos — ' + pl.nome;
+    document.getElementById('modal-body').innerHTML = `
+      <div style="font-size:12px;color:#aaa;margin-bottom:12px">Arraste para reordenar</div>
+      <div class="ordem-drag-list" id="ordem-drag-list">${listaHtml}</div>`;
+    const btnSalvar = document.getElementById('btn-salvar');
+    btnSalvar.textContent = '💾 Salvar ordem';
+    btnSalvar.onclick = salvarOrdem;
+    document.getElementById('modal-conteudo').classList.add('aberto');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // ── Drag-and-drop handlers
+  let dragIdx = null;
+  function dragStart(e) {
+    dragIdx = +e.currentTarget.dataset.idx;
+    e.currentTarget.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  }
+  function dragOver(e) {
+    e.preventDefault();
+    document.querySelectorAll('.ordem-drag-item').forEach(el => el.classList.remove('drag-over'));
+    e.currentTarget.classList.add('drag-over');
+  }
+  function dragDrop(e) {
+    e.preventDefault();
+    const targetIdx = +e.currentTarget.dataset.idx;
+    if (dragIdx === null || dragIdx === targetIdx) return;
+    const moved = ordemItens.splice(dragIdx, 1)[0];
+    ordemItens.splice(targetIdx, 0, moved);
+    // Re-renderiza a lista com novos índices
+    const list = document.getElementById('ordem-drag-list');
+    list.innerHTML = ordemItens.map((it, i) => {
+      const ytId = extrairYtId(it.link_externo);
+      const thumbSrc = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
+      const thumbEl  = thumbSrc
+        ? `<img class="ordem-drag-thumb" src="${thumbSrc}" alt="">`
+        : `<div class="ordem-drag-thumb" style="display:flex;align-items:center;justify-content:center;font-size:18px">🎬</div>`;
+      return `<div class="ordem-drag-item" draggable="true" data-idx="${i}"
+          ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="dragDrop(event)" ondragend="dragEnd()">
+        <span class="ordem-drag-handle">⠿</span>
+        <div class="ordem-drag-num">${i + 1}</div>
+        ${thumbEl}
+        <div class="ordem-drag-titulo">${esc(it.titulo)}</div>
+      </div>`;
+    }).join('');
+    dragIdx = null;
+  }
+  function dragEnd() {
+    dragIdx = null;
+    document.querySelectorAll('.ordem-drag-item').forEach(el => {
+      el.classList.remove('dragging', 'drag-over');
+    });
+  }
+
+  async function salvarOrdem() {
+    if (!playlistAtiva) return;
+    const btn = document.getElementById('btn-salvar');
+    btn.disabled = true; btn.textContent = 'Salvando...';
+
+    // Atualiza cada item com nova ordem
+    for (let i = 0; i < ordemItens.length; i++) {
+      await db.from('pregacao_playlist_itens')
+        .update({ ordem: i })
+        .eq('playlist_id', playlistAtiva.id)
+        .eq('conteudo_id', ordemItens[i].conteudo_id);
+    }
+
+    btn.disabled = false; btn.textContent = '💾 Salvar';
+    btn.onclick = salvar;
+    toast('Ordem salva!', 'ok');
+    fecharModal();
+    await carregarPlaylists();
+  }
+
+  /* ── NOVA PLAYLIST INLINE (dentro do form de pregação) ── */
+  function toggleNovaPlaylistInline(forcar) {
+    const box = document.getElementById('pl-inline-box');
+    if (!box) return;
+    const abrir = forcar !== undefined ? forcar : !box.classList.contains('aberto');
+    box.classList.toggle('aberto', abrir);
+    if (abrir) {
+      const inp = document.getElementById('pl-inline-nome');
+      if (inp) { inp.value = ''; inp.focus(); }
+    }
+  }
+
+  async function criarPlaylistInline() {
+    const inp = document.getElementById('pl-inline-nome');
+    const nome = inp?.value.trim();
+    if (!nome) { inp.style.borderColor = '#e74c3c'; inp.focus(); return; }
+
+    const btn = inp.closest('.pl-inline-row').querySelector('.btn-primary');
+    btn.disabled = true; btn.textContent = 'Criando...';
+
+    const { data, error } = await db.from('pregacao_playlists')
+      .insert({ nome })
+      .select()
+      .single();
+
+    btn.disabled = false; btn.textContent = 'Criar';
+
+    if (error) { toast('Erro ao criar playlist: ' + error.message, 'err'); return; }
+
+    // Adiciona à lista local
+    playlists.push(data);
+
+    // Adiciona ao select e seleciona — sem recriar o select inteiro
+    const sel = document.getElementById('select-playlist-form');
+    if (sel) {
+      // Remove opção temporária se existir
+      const existing = sel.querySelector(`option[value="${data.id}"]`);
+      if (!existing) {
+        const opt = document.createElement('option');
+        opt.value = data.id;
+        opt.textContent = data.nome;
+        sel.appendChild(opt);
+      }
+      sel.value = data.id;
+    }
+
+    toggleNovaPlaylistInline(false);
+    toast(`Playlist "${data.nome}" criada e selecionada!`, 'ok');
+  }
+
+  /* ══ DRAG-AND-DROP — CARDS DE PLAYLIST ══════════════ */
+  let dragCardId = null;
+
+  function dragStartCard(e) {
+    dragCardId = e.currentTarget.dataset.plid;
+    e.currentTarget.classList.add('dragging-card');
+    e.dataTransfer.effectAllowed = 'move';
+  }
+  function dragOverCard(e) {
+    e.preventDefault();
+    document.querySelectorAll('.playlist-card').forEach(c => c.classList.remove('drag-over-card'));
+    const card = e.target.closest('.playlist-card');
+    if (card && card.dataset.plid !== dragCardId) card.classList.add('drag-over-card');
+  }
+  function dragDropCard(e) {
+    e.preventDefault();
+    const targetId = e.currentTarget.dataset.plid;
+    if (!dragCardId || dragCardId === targetId) return;
+
+    const fromIdx = playlists.findIndex(p => p.id === dragCardId);
+    const toIdx   = playlists.findIndex(p => p.id === targetId);
+    if (fromIdx < 0 || toIdx < 0) return;
+
+    // Reordena localmente
+    const moved = playlists.splice(fromIdx, 1)[0];
+    playlists.splice(toIdx, 0, moved);
+
+    renderPregacoesAba();
+    renderPlaylists();
+    salvarOrdemPlaylists();
+  }
+  function dragEndCard() {
+    dragCardId = null;
+    document.querySelectorAll('.playlist-card').forEach(c => {
+      c.classList.remove('dragging-card', 'drag-over-card');
+    });
+  }
+
+  async function salvarOrdemPlaylists() {
+    await Promise.all(playlists.map((pl, i) =>
+      db.from('pregacao_playlists').update({ ordem: i }).eq('id', pl.id)
+    ));
+    toast('Ordem das playlists salva!', 'ok');
+  }
+
+  /* ══ SETAS + DRAG — VÍDEOS DA PLAYLIST ══════════════ */
+  let dragRowIdx = null;
+
+  function moverVideo(idx, delta) {
+    if (!playlistAtiva) return;
+    const itens = (pregPorPlaylist[playlistAtiva.id] || []).slice().sort((a, b) => a.ordem - b.ordem);
+    const novo = idx + delta;
+    if (novo < 0 || novo >= itens.length) return;
+
+    // Troca os dois itens de posição
+    const tmp = itens[idx];
+    itens[idx] = itens[novo];
+    itens[novo] = tmp;
+
+    // Renumera ordens de forma limpa
+    itens.forEach((it, i) => { it.ordem = i; });
+    pregPorPlaylist[playlistAtiva.id] = itens;
+
+    // Re-renderiza imediatamente (sem esperar o Supabase)
+    abrirPlaylist(playlistAtiva.id);
+
+    // Salva em background
+    salvarOrdemVideos(itens);
+  }
+
+  function dragStartRow(e, idx) {
+    dragRowIdx = idx;
+    e.dataTransfer.effectAllowed = 'move';
+    e.target.closest('tr')?.classList.add('dragging-row');
+  }
+  function dragOverRow(e) {
+    e.preventDefault();
+    document.querySelectorAll('tr.drag-over-row').forEach(r => r.classList.remove('drag-over-row'));
+    e.target.closest('tr')?.classList.add('drag-over-row');
+  }
+  function dragDropRow(e, targetIdx) {
+    e.preventDefault();
+    if (dragRowIdx === null || dragRowIdx === targetIdx || !playlistAtiva) return;
+
+    const itens = (pregPorPlaylist[playlistAtiva.id] || []).slice().sort((a, b) => a.ordem - b.ordem);
+    const moved = itens.splice(dragRowIdx, 1)[0];
+    itens.splice(targetIdx, 0, moved);
+
+    // Renumera ordens
+    itens.forEach((it, i) => { it.ordem = i; });
+    pregPorPlaylist[playlistAtiva.id] = itens;
+
+    abrirPlaylist(playlistAtiva.id);
+    salvarOrdemVideos(itens);
+    dragRowIdx = null;
+  }
+  function dragEndRow() {
+    dragRowIdx = null;
+    document.querySelectorAll('tr').forEach(r => r.classList.remove('dragging-row', 'drag-over-row'));
+  }
+
+  async function salvarOrdemVideos(itens) {
+    await Promise.all(itens.map((it, i) =>
+      db.from('pregacao_playlist_itens')
+        .update({ ordem: i })
+        .eq('playlist_id', playlistAtiva.id)
+        .eq('conteudo_id', it.conteudo_id)
+    ));
+    toast('Ordem salva!', 'ok');
+  }
+
+  /* ── TOAST ───────────────────────────────────────── */
+  function toast(msg, tipo = 'ok') {
+    const wrap = document.getElementById('toast-wrap');
+    const el   = document.createElement('div');
+    el.className = `toast toast-${tipo}`;
+    el.textContent = (tipo === 'ok' ? '✅ ' : '❌ ') + msg;
+    wrap.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+
+  </script>
+
+  <script src="/pwa.js"></script>
+  <script src="permissions.js"></script>
+  <script src="ministerios-nav.js"></script>
+  <script src="conteudos-nav.js"></script>
+</body>
+</html>

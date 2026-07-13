@@ -1,0 +1,698 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>O Que Cremos — Sua Igreja</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand:       #2BBFB3;
+      --brand-dark:  #1a9e93;
+      --brand-deep:  #0f6b64;
+      --brand-light: #e8faf9;
+      --brand-mid:   #b2e8e4;
+      --text:        #1a2e2d;
+      --muted:       #6b8b89;
+      --bg:          #ffffff;
+      --radius:      16px;
+      --dropdown-bg: #071a18;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       HEADER
+    ══════════════════════════════════════════════════════ */
+    header {
+      width: 100%; padding: 12px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--brand);
+      box-shadow: 0 2px 16px rgba(43,191,179,0.30);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    header.scrolled { background: var(--brand-dark); box-shadow: 0 2px 24px rgba(0,0,0,0.18); }
+
+    .header-logo img { height: 44px; object-fit: contain; display: block; }
+    .header-right { display: flex; align-items: center; gap: 4px; }
+
+    .main-nav { display: flex; align-items: center; gap: 2px; list-style: none; }
+    .nav-item  { position: relative; }
+
+    .nav-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 8px 13px; border-radius: 8px;
+      color: rgba(255,255,255,0.92); font-size: 13.5px; font-weight: 600;
+      text-decoration: none; cursor: pointer; white-space: nowrap;
+      background: transparent; border: none; font-family: inherit;
+      transition: background 0.2s, color 0.2s; user-select: none;
+    }
+    .nav-link:hover, .nav-item.open > .nav-link {
+      background: rgba(255,255,255,0.15); color: #ffffff;
+    }
+    .nav-link .chevron {
+      width: 13px; height: 13px; flex-shrink: 0;
+      transition: transform 0.25s; opacity: 0.70;
+    }
+    .nav-item.open > .nav-link .chevron { transform: rotate(180deg); opacity: 1; }
+
+    .dropdown {
+      position: absolute; top: calc(100% + 12px); right: 0;
+      background: var(--dropdown-bg);
+      border-radius: 12px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.20);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-width: 210px; padding: 6px;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 200;
+    }
+    .nav-item.open > .dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .dropdown::before {
+      content: ''; position: absolute; top: -7px; right: 20px;
+      border-left: 7px solid transparent; border-right: 7px solid transparent;
+      border-bottom: 7px solid var(--dropdown-bg);
+    }
+    .dropdown-item {
+      display: flex; align-items: center;
+      padding: 11px 14px; border-radius: 8px;
+      color: rgba(255,255,255,0.82); font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(43,191,179,0.18); color: #ffffff; }
+    .dropdown-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 3px 6px; }
+
+    .btn-membros {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px; border-radius: 50px; margin-left: 8px;
+      background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.45);
+      color: #ffffff; font-size: 13px; font-weight: 700;
+      text-decoration: none; white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-membros:hover { background: rgba(255,255,255,0.30); border-color: rgba(255,255,255,0.80); }
+
+    .nav-toggle {
+      display: none;
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.40);
+      border-radius: 10px; width: 42px; height: 42px; cursor: pointer;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 5px; transition: background .2s; flex-shrink: 0; margin-left: 8px;
+    }
+    .nav-toggle:hover { background: rgba(255,255,255,0.28); }
+    .nav-toggle span { display: block; width: 18px; height: 2px; background: #ffffff; border-radius: 2px; transition: all .3s; }
+    .nav-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    /* ══════════════════════════════════════════════════════
+       MENU MOBILE
+    ══════════════════════════════════════════════════════ */
+    .mobile-menu-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,40,38,0.55); z-index: 98;
+      opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    }
+    .mobile-menu-overlay.active { opacity: 1; pointer-events: all; }
+    .mobile-menu {
+      position: fixed; top: 0; left: 0; width: 300px; height: 100vh;
+      background: var(--brand-dark); z-index: 99;
+      display: flex; flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      overflow-y: auto;
+    }
+    .mobile-menu.active { transform: translateX(0); }
+    .mobile-menu-header {
+      padding: 20px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .mobile-menu-header img { height: 36px; object-fit: contain; }
+    .btn-fechar-mobile {
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.35);
+      color: #fff; width: 34px; height: 34px; border-radius: 50%;
+      font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .btn-fechar-mobile:hover { background: rgba(255,255,255,0.28); }
+    .mobile-nav { padding: 12px 0; flex: 1; }
+    .m-group { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .m-group-btn {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; cursor: pointer; font-family: inherit;
+      color: rgba(255,255,255,0.92); font-size: 14px; font-weight: 700;
+      transition: background 0.2s;
+    }
+    .m-group-btn:hover { background: rgba(255,255,255,0.08); }
+    .m-group-btn .m-chevron { width: 16px; height: 16px; transition: transform 0.25s; opacity: 0.6; }
+    .m-group.open .m-group-btn .m-chevron { transform: rotate(180deg); opacity: 1; }
+    .m-sub { max-height: 0; overflow: hidden; transition: max-height 0.30s ease; background: rgba(0,0,0,0.20); }
+    .m-group.open .m-sub { max-height: 400px; }
+    .m-sub a {
+      display: flex; align-items: center;
+      padding: 12px 20px 12px 32px;
+      color: rgba(255,255,255,0.75); font-size: 13.5px; font-weight: 600;
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .m-sub a:last-child { border-bottom: none; }
+    .m-sub a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .mobile-menu-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .btn-membros-mobile {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 13px;
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.40);
+      border-radius: 12px; color: #ffffff;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-membros-mobile:hover { background: rgba(255,255,255,0.28); }
+
+    /* ══════════════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════════════ */
+    .hero {
+      min-height: 28vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 110px 24px 52px;
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-dark) 50%, var(--brand) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 14px; max-width: 600px;
+      animation: fadeUp 0.9s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero p {
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      color: rgba(255,255,255,0.85); line-height: 1.7;
+      max-width: 480px; font-style: italic; font-weight: 800;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       O QUE CREMOS — CONTEÚDO
+    ══════════════════════════════════════════════════════ */
+    .crenças-section {
+      background: #0a2e2b;
+      padding: 72px 24px 80px;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+
+    .crenças-grid {
+      width: 100%; max-width: 900px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    /* último item sozinho fica centralizado se ímpar */
+    .crenca-card:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      max-width: 440px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .crenca-card {
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(43,191,179,0.25);
+      border-top: 4px solid var(--brand);
+      border-radius: var(--radius);
+      padding: 28px 26px;
+      display: flex; flex-direction: column; gap: 12px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+    .crenca-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+      background: rgba(255,255,255,0.09);
+    }
+
+    .crenca-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(43,191,179,0.18); border: 1px solid rgba(43,191,179,0.45);
+      border-radius: 50px; padding: 5px 14px;
+      font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--brand); width: fit-content;
+    }
+
+    .crenca-card h3 {
+      font-size: 1.1rem; font-weight: 800; color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .crenca-divider {
+      width: 36px; height: 3px; background: var(--brand); border-radius: 4px;
+    }
+
+    .crenca-card p {
+      font-size: 0.93rem; color: rgba(255,255,255,0.78); line-height: 1.80;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       VERSÍCULO BANNER
+    ══════════════════════════════════════════════════════ */
+    .verse-banner {
+      background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-dark) 60%, var(--brand) 100%);
+      padding: 20px 24px;
+      text-align: center;
+    }
+    .verse-banner blockquote {
+      max-width: 580px; margin: 0 auto;
+      font-size: clamp(0.82rem, 1.8vw, 0.93rem);
+      color: rgba(255,255,255,0.92); font-style: italic; line-height: 1.7;
+    }
+    .verse-banner cite {
+      display: inline;
+      font-size: 0.85rem; color: rgba(255,255,255,0.65);
+      font-style: normal; font-weight: 700; letter-spacing: 0.5px;
+      margin-left: 6px;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════════════ */
+    /* footer: estilos via site-footer.js */
+
+    /* ══════════════════════════════════════════════════════
+       DRAWER ORAÇÃO
+    ══════════════════════════════════════════════════════ */
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(10,40,38,0.55);
+      z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .drawer-overlay.active { opacity: 1; pointer-events: all; }
+    .drawer {
+      position: fixed; top: 0; right: 0; width: 100%; max-width: 440px; height: 100vh;
+      background: #fff; z-index: 301; display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: -8px 0 40px rgba(0,0,0,0.18);
+    }
+    .drawer.active { transform: translateX(0); }
+    .drawer-header {
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+      padding: 28px 24px 24px; display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 16px; flex-shrink: 0;
+    }
+    .drawer-header-text h2 { color:#fff; font-size:20px; font-weight:800; }
+    .drawer-header-text p  { color:rgba(255,255,255,0.82); font-size:13px; margin-top:4px; line-height:1.5; }
+    .btn-fechar-drawer {
+      background: rgba(255,255,255,0.20); border: 1.5px solid rgba(255,255,255,0.40);
+      color: #fff; width:34px; height:34px; border-radius:50%; font-size:16px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; transition:background 0.2s;
+    }
+    .btn-fechar-drawer:hover { background:rgba(255,255,255,0.35); }
+    .drawer-body { flex:1; overflow-y:auto; padding:28px 24px; display:flex; flex-direction:column; gap:18px; }
+    .drawer-field { display:flex; flex-direction:column; gap:6px; }
+    .drawer-field label { font-size:13px; font-weight:700; color:#444; }
+    .drawer-field input, .drawer-field textarea {
+      width:100%; padding:11px 14px; border:1.5px solid #e0e0e0; border-radius:10px;
+      font-size:14px; font-family:inherit; background:#fafafa; color:var(--text);
+      transition:border-color 0.2s, background 0.2s;
+    }
+    .drawer-field input:focus, .drawer-field textarea:focus { outline:none; border-color:var(--brand); background:#fff; }
+    .drawer-field textarea { min-height:120px; resize:vertical; }
+    .drawer-hint { font-size:11px; color:#aaa; line-height:1.5; margin-top:-8px; }
+    .drawer-divider-form { width:100%; height:1px; background:#f0f0f0; }
+    .btn-enviar-oracao {
+      width:100%; padding:14px;
+      background:linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:800;
+      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+      transition:all 0.2s; box-shadow:0 4px 16px rgba(43,191,179,0.35);
+      touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+    }
+    .btn-enviar-oracao:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(43,191,179,0.45); }
+    .btn-enviar-oracao:disabled { opacity:0.65; cursor:not-allowed; transform:none; }
+    .drawer-sucesso {
+      display:none; flex-direction:column; align-items:center; justify-content:center;
+      gap:16px; text-align:center; padding:40px 20px; flex:1;
+    }
+    .drawer-sucesso.show { display:flex; }
+    .drawer-sucesso .icone-sucesso { font-size:4rem; }
+    .drawer-sucesso h3 { font-size:20px; font-weight:800; color:var(--text); }
+    .drawer-sucesso p  { font-size:14px; color:var(--muted); line-height:1.7; max-width:280px; }
+    .btn-novo-pedido {
+      margin-top:8px; padding:10px 28px; border-radius:50px;
+      border:2px solid var(--brand); background:#fff; color:var(--brand);
+      font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s;
+      touch-action:manipulation;
+    }
+    .btn-novo-pedido:hover { background:var(--brand); color:#fff; }
+
+    /* ══════════════════════════════════════════════════════
+       RESPONSIVO
+    ══════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      header { padding: 12px 16px; }
+      .main-nav, .btn-membros { display: none; }
+      .nav-toggle { display: flex; }
+      .mobile-menu-overlay { display: block; pointer-events: none; }
+      .hero { padding: 100px 20px 44px; }
+      .crenças-grid { grid-template-columns: 1fr; }
+      .crenca-card:last-child:nth-child(odd) { grid-column: auto; max-width: 100%; margin: 0; }
+      .footer-top { grid-template-columns: 1fr; padding: 0 24px; gap: 20px; }
+      .footer-left  { align-items: center; }
+      .footer-tagline { text-align: center; }
+      .footer-right { align-items: center; text-align: center; }
+      .footer-divider { width: calc(100% - 48px); }
+    }
+    @media (max-width: 580px) { .drawer { max-width: 100%; } }
+  </style>
+  <meta name="theme-color" content="#2BBFB3"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════════════════ -->
+<header id="main-header">
+  <div class="header-logo">
+    <a href="index.html"><img src="logo.png" alt="Sua Igreja"/></a>
+  </div>
+  <div class="header-right">
+    <ul class="main-nav" id="main-nav">
+
+      <li class="nav-item" data-nav="sobre">
+        <button class="nav-link" onclick="toggleNav('sobre')">
+          Sobre Nós
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="dropdown">
+          <a class="dropdown-item" href="quem-somos.html">Quem Somos</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="o-que-cremos.html">O Que Cremos</a>
+        </div>
+      </li>
+
+      <li class="nav-item" data-nav="conteudo">
+        <button class="nav-link" onclick="toggleNav('conteudo')">
+          Conteúdo
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="dropdown">
+          <a class="dropdown-item" href="pregacoes.html">Pregações</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="cursos.html">Cursos</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="downloads.html">Downloads</a>
+        </div>
+      </li>
+
+      <li class="nav-item" data-nav="fale">
+        <button class="nav-link" onclick="toggleNav('fale')">
+          Fale Conosco
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="dropdown">
+          <a class="dropdown-item" href="#" onclick="fecharTodosNavs(); abrirDrawer(); return false;">Pedido de Oração</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="agendamento-pastoral.html">Agendamento Pastoral</a>
+        </div>
+      </li>
+
+    </ul>
+    <a href="login.html" class="btn-membros">🔑 Área de Membros</a>
+    <button class="nav-toggle" id="nav-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     MENU MOBILE
+══════════════════════════════════════════════════════════════════ -->
+<div class="mobile-menu-overlay" id="mobile-overlay" onclick="fecharMobileMenu()"></div>
+<nav class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-header">
+    <img src="logo.png" alt="Sua Igreja"/>
+    <button class="btn-fechar-mobile" onclick="fecharMobileMenu()">✕</button>
+  </div>
+  <div class="mobile-nav">
+    <div class="m-group" id="m-sobre">
+      <button class="m-group-btn" onclick="toggleMobileGroup('m-sobre')">
+        Sobre Nós
+        <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="m-sub">
+        <a href="quem-somos.html">Quem Somos</a>
+        <a href="o-que-cremos.html">O Que Cremos</a>
+      </div>
+    </div>
+    <div class="m-group" id="m-conteudo">
+      <button class="m-group-btn" onclick="toggleMobileGroup('m-conteudo')">
+        Conteúdo
+        <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="m-sub">
+        <a href="pregacoes.html">Pregações</a>
+        <a href="cursos.html">Cursos</a>
+        <a href="downloads.html">Downloads</a>
+      </div>
+    </div>
+    <div class="m-group" id="m-fale">
+      <button class="m-group-btn" onclick="toggleMobileGroup('m-fale')">
+        Fale Conosco
+        <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="m-sub">
+        <a href="#" onclick="fecharMobileMenu(); abrirDrawer(); return false;">Pedido de Oração</a>
+        <a href="agendamento-pastoral.html">Agendamento Pastoral</a>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-menu-footer">
+    <a href="login.html" class="btn-membros-mobile">🔑 Área de Membros</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-content">
+    <p>Os fundamentos da nossa fé.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     O QUE CREMOS — CARDS
+══════════════════════════════════════════════════════════════════ -->
+<section class="crenças-section">
+  <div class="crenças-grid">
+
+    <div class="crenca-card">
+      <span class="crenca-badge"> As Escrituras</span>
+      <h3>Sobre as Escrituras</h3>
+      <div class="crenca-divider"></div>
+      <p>Cremos que toda a Bíblia é a Palavra inspirada de Deus e que seus autores foram homens movidos pelo Espírito de Deus para escrever Suas Palavras.</p>
+    </div>
+
+    <div class="crenca-card">
+      <span class="crenca-badge"> Deus</span>
+      <h3>Sobre Deus</h3>
+      <div class="crenca-divider"></div>
+      <p>Nós acreditamos em um Deus que existe em três pessoas distintas: Pai, Filho e Espírito Santo. Ele é único e verdadeiro, o Criador de tudo e de todos.</p>
+    </div>
+
+    <div class="crenca-card">
+      <span class="crenca-badge"> Espírito Santo</span>
+      <h3>Sobre o Espírito Santo</h3>
+      <div class="crenca-divider"></div>
+      <p>Acreditamos que o Espírito Santo convence o homem do seu estado separado de Deus e os regenera despertando-os para o arrependimento e a fé em Jesus. Cremos que por meio dele os crentes são renovados, santificados e adotados na família de Deus.</p>
+    </div>
+
+    <div class="crenca-card">
+      <span class="crenca-badge"> A Humanidade</span>
+      <h3>Sobre a Humanidade</h3>
+      <div class="crenca-divider"></div>
+      <p>Acreditamos que todas as pessoas foram criadas à imagem de Deus para ter comunhão com ele, mas estão separadas dele e condenadas por causa da culpa do pecado. Como resultado, as pessoas são incapazes de recuperar um relacionamento correto com Deus através de seus próprios esforços.</p>
+    </div>
+
+    <div class="crenca-card">
+      <span class="crenca-badge"> O Evangelho</span>
+      <h3>Sobre o Evangelho e Salvação</h3>
+      <div class="crenca-divider"></div>
+      <p>Cremos ser o evangelho as boas notícias de Jesus, a mensagem que Cristo morreu pelos nossos pecados e ressuscitou. A verdade de que o pecador encontra reconciliação com Deus pela fé no sacrifício substitutivo de Jesus.</p>
+    </div>
+
+    <div class="crenca-card">
+      <span class="crenca-badge"> A Vida Cristã</span>
+      <h3>Sobre a Vida Cristã</h3>
+      <div class="crenca-divider"></div>
+      <p>Acreditamos que todos os cristãos devem viver para Cristo e não para si mesmos. Pela obediência à Palavra de Deus e cedendo diariamente ao Espírito de Deus, todo crente deve amadurecer e ser conforme a imagem de Cristo.</p>
+    </div>
+
+    <div class="crenca-card">
+      <span class="crenca-badge"> A Igreja</span>
+      <h3>Sobre a Igreja</h3>
+      <div class="crenca-divider"></div>
+      <p>Acreditamos que a igreja é o corpo de Cristo, do qual Jesus Cristo é a cabeça. Os membros da igreja são aqueles que confiam pela fé na obra consumada de Cristo. O propósito da igreja é glorificar a Deus, levando pessoas a um relacionamento crescente com Jesus e tornando-o conhecido ao mundo.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     VERSÍCULO
+══════════════════════════════════════════════════════════════════ -->
+<div class="verse-banner">
+  <blockquote>
+    "Santifica-os na verdade; a tua palavra é a verdade." <cite>— João 17:17</cite>
+  </blockquote>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════════════ -->
+<div data-site-footer></div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DRAWER ORAÇÃO
+══════════════════════════════════════════════════════════════════ -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
+<div class="drawer" id="drawer-oracao">
+  <div class="drawer-header">
+    <div class="drawer-header-text">
+      <h2>Pedido de Oração</h2>
+      <p>Compartilhe seu pedido conosco.<br/>Vamos orar por você! 🙏</p>
+    </div>
+    <button class="btn-fechar-drawer" onclick="fecharDrawer()">✕</button>
+  </div>
+  <div class="drawer-body" id="drawer-form-body">
+    <div class="drawer-field">
+      <label>Nome completo <span style="color:#e74c3c">*</span></label>
+      <input type="text" id="oracao-nome" placeholder="Ex: Maria Souza"/>
+    </div>
+    <div class="drawer-field">
+      <label>Telefone / WhatsApp</label>
+      <input type="text" id="oracao-telefone" placeholder="(31) 99999-9999"/>
+      <span class="drawer-hint">Opcional — para que possamos entrar em contato.</span>
+    </div>
+    <div class="drawer-divider-form"></div>
+    <div class="drawer-field">
+      <label>Seu pedido de oração <span style="color:#e74c3c">*</span></label>
+      <textarea id="oracao-pedido" placeholder="Escreva aqui o seu pedido de oração..."></textarea>
+    </div>
+    <p id="drawer-erro" style="display:none;font-size:13px;color:#e74c3c;background:#fff0f0;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-weight:600;"></p>
+    <button class="btn-enviar-oracao" id="btn-enviar" onclick="enviarPedidoOracao()">🙏 Enviar Pedido de Oração</button>
+  </div>
+  <div class="drawer-sucesso" id="drawer-sucesso">
+    <div class="icone-sucesso">🙏</div>
+    <h3>Pedido enviado!</h3>
+    <p>Recebemos seu pedido de oração.<br/>Nossa equipe vai orar por você com muito carinho.</p>
+    <button class="btn-novo-pedido" onclick="resetDrawer()">+ Enviar outro pedido</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabase.js"></script>
+<script>
+
+  /* ── NAV DESKTOP ──────────────────────────────────────────────── */
+  function toggleNav(id) {
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.toggle('open', item.dataset.nav === id && !item.classList.contains('open'))
+    })
+  }
+  function fecharTodosNavs() {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('open'))
+  }
+  document.addEventListener('click', e => { if (!e.target.closest('.nav-item')) fecharTodosNavs() })
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { fecharTodosNavs(); fecharMobileMenu(); fecharDrawer() }
+  })
+
+  /* ── MENU MOBILE ──────────────────────────────────────────────── */
+  function toggleMobileMenu() {
+    const menu    = document.getElementById('mobile-menu')
+    const overlay = document.getElementById('mobile-overlay')
+    const toggle  = document.getElementById('nav-toggle')
+    const open    = menu.classList.toggle('active')
+    overlay.classList.toggle('active', open)
+    toggle.classList.toggle('open', open)
+    document.body.style.overflow = open ? 'hidden' : ''
+  }
+  function fecharMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active')
+    document.getElementById('mobile-overlay').classList.remove('active')
+    document.getElementById('nav-toggle').classList.remove('open')
+    document.body.style.overflow = ''
+  }
+  function toggleMobileGroup(id) {
+    const group   = document.getElementById(id)
+    const wasOpen = group.classList.contains('open')
+    document.querySelectorAll('.m-group').forEach(g => g.classList.remove('open'))
+    if (!wasOpen) group.classList.add('open')
+  }
+
+  /* ── SCROLL ───────────────────────────────────────────────────── */
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50)
+  })
+
+  /* ── DRAWER ───────────────────────────────────────────────────── */
+  function abrirDrawer() {
+    document.getElementById('drawer-overlay').classList.add('active')
+    document.getElementById('drawer-oracao').classList.add('active')
+    document.body.style.overflow = 'hidden'
+  }
+  function fecharDrawer() {
+    document.getElementById('drawer-overlay').classList.remove('active')
+    document.getElementById('drawer-oracao').classList.remove('active')
+    document.body.style.overflow = ''
+  }
+  function resetDrawer() {
+    document.getElementById('oracao-nome').value     = ''
+    document.getElementById('oracao-telefone').value = ''
+    document.getElementById('oracao-pedido').value   = ''
+    document.getElementById('drawer-erro').style.display = 'none'
+    document.getElementById('drawer-form-body').style.display = 'flex'
+    document.getElementById('drawer-sucesso').classList.remove('show')
+  }
+  async function enviarPedidoOracao() {
+    const nome     = document.getElementById('oracao-nome').value.trim()
+    const telefone = document.getElementById('oracao-telefone').value.trim() || null
+    const pedido   = document.getElementById('oracao-pedido').value.trim()
+    const erroEl   = document.getElementById('drawer-erro')
+    const btnEl    = document.getElementById('btn-enviar')
+    erroEl.style.display = 'none'
+    if (!nome)   { erroEl.textContent = '⚠️ O nome é obrigatório.';         erroEl.style.display = 'block'; document.getElementById('oracao-nome').focus();   return }
+    if (!pedido) { erroEl.textContent = '⚠️ Escreva seu pedido de oração.'; erroEl.style.display = 'block'; document.getElementById('oracao-pedido').focus(); return }
+    btnEl.disabled = true; btnEl.textContent = '⏳ Enviando...'
+    const { error } = await db.from('pedidos_oracao').insert({ nome, telefone, pedido, origem: 'Site', status: 'Pendente' })
+    btnEl.disabled = false; btnEl.innerHTML = '🙏 Enviar Pedido de Oração'
+    if (error) { erroEl.textContent = '❌ Erro ao enviar. Tente novamente.'; erroEl.style.display = 'block'; return }
+    document.getElementById('drawer-form-body').style.display = 'none'
+    document.getElementById('drawer-sucesso').classList.add('show')
+  }
+
+</script>
+<script src="/pwa.js"></script>
+<script src="site-footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificado — Sua Igreja</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <style>
+    :root {
+      --brand: #2bbfb3;
+      --brand-deep: #0f6b64;
+      --brand-dark: #1a9e93;
+      --ink: #1a2e2d;
+      --muted: #6b8b89;
+      --gold: #c9a44c;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #e8f1f0; color: var(--ink);
+      min-height: 100vh; padding: 24px;
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+    }
+
+    .topo-acoes {
+      width: 100%; max-width: 1100px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .topo-acoes a {
+      color: var(--brand-deep); font-size: 13px; font-weight: 700;
+      text-decoration: none;
+    }
+    .topo-acoes a:hover { text-decoration: underline; }
+    .btns-acao { display: flex; gap: 8px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 9px; border: none;
+      font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--brand-deep); color: #fff; }
+    .btn-primary:hover { background: var(--brand-dark); }
+    .btn-ghost { background: #fff; color: var(--brand-deep); border: 1.5px solid var(--brand); }
+    .btn-ghost:hover { background: var(--brand); color: #fff; }
+
+    /* ── CERTIFICADO (A4 paisagem ~ 1100x780) ──────────────── */
+    .cert-wrap {
+      width: 100%; max-width: 1100px;
+    }
+    .cert {
+      width: 100%; aspect-ratio: 297 / 210;
+      background: #fffdf7;
+      border: 14px double var(--brand-deep);
+      box-shadow: 0 18px 40px rgba(15,107,100,0.15);
+      padding: 6%;
+      display: flex; flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .cert::before, .cert::after {
+      content: ''; position: absolute;
+      width: 180px; height: 180px;
+      border: 3px solid var(--gold);
+      border-radius: 50%; opacity: 0.08;
+    }
+    .cert::before { top: -60px; left: -60px; }
+    .cert::after  { bottom: -60px; right: -60px; }
+
+    .cert-topo {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .cert-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 800; color: var(--brand-deep); font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+    .cert-logo img { width: 38px; height: 38px; object-fit: contain; }
+    .cert-selo {
+      font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+      color: var(--gold); text-transform: uppercase;
+      border: 1.5px solid var(--gold); padding: 4px 12px; border-radius: 30px;
+    }
+
+    .cert-corpo {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 0 4%;
+    }
+    .cert-titulo {
+      font-size: clamp(1.4rem, 4vw, 2.6rem);
+      font-weight: 900; color: var(--brand-deep);
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .cert-sub {
+      font-size: clamp(11px, 1.3vw, 13px);
+      color: var(--muted); letter-spacing: 4px;
+      text-transform: uppercase; margin-bottom: 28px;
+    }
+    .cert-frase {
+      font-size: clamp(12px, 1.4vw, 14px); color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .cert-aluno {
+      font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: var(--brand-deep); font-weight: 400;
+      margin: 6px 0 22px; line-height: 1.1;
+      border-bottom: 1.5px solid var(--brand);
+      padding-bottom: 14px; min-width: 60%;
+    }
+    .cert-conclusao {
+      font-size: clamp(12px, 1.4vw, 15px);
+      color: var(--ink); line-height: 1.7;
+      max-width: 760px;
+    }
+    .cert-conclusao b { color: var(--brand-deep); }
+
+    .cert-rodape {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-top: 18px; gap: 24px; font-size: 11.5px; color: var(--muted);
+    }
+    .cert-assinatura {
+      text-align: center; min-width: 200px;
+    }
+    .cert-assinatura-img {
+      display: block; height: 48px; width: auto;
+      max-width: 180px;
+      margin: 0 auto -4px; object-fit: contain;
+    }
+    .cert-assinatura .linha {
+      border-top: 1.5px solid var(--ink);
+      padding-top: 4px; font-weight: 700; color: var(--ink); font-size: 12px;
+    }
+    .cert-validacao {
+      text-align: right; font-size: 10.5px; line-height: 1.5;
+    }
+    .cert-validacao .codigo {
+      font-family: 'Courier New', monospace; font-weight: 800;
+      color: var(--brand-deep); font-size: 12px; letter-spacing: 1px;
+    }
+
+    /* ── ESTADOS ─────────────────────────────────────────────── */
+    .estado {
+      max-width: 520px; background: #fff; border-radius: 14px;
+      padding: 36px 28px; text-align: center;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+    }
+    .estado-icone { font-size: 2.6rem; margin-bottom: 10px; }
+    .estado h2 { color: var(--brand-deep); font-size: 1.2rem; margin: 0 0 6px; }
+    .estado p { color: var(--muted); font-size: 13.5px; margin: 0 0 16px; }
+
+    /* ── IMPRESSÃO ───────────────────────────────────────────── */
+    @media print {
+      @page { size: A4 landscape; margin: 0; }
+      body { background: #fff; padding: 0; }
+      .topo-acoes { display: none !important; }
+      .cert-wrap { max-width: none; }
+      .cert {
+        width: 100vw; height: 100vh; aspect-ratio: auto;
+        border-width: 12px; box-shadow: none;
+      }
+    }
+
+    @media (max-width: 700px) {
+      body { padding: 12px; }
+      .cert { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topo-acoes" id="topo-acoes" style="display:none">
+  <a href="dashboard.html">← Voltar ao painel</a>
+  <div class="btns-acao">
+    <button class="btn btn-ghost" onclick="copiarLink()">🔗 Copiar link de validação</button>
+    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+  </div>
+</div>
+
+<div id="conteudo">
+  <div class="estado">
+    <div class="estado-icone">⏳</div>
+    <h2>Carregando certificado...</h2>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/config.js"></script>
+<script src="/supabase.js"></script>
+<script>
+  const params    = new URLSearchParams(location.search)
+  const CODIGO    = params.get('c')
+  const MATRICULA = params.get('m')
+
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  }
+
+  function fmtData(iso) {
+    if (!iso) return ''
+    return new Date(iso).toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
+  }
+
+  function fmtCarga(min) {
+    if (!min) return ''
+    const h = Math.floor(min / 60), m = min % 60
+    return h ? (m ? `${h}h${m}min` : `${h}h`) : `${m}min`
+  }
+
+  function copiarLink() {
+    const url = `${location.origin}/plataforma/certificado.html?c=${encodeURIComponent(window._certCodigo || '')}`
+    navigator.clipboard?.writeText(url)
+    alert('Link de validação copiado!\n\n' + url)
+  }
+
+  function renderErro(msg) {
+    document.getElementById('conteudo').innerHTML = `
+      <div class="estado">
+        <div class="estado-icone">⚠️</div>
+        <h2>${esc(msg)}</h2>
+        <p>Verifique o código ou tente acessar pelo painel da plataforma.</p>
+        <a class="btn btn-primary" href="dashboard.html">Ir para o painel</a>
+      </div>`
+  }
+
+  function renderCertificado({ aluno_nome, curso_titulo, carga_horaria_min, emitido_em, codigo_validacao }) {
+    window._certCodigo = codigo_validacao
+    document.getElementById('topo-acoes').style.display = 'flex'
+    const carga = fmtCarga(carga_horaria_min)
+    document.getElementById('conteudo').innerHTML = `
+      <div class="cert-wrap">
+        <div class="cert">
+          <div class="cert-topo">
+            <div class="cert-logo">
+              <img src="/logo.png" alt="Sua Igreja" onerror="this.style.display='none'">
+              <span>SUA IGREJA • PLATAFORMA DE CURSOS</span>
+            </div>
+            <div class="cert-selo">Certificado Oficial</div>
+          </div>
+
+          <div class="cert-corpo">
+            <div class="cert-titulo">Certificado</div>
+            <div class="cert-sub">de Conclusão</div>
+
+            <div class="cert-frase">Certificamos que</div>
+            <div class="cert-aluno">${esc(aluno_nome)}</div>
+
+            <div class="cert-conclusao">
+              concluiu com aproveitamento o curso
+              <b>${esc(curso_titulo)}</b>${carga ? `, com carga horária de <b>${carga}</b>` : ''},
+              oferecido pela <b>Plataforma de Cursos da Sua Igreja</b>.
+            </div>
+          </div>
+
+          <div class="cert-rodape">
+            <div class="cert-assinatura">
+              <img src="assets/assinatura-pastor.png" alt="" class="cert-assinatura-img" onerror="this.style.display='none'">
+              <div class="linha">Sua Igreja</div>
+              <div>Coordenação Pedagógica</div>
+            </div>
+            <div class="cert-validacao">
+              Emitido em <b>${fmtData(emitido_em)}</b><br>
+              Código de validação: <span class="codigo">${esc(codigo_validacao)}</span><br>
+              <span style="font-size:10px">Valide em ${location.host}/plataforma/certificado.html?c=${esc(codigo_validacao)}</span>
+            </div>
+          </div>
+        </div>
+      </div>`
+  }
+
+  ;(async function init() {
+    // Modo público: ?c=<codigo>
+    if (CODIGO) {
+      const { data, error } = await db.rpc('validar_certificado', { p_codigo: CODIGO })
+      if (error || !data) return renderErro('Certificado não encontrado')
+      renderCertificado(data)
+      return
+    }
+
+    // Modo aluno: ?m=<matricula_id> — exige sessão
+    if (!MATRICULA) {
+      renderErro('Certificado não especificado')
+      return
+    }
+
+    const { data: { session } } = await db.auth.getSession()
+    if (!session) {
+      location.href = '/cursos-login.html?next=' + encodeURIComponent(location.pathname + location.search)
+      return
+    }
+
+    // Tenta emitir (idempotente). Se já existir, retorna o mesmo.
+    const { data: cert, error: errEmit } = await db.rpc('emitir_certificado', { p_matricula_id: MATRICULA })
+    if (errEmit || !cert) {
+      renderErro(errEmit?.message?.includes('não concluído')
+        ? 'Você precisa concluir todas as aulas do curso antes de emitir o certificado.'
+        : 'Não foi possível emitir o certificado')
+      return
+    }
+
+    // Busca dados de exibição (nome do aluno + título do curso) via validar
+    const { data: dados } = await db.rpc('validar_certificado', { p_codigo: cert.codigo_validacao })
+    if (!dados) return renderErro('Certificado não encontrado')
+    renderCertificado(dados)
+  })()
+</script>
+</body>
+</html>

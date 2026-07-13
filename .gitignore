@@ -1,0 +1,24 @@
+# Binários
+*.exe
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.*.local
+
+# Dependências
+node_modules/
+
+# Supabase
+supabase/.temp/
+supabase/.branches/
+
+# Logs
+*.log
+
+# Sistema operacional / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.tools/

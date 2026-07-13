@@ -1,0 +1,1518 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="pagina-slug"  content="ministerios_musica">
+  <meta name="pagina-label" content="🎵 Ministério — Música">
+  <title>Música — Sua Igreja</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+
+    .ministerio-hero {
+      background: linear-gradient(135deg, #2BBFB3, #1a9e93);
+      border-radius: 16px;
+      padding: 28px 32px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .hero-icone { font-size: 56px; line-height: 1; }
+    .hero-info h1 { font-size: 26px; margin: 0 0 4px; color: white; }
+    .hero-info p  { font-size: 14px; opacity: .85; margin: 0; }
+    .hero-badge {
+      margin-left: auto;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .hero-lideres {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .hero-lider-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+    }
+    .hero-lider-pill span {
+      font-size: 10px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 1px 8px;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    .abas {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 28px;
+    }
+    .aba-btn {
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all .2s;
+      border-radius: 0;
+    }
+    .aba-btn:hover  { color: #2BBFB3; }
+    .aba-btn.active { color: #2BBFB3; border-bottom-color: #2BBFB3; }
+    .aba-content        { display: none; }
+    .aba-content.active { display: block; }
+
+    .aba-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .lideres-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .lider-card {
+      background: linear-gradient(135deg, #2BBFB3, #1a9e93);
+      color: white;
+      border-radius: 14px;
+      padding: 20px 24px;
+      min-width: 190px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .lider-card .lider-icon   { font-size: 30px; }
+    .lider-card .lider-nome   { font-size: 15px; font-weight: 700; }
+    .lider-card .lider-funcao {
+      font-size: 12px;
+      background: rgba(255,255,255,.25);
+      border-radius: 20px;
+      padding: 2px 10px;
+      width: fit-content;
+    }
+    .btn-rm-lider {
+      position: absolute; top: 8px; right: 10px;
+      background: transparent; border: none;
+      color: rgba(255,255,255,.7); font-size: 16px; cursor: pointer;
+    }
+    .btn-rm-lider:hover { color: white; }
+
+    .lider-form-inline {
+      background: #f8fffe;
+      border: 1px solid #d0f0ee;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .lider-form-inline.open { display: block; }
+    .lider-form-inline h3 { font-size: 15px; margin: 0 0 16px; color: #1a9e93; }
+    .lider-form-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    .lider-form-row > div { display: flex; flex-direction: column; gap: 4px; }
+    .lider-form-row label { font-size: 12px; font-weight: 600; color: #555; }
+    .lider-form-row select,
+    .lider-form-row input {
+      padding: 9px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      min-width: 220px;
+    }
+    .lider-form-row select:focus,
+    .lider-form-row input:focus { border-color: #2BBFB3; outline: none; }
+
+    .cal-wrap {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      padding: 14px 16px;
+      margin: 0 0 20px;
+      max-width: 720px;
+    }
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .cal-header h3 { font-size: 16px; margin: 0; color: #1a2e2d; }
+    .cal-nav-btn {
+      background: #f0fffe;
+      border: 1px solid #c0e8e6;
+      border-radius: 8px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 18px;
+      color: #1a9e93;
+      transition: background .2s;
+    }
+    .cal-nav-btn:hover { background: #2BBFB3; color: white; }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .cal-dow {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #aaa;
+      padding: 4px 0 8px;
+      text-transform: uppercase;
+    }
+    .cal-day {
+      min-height: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      position: relative;
+      transition: background .15s;
+      padding: 6px 4px;
+      gap: 3px;
+    }
+    .cal-day:hover { background: #f0fffe; }
+    .cal-day.vazio { cursor: default; background: transparent !important; }
+    .cal-day.hoje  { background: #e8faf9; color: #1a9e93; }
+    .cal-day.selecionado { background: #2BBFB3 !important; color: white !important; }
+    .cal-day.tem-evento::after {
+      content: '';
+      display: block;
+      width: 6px; height: 6px;
+      background: #2BBFB3;
+      border-radius: 50%;
+      margin-top: 2px;
+    }
+    .cal-day.selecionado.tem-evento::after { background: white; }
+    .cal-day-num { font-size: 13px; font-weight: 700; }
+    .cal-ev-mini {
+      background: rgba(43,191,179,.15);
+      color: #1a9e93;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 4px;
+      width: 100%;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cal-day.selecionado .cal-ev-mini {
+      background: rgba(255,255,255,.25);
+      color: white;
+    }
+
+    .dia-painel {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+    .dia-painel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .dia-painel-header h4 { font-size: 15px; margin: 0; color: #1a2e2d; }
+
+    .evento-card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+    }
+    .evento-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .evento-head h3 { margin: 0; font-size: 16px; color: #1a2e2d; }
+    .evento-data-badge {
+      background: #e8faf9;
+      color: #1a9e93;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .evento-desc { font-size: 13px; color: #888; margin: 6px 0 14px; }
+    .evento-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .escala-resumo { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill { border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; }
+    .pill-pendente   { background: #FFF3CD; color: #856404; }
+    .pill-confirmado { background: #D1FAE5; color: #065F46; }
+    .pill-recusado   { background: #FEE2E2; color: #991B1B; }
+    .escala-itens { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .escala-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8f8f8;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .escala-item-nome { font-weight: 600; color: #1a2e2d; }
+    .escala-item-tel  { font-size: 12px; color: #aaa; margin-left: 8px; }
+
+    .disp-section {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      padding: 20px 24px;
+      margin-top: 20px;
+    }
+    .disp-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .disp-section-header h4 { font-size: 15px; margin: 0; color: #1a2e2d; }
+    .disp-dia-group { margin-bottom: 16px; }
+    .disp-dia-titulo {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1a9e93;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 8px;
+    }
+    .disp-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8fffe;
+      border: 1px solid #d0f0ee;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .disp-nome  { font-weight: 600; color: #1a2e2d; font-size: 14px; flex: 1; }
+    .disp-obs   { font-size: 12px; color: #888; font-style: italic; }
+    .badge-periodo {
+      background: #e8faf9;
+      color: #1a9e93;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .disp-acoes { display: flex; gap: 6px; margin-left: auto; }
+    .btn-disp-editar,
+    .btn-disp-excluir {
+      background: transparent;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 3px 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background .15s;
+    }
+    .btn-disp-editar:hover  { background: #e8faf9; border-color: #2BBFB3; }
+    .btn-disp-excluir:hover { background: #fee2e2; border-color: #ef4444; }
+
+    .aviso-form-inline {
+      background: #f8fffe;
+      border: 1px solid #d0f0ee;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .aviso-form-inline h3 { font-size: 15px; margin: 0 0 16px; color: #1a9e93; }
+    .aviso-form-inline .form-group {
+      display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px;
+    }
+    .aviso-form-inline label { font-size: 12px; font-weight: 700; color: #555; }
+    .aviso-form-inline input,
+    .aviso-form-inline textarea {
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .aviso-form-inline input:focus,
+    .aviso-form-inline textarea:focus { border-color: #2BBFB3; outline: none; }
+    .aviso-form-inline .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .aviso-form-inline .form-row > .form-group { flex: 1; min-width: 180px; }
+    .aviso-card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      border-left: 4px solid #2BBFB3;
+    }
+    .aviso-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .aviso-head h3  { margin: 0; font-size: 15px; color: #1a2e2d; }
+    .aviso-meta     { font-size: 12px; color: #aaa; margin: 4px 0 10px; }
+    .aviso-texto    { font-size: 14px; color: #444; line-height: 1.6; }
+    .aviso-anexo {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 10px; font-size: 13px; color: #2BBFB3;
+      font-weight: 600; text-decoration: none;
+    }
+    .aviso-anexo:hover { text-decoration: underline; }
+    .btn-rm-aviso {
+      background: transparent; border: none;
+      color: #dc3545; font-size: 18px; cursor: pointer; flex-shrink: 0;
+    }
+    .upload-area {
+      border: 2px dashed #2BBFB3;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      color: #2BBFB3;
+      font-size: 14px;
+      transition: background .2s;
+    }
+    .upload-area:hover { background: #f0fffe; }
+
+    .avisos-destaque-wrap { margin: 0 0 28px; }
+    .avisos-destaque-titulo {
+      font-size: 13px;
+      font-weight: 700;
+      color: #aaa;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .aviso-destaque-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+      margin-bottom: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow .2s, transform .15s;
+      border-left: 4px solid #2BBFB3;
+    }
+    .aviso-destaque-card:hover {
+      box-shadow: 0 6px 24px rgba(43,191,179,.22);
+      transform: translateY(-2px);
+    }
+    .aviso-destaque-img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+      display: block;
+      background: #f5f5f5;
+    }
+    .aviso-destaque-body { padding: 16px 20px; }
+    .aviso-destaque-body h3 {
+      font-size: 15px; font-weight: 700; color: #1a2e2d; margin: 0 0 4px;
+    }
+    .aviso-destaque-meta { font-size: 12px; color: #aaa; margin-bottom: 10px; }
+    .aviso-destaque-texto {
+      font-size: 14px; color: #555; line-height: 1.65;
+      display: -webkit-box; -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical; overflow: hidden;
+      text-overflow: ellipsis; white-space: pre-wrap;
+    }
+    .aviso-destaque-rodape {
+      font-size: 12px; color: #2BBFB3; font-weight: 600; margin-top: 10px;
+    }
+
+    .filtros-wrap {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      align-items: flex-end; margin-bottom: 20px;
+    }
+    .filtros-wrap label {
+      font-size: 13px; font-weight: 600; color: #555;
+      display: block; margin-bottom: 4px;
+    }
+    .filtros-wrap input,
+    .filtros-wrap select {
+      padding: 9px 12px; border: 1px solid #ddd;
+      border-radius: 8px; font-size: 14px; outline: none;
+    }
+    .filtros-wrap input:focus,
+    .filtros-wrap select:focus { border-color: #2BBFB3; }
+    .export-wrap { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+    .stats-row   { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .stat-box {
+      background: white; border-radius: 12px; padding: 14px 20px;
+      text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.07); min-width: 110px;
+    }
+    .stat-box .stat-num   { font-size: 28px; font-weight: 800; color: #2BBFB3; }
+    .stat-box .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
+    .stat-box.verde    .stat-num { color: #10b981; }
+    .stat-box.vermelho .stat-num { color: #ef4444; }
+    .stat-box.amarelo  .stat-num { color: #f59e0b; }
+
+    .check-list {
+      border: 1px solid #eee; border-radius: 8px; padding: 8px; margin-top: 4px;
+    }
+    .check-list label {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 4px; font-size: 14px; cursor: pointer; border-radius: 6px;
+    }
+    .check-list label:hover { background: #f5f5f5; }
+    .link-box {
+      background: #f5f5f5; border-radius: 8px; padding: 10px 14px;
+      font-size: 12px; word-break: break-all; color: #444;
+      margin-top: 8px; display: flex; align-items: center; gap: 8px;
+    }
+    .link-box .btn-copiar {
+      background: #2BBFB3; color: white; border: none; border-radius: 6px;
+      padding: 4px 10px; font-size: 12px; cursor: pointer; white-space: nowrap;
+    }
+    .empty-state { text-align: center; color: #bbb; padding: 50px 20px; font-size: 15px; }
+    .modal textarea {
+      width: 100%; min-height: 90px; padding: 10px; border-radius: 8px;
+      border: 1px solid #ddd; font-size: 14px; resize: vertical;
+      font-family: inherit; box-sizing: border-box;
+    }
+    .modal textarea:focus { border-color: #2BBFB3; outline: none; }
+    .sel-todos {
+      font-size: 13px; color: #2BBFB3; cursor: pointer;
+      font-weight: 600; margin-bottom: 6px; display: inline-block;
+    }
+
+    #tela-confirmacao {
+      display: none; min-height: 80vh;
+      align-items: center; justify-content: center;
+    }
+    .confirm-card {
+      background: white; border-radius: 20px; padding: 40px;
+      max-width: 460px; width: 100%; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,.12); border-top: 5px solid #2BBFB3;
+    }
+    .confirm-card .big-icon  { font-size: 60px; margin-bottom: 12px; }
+    .confirm-card h2         { font-size: 22px; margin-bottom: 8px; color: #1a2e2d; }
+    .confirm-card .conf-data { color: #2BBFB3; font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .confirm-card .conf-desc { color: #888; font-size: 14px; margin-bottom: 24px; }
+    .confirm-btns            { display: flex; gap: 12px; justify-content: center; }
+
+    .modal-box {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      width: 100%;
+      max-width: 460px;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0,0,0,.15);
+    }
+    .modal-box h2 { font-size: 17px; margin: 0 0 20px; color: #1a2e2d; }
+    .modal-box .form-group {
+      display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;
+    }
+    .modal-box label { font-size: 12px; font-weight: 700; color: #555; }
+    .modal-box select,
+    .modal-box textarea {
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .modal-box select:focus,
+    .modal-box textarea:focus { border-color: #2BBFB3; }
+    .modal-close {
+      position: absolute; top: 14px; right: 16px;
+      background: none; border: none; font-size: 20px;
+      cursor: pointer; color: #aaa; line-height: 1;
+    }
+    .modal-close:hover { color: #333; }
+
+    .cal-ev-geral {
+      opacity: 0.85;
+      font-style: italic;
+      border-left: 3px solid currentColor !important;
+      padding-left: 5px !important;
+    }
+
+    .playlist-toolbar {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .playlist-busca {
+      flex: 1; min-width: 200px; max-width: 340px;
+      padding: 9px 14px; border: 1.5px solid #e0e0e0;
+      border-radius: 10px; font-size: 14px; font-family: inherit;
+      transition: border-color .2s;
+    }
+    .playlist-busca:focus { border-color: #2BBFB3; outline: none; }
+    .playlist-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      overflow: hidden;
+    }
+    .musica-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background .15s;
+    }
+    .musica-card:last-child { border-bottom: none; }
+    .musica-card:hover { background: #f8fffe; }
+    .musica-thumb {
+      width: 44px; height: 44px; flex-shrink: 0;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1DB954, #158a3c);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: white;
+      overflow: hidden;
+    }
+    .musica-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 8px; }
+    .musica-num {
+      width: 20px; flex-shrink: 0;
+      font-size: 12px; color: #bbb; font-weight: 600; text-align: right;
+    }
+    .musica-info {
+      flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;
+    }
+    .musica-titulo {
+      font-size: 14px; font-weight: 700; color: #1a2e2d;
+      margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .musica-artista {
+      font-size: 12px; color: #888; margin: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .musica-tags { display: flex; gap: 4px; flex-shrink: 0; }
+    .musica-tag {
+      background: #e8faf9; color: #1a9e93;
+      border-radius: 20px; padding: 2px 8px;
+      font-size: 11px; font-weight: 600; white-space: nowrap;
+    }
+    .musica-footer { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .btn-spotify {
+      display: flex; align-items: center; gap: 5px;
+      background: #1DB954; color: white; border: none;
+      border-radius: 20px; padding: 5px 12px;
+      font-size: 11px; font-weight: 700; cursor: pointer;
+      text-decoration: none; transition: background .2s; white-space: nowrap;
+    }
+    .btn-spotify:hover { background: #158a3c; }
+    .btn-editar-musica, .btn-excluir-musica {
+      background: transparent; border: 1px solid #e0e0e0;
+      border-radius: 7px; padding: 5px 8px; cursor: pointer;
+      font-size: 12px; transition: background .15s; color: #888;
+    }
+    .btn-editar-musica:hover  { background: #e8faf9; border-color: #2BBFB3; color: #2BBFB3; }
+    .btn-excluir-musica:hover { background: #fee2e2; border-color: #ef4444; color: #ef4444; }
+    .btn-play-musica {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: #1DB954; color: white; border: none;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 13px; flex-shrink: 0;
+      transition: background .2s, transform .15s;
+    }
+    .btn-play-musica:hover { background: #158a3c; transform: scale(1.1); }
+    .btn-play-musica.ativo { background: #1a9e93; }
+    .musica-player-row {
+      display: none;
+      padding: 0 16px 10px 92px;
+      border-bottom: 1px solid #f0f0f0;
+      background: #fafafa;
+    }
+    .musica-player-row.aberto { display: block; }
+    .musica-player-row iframe {
+      width: 100%; height: 80px; border: none; border-radius: 10px;
+    }
+    .playlist-culto-wrap {
+      background: linear-gradient(135deg, #f0fffe, #e8faf9);
+      border: 1.5px solid #b0e8e4; border-radius: 16px;
+      padding: 20px 24px; margin-bottom: 24px;
+    }
+    .culto-sel-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .culto-musica-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: white; border: 1.5px solid #2BBFB3;
+      border-radius: 20px; padding: 5px 12px; font-size: 13px; font-weight: 600;
+      color: #1a9e93;
+    }
+    .culto-musica-pill button {
+      background: none; border: none; cursor: pointer;
+      color: #888; font-size: 14px; padding: 0; line-height: 1;
+    }
+    .culto-musica-pill button:hover { color: #ef4444; }
+    .modal-playlist { max-width: 540px; }
+    .form-group-pl { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
+    .form-group-pl label { font-size: 12px; font-weight: 700; color: #555; }
+    .form-group-pl input, .form-group-pl textarea, .form-group-pl select {
+      padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px;
+      font-size: 14px; font-family: inherit; box-sizing: border-box; width: 100%;
+    }
+    .form-group-pl input:focus, .form-group-pl textarea:focus,
+    .form-group-pl select:focus { border-color: #2BBFB3; outline: none; }
+    .spotify-preview {
+      display: flex; align-items: center; gap: 10px;
+      background: #f8fffe; border: 1px solid #d0f0ee;
+      border-radius: 10px; padding: 10px 14px; margin-top: 6px;
+    }
+    .spotify-preview img { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; }
+    .spotify-preview-info strong { font-size: 13px; color: #1a2e2d; display: block; }
+    .spotify-preview-info span   { font-size: 12px; color: #888; }
+
+    /* ── CALENDÁRIO DA PLAYLIST (compacto) ───────────── */
+    .cal-wrap-sm {
+      padding: 12px 14px;
+    }
+    .cal-wrap-sm .cal-header {
+      margin-bottom: 10px;
+    }
+    .cal-wrap-sm .cal-header h3 {
+      font-size: 13px;
+    }
+    .cal-wrap-sm .cal-nav-btn {
+      padding: 3px 9px;
+      font-size: 14px;
+    }
+    .cal-wrap-sm .cal-dow {
+      font-size: 8px;
+      padding: 2px 0 4px;
+    }
+    .cal-wrap-sm .cal-day {
+      min-height: 38px;
+      padding: 3px 2px;
+      gap: 1px;
+      border-radius: 6px;
+    }
+    .cal-wrap-sm .cal-day-num {
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .cal-wrap-sm .cal-ev-mini {
+      font-size: 7px;
+      padding: 1px 2px;
+      border-radius: 3px;
+    }
+    .cal-wrap-sm .cal-grid {
+      gap: 2px;
+    }
+
+  
+    /* ── PLAYLIST RESPONSIVO MOBILE ─── */
+    @media (max-width: 768px) {
+
+      /* Calendário interno da playlist */
+      #playlist-cal-wrap,
+      .playlist-cal-wrap {
+        overflow-x: auto;
+      }
+
+      /* Toolbar da playlist */
+      .playlist-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .playlist-toolbar > div {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .playlist-toolbar select,
+      .playlist-toolbar .btn {
+        width: 100%;
+      }
+      .playlist-busca { max-width: 100%; width: 100%; }
+
+      /* Card da música */
+      .musica-card {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 10px;
+      }
+      .musica-num { display: none; }
+      .musica-thumb { width: 40px; height: 40px; }
+      .musica-info { min-width: 0; flex: 1; }
+      .musica-titulo {
+        font-size: 13px;
+        white-space: normal;
+      }
+      .musica-artista { font-size: 11px; }
+
+      /* Tags: só mostrar 1 */
+      .musica-tags { display: none; }
+
+      /* Footer dos botões */
+      .musica-footer {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 4px;
+      }
+      .btn-spotify {
+        flex: 1;
+        justify-content: center;
+        font-size: 11px;
+        padding: 5px 8px;
+      }
+      .btn-editar-musica,
+      .btn-excluir-musica,
+      .btn-play-musica { padding: 5px 8px; font-size: 12px; }
+
+      /* Seleção culto */
+      .playlist-culto-wrap { padding: 14px 12px; }
+      .culto-musica-pill { font-size: 12px; padding: 4px 10px; }
+
+      /* Player row */
+      .musica-player-row { padding: 0 10px 10px; }
+      .musica-player-row iframe { height: 70px; }
+
+      /* Botões de ação do culto */
+      .playlist-culto-wrap > div:last-child {
+        flex-direction: column;
+        gap: 6px;
+      }
+      .playlist-culto-wrap .btn { width: 100%; text-align: center; }
+
+      /* Calendário do evento (vincular repertório) */
+      .aba-content .cal-wrap,
+      #aba-playlist .cal-wrap {
+        max-width: 100%;
+        padding: 10px 6px;
+      }
+      .aba-content .cal-dow { font-size: 9px; }
+      .aba-content .cal-day { min-height: 36px; padding: 2px; }
+      .aba-content .cal-num { font-size: 11px; width: 20px; height: 20px; }
+      .aba-content .cal-grid { gap: 2px; }
+
+      /* Botões Salvar repertório / Copiar Setlist */
+      #aba-playlist > div[style*="display:flex"],
+      .aba-content > div[style*="gap"] {
+        flex-direction: column !important;
+        gap: 8px !important;
+      }
+    }
+</style>
+<style>
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 6px 12px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .sidebar-user {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: inherit; padding: 5px 10px;
+    border-radius: 10px; transition: background .2s; cursor: pointer;
+  }
+  .sidebar-user:hover { background: rgba(255,255,255,0.12); }
+  .sidebar-user-icon {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0; overflow: hidden;
+  }
+  .sidebar-user-icon img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+  .sidebar-user-nome {
+    font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sidebar-logout {
+    width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 600;
+    cursor: pointer; padding: 5px 10px; border-radius: 10px;
+    transition: background .2s, color .2s; text-align: left;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
+</style>
+
+  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo"><img src="logo.png" alt="Sua Igreja" /></div>
+  <nav id="sidebar-nav">
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="membros.html">👥 Membros</a>
+    <a href="visitantes.html">🙋 Visitantes</a>
+    <a href="criancas.html">👶 Crianças</a>
+    <a href="pedido-de-oracao.html">🙏 Pedidos de Oração</a>
+    <a href="aniversariantes.html">🎂 Aniversariantes</a>
+
+    <!-- ITEM MINISTÉRIOS COM CASCATA -->
+    <div class="nav-ministerios" id="nav-ministerios">
+      <div class="nav-min-trigger" id="nav-min-trigger">
+        <span>✨ Ministérios</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+      <div id="nav-ministerios-lista">
+        <div class="nav-min-loading">Carregando...</div>
+      </div>
+    </div>
+
+    <a href="agenda.html">📅 Agenda</a>
+    <a href="inscricoes.html">📋 Inscrições</a>
+    <a href="central-voluntarios.html">🎯 Central de Voluntários</a>
+    <a href="mesas.html">🟤 Mesas</a>
+    <a href="financeiro.html">💰 Financeiro</a>
+    <a href="relatorios.html">📈 Relatórios</a>
+    <div class="nav-ministerios" id="nav-conteudos">
+      <div class="nav-min-trigger" id="nav-conteudos-trigger">
+        <span>📚 Conteúdos</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+        <div id="nav-conteudos-lista">
+          <a href="conteudos.html?aba=pregacoes"  class="nav-min-item" data-aba="pregacoes">🎙️ Pregações</a>
+          <a href="conteudos.html?aba=cursos"     class="nav-min-item" data-aba="cursos">🎓 Cursos</a>
+          <a href="conteudos.html?aba=biblioteca" class="nav-min-item" data-aba="biblioteca">📖 Biblioteca</a>
+        </div>
+    </div>
+    <a href="usuarios.html">⚙️ Usuários</a>
+  </nav>
+
+<div class="sidebar-footer">
+  <a href="perfil.html" class="sidebar-user" title="Meu perfil">
+    <span class="sidebar-user-icon" id="sidebarUserIcon">👤</span>
+    <span class="sidebar-user-nome" id="sidebarUserNome">Carregando...</span>
+  </a>
+  <button class="sidebar-logout"
+    onclick="fazerLogout ? fazerLogout() : db.auth.signOut().then(()=>location.href='index.html')">
+    🚪 Sair
+  </button>
+</div>
+
+
+</aside>
+
+<div class="main">
+
+  <div id="tela-confirmacao">
+    <div class="confirm-card">
+      <div class="big-icon" id="conf-icon">🎵</div>
+      <h2 id="conf-evento-nome">Carregando...</h2>
+      <div class="conf-data" id="conf-evento-data"></div>
+      <div class="conf-desc" id="conf-evento-desc"></div>
+      <div class="confirm-btns" id="confirm-btns">
+        <button class="btn btn-danger"  onclick="responderEscala('recusado')">❌ Não posso ir</button>
+        <button class="btn btn-primary" onclick="responderEscala('confirmado')">✅ Confirmo presença</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tela-principal">
+
+    <div class="ministerio-hero">
+      <div class="hero-icone">🎵</div>
+      <div class="hero-info">
+        <h1>Ministério de Música</h1>
+        <p>Louvor · Instrumentistas · Vocais · Ensaios</p>
+        <div class="hero-lideres" id="hero-lideres"></div>
+      </div>
+      <div class="hero-badge" id="hero-badge">⏳ Carregando...</div>
+    </div>
+
+    <div class="abas">
+      <button class="aba-btn active" data-aba="voluntarios" onclick="trocarAba('voluntarios', this)">👥 Voluntários</button>
+      <button class="aba-btn"        data-aba="lideres"     onclick="trocarAba('lideres',     this)">👑 Líderes</button>
+      <button class="aba-btn"        data-aba="escala"      onclick="trocarAba('escala',      this)">📅 Escala</button>
+      <button class="aba-btn"        data-aba="playlist"    onclick="trocarAba('playlist',    this)">🎵 Playlist</button>
+      <button class="aba-btn" data-aba="avisos" id="btn-aba-avisos" style="display:none;"
+        onclick="trocarAba('avisos', this)">📢 Avisos</button>
+      <button class="aba-btn"        data-aba="relatorios"  onclick="trocarAba('relatorios',  this)">📊 Relatórios</button>
+    </div>
+
+    <!-- ABA: VOLUNTÁRIOS -->
+    <div class="aba-content active" id="aba-voluntarios" data-aba="voluntarios">
+      <div class="aba-toolbar">
+        <input type="text" class="search-bar" id="busca-vol"
+          placeholder="🔍 Buscar voluntário..." oninput="filtrarVols()" />
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th><th>Telefone</th><th>Endereço</th>
+              <th>Nascimento</th><th>Mesa</th><th>Habilidades</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-voluntarios"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ABA: LÍDERES -->
+    <div class="aba-content" id="aba-lideres" data-aba="lideres">
+      <div class="lider-form-inline" id="lider-form-inline">
+        <h3>👑 Designar novo líder</h3>
+        <div class="lider-form-row">
+          <div>
+            <label>Voluntário</label>
+            <select id="sel-lider-vol">
+              <option value="">— Selecione um voluntário —</option>
+            </select>
+          </div>
+          <div>
+            <label>Função</label>
+            <select id="sel-lider-funcao">
+              <option value="Líder">👑 Líder</option>
+              <option value="Co-Líder">🤝 Co-Líder</option>
+              <option value="Coordenador">📋 Coordenador</option>
+            </select>
+          </div>
+          <div style="align-self:flex-end; display:flex; gap:8px;">
+            <button class="btn btn-secondary" onclick="fecharFormLider()">Cancelar</button>
+            <button class="btn btn-primary" id="btn-salvar-lider" onclick="salvarLider()">💾 Salvar</button>
+          </div>
+        </div>
+      </div>
+      <div class="aba-toolbar" style="justify-content:flex-end;">
+        <button class="btn btn-primary" id="btn-add-lider" data-acao="adicionar" onclick="abrirFormLider()">
+          + Designar Líder
+        </button>
+      </div>
+      <div class="lideres-wrap" id="lideres-wrap">
+        <div class="empty-state">Nenhum líder designado ainda.</div>
+      </div>
+    </div>
+
+    <!-- ABA: ESCALA -->
+    <div class="aba-content" id="aba-escala" data-aba="escala">
+      <div class="cal-wrap">
+        <div class="cal-header">
+          <button class="cal-nav-btn" onclick="mudarMes(-1)">‹</button>
+          <h3 id="cal-titulo"></h3>
+          <button class="cal-nav-btn" onclick="mudarMes(1)">›</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+
+      <div class="dia-painel" id="dia-painel" style="display:none;">
+        <div class="dia-painel-header">
+          <h4 id="dia-painel-titulo">Eventos do dia</h4>
+          <button class="btn btn-primary" style="font-size:12px;"
+            data-acao="adicionar" data-acao-lider onclick="abrirModalEvento()">+ Novo Evento neste dia</button>
+        </div>
+        <div id="eventos-do-dia">
+          <div class="empty-state" style="padding:20px;">Nenhum evento neste dia.</div>
+        </div>
+        <div class="disp-section">
+          <div class="disp-section-header">
+            <h4>🗓️ Disponibilidades neste dia</h4>
+            <button class="btn btn-primary" style="font-size:12px;"
+              onclick="abrirModalDisponibilidade(document.getElementById('inp-ev-data').value)">
+              + Minha disponibilidade
+            </button>
+          </div>
+          <div id="disponibilidade-dia-wrap">
+            <p style="color:#bbb;font-size:13px;text-align:center;">
+              Nenhuma disponibilidade neste dia.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="todos-eventos-wrap">
+        <div class="aba-toolbar" style="justify-content:flex-end;">
+          <button class="btn btn-primary" id="btn-add-evento" data-acao="adicionar" data-acao-lider onclick="abrirModalEvento()">
+            + Novo Evento
+          </button>
+        </div>
+        <div id="eventos-wrap">
+          <div class="empty-state">Nenhum evento cadastrado ainda.</div>
+        </div>
+        <div class="disp-section" style="margin-top:24px;">
+          <div class="disp-section-header">
+            <h4>🗓️ Disponibilidades do mês</h4>
+          </div>
+          <div id="disponibilidade-mes-wrap">
+            <p style="color:#bbb;font-size:13px;text-align:center;padding:20px;">
+              Nenhuma disponibilidade registrada este mês.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA: AVISOS -->
+    <div class="aba-content" id="aba-avisos" data-aba="avisos">
+      <div class="aviso-form-inline" id="aviso-form-inline">
+        <h3>📢 Publicar novo aviso</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Título *</label>
+            <input type="text" id="inp-av-titulo" placeholder="Ex: Ensaio cancelado" />
+          </div>
+          <div class="form-group">
+            <label>Postado por</label>
+            <input type="text" id="inp-av-autor" placeholder="Ex: Pastor João" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Mensagem</label>
+          <textarea id="inp-av-texto" rows="4"
+            placeholder="Escreva o comunicado completo aqui..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Imagem / Anexo (opcional)</label>
+          <div class="upload-area" onclick="document.getElementById('inp-av-arquivo').click()">
+            📎 Clique para selecionar uma imagem ou arquivo
+            <div id="upload-preview" style="font-size:12px;color:#555;margin-top:6px;"></div>
+          </div>
+          <input type="file" id="inp-av-arquivo" style="display:none"
+            onchange="previewArquivo(this)" accept="image/*,.pdf,.doc,.docx" />
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
+          <button class="btn btn-secondary" onclick="limparFormAviso()">🗑️ Limpar</button>
+          <button class="btn btn-primary"   data-acao="adicionar" onclick="salvarAviso()">📢 Publicar aviso</button>
+        </div>
+      </div>
+      <div id="avisos-wrap">
+        <div class="empty-state">Nenhum aviso publicado ainda.</div>
+      </div>
+    </div>
+
+    <!-- ABA: RELATÓRIOS -->
+    <div class="aba-content" id="aba-relatorios" data-aba="relatorios">
+      <div class="stats-row" id="stats-row"></div>
+      <div class="filtros-wrap">
+        <div><label>De</label><input type="date" id="filtro-ini" /></div>
+        <div><label>Até</label><input type="date" id="filtro-fim" /></div>
+        <div>
+          <label>Evento</label>
+          <select id="filtro-evento"><option value="">Todos</option></select>
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="filtro-status">
+            <option value="">Todos</option>
+            <option value="confirmado">✅ Confirmado</option>
+            <option value="pendente">⏳ Pendente</option>
+            <option value="recusado">❌ Recusado</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="gerarRelatorio()">🔍 Filtrar</button>
+      </div>
+      <div class="export-wrap">
+        <button class="btn btn-secondary" onclick="exportarPDF()">📄 Exportar PDF</button>
+        <button class="btn btn-secondary" onclick="exportarCSV()">📊 Exportar CSV</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Evento</th><th>Data</th><th>Voluntário</th>
+              <th>Status</th><th>Respondido em</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-relatorio"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ABA: PLAYLIST -->
+    <div class="aba-content" id="aba-playlist" data-aba="playlist">
+
+      <div class="playlist-culto-wrap" id="playlist-culto-wrap">
+        <h3 style="font-size:15px;color:#1a9e93;margin:0 0 14px;display:flex;align-items:center;gap:8px;">
+          🎶 Vincular repertório a um evento
+        </h3>
+
+        <div class="cal-wrap" style="margin-bottom:16px;">
+          <div class="cal-header">
+            <button class="cal-nav-btn" onclick="mudarMesPlaylist(-1)">‹</button>
+            <h3 id="pl-cal-titulo" style="font-size:15px;margin:0;color:#1a2e2d;"></h3>
+            <button class="cal-nav-btn" onclick="mudarMesPlaylist(1)">›</button>
+          </div>
+          <div class="cal-grid" id="pl-cal-grid"></div>
+        </div>
+
+        <div id="pl-evento-selecionado"
+          style="display:none;background:white;border:2px solid #2BBFB3;
+                 border-radius:12px;padding:12px 16px;margin-bottom:14px;
+                 align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div>
+            <span style="font-size:12px;color:#aaa;display:block;">Evento selecionado</span>
+            <span id="pl-evento-nome" style="font-size:14px;font-weight:700;color:#1a2e2d;"></span>
+            <span id="pl-evento-data" style="font-size:12px;color:#2BBFB3;margin-left:8px;"></span>
+          </div>
+          <button onclick="limparEventoPlaylist()"
+            style="background:none;border:none;color:#aaa;font-size:18px;cursor:pointer;line-height:1;">✕</button>
+        </div>
+
+        <div class="culto-sel-grid" id="culto-sel-grid">
+          <span style="color:#aaa;font-size:13px;">
+            Clique em um evento no calendário acima para ver ou montar o repertório.
+          </span>
+        </div>
+
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary"   onclick="salvarPlaylistEvento()">💾 Salvar repertório</button>
+          <button class="btn btn-secondary" onclick="copiarSetlistWhatsapp()">📲 Copiar Setlist</button>
+          <button class="btn btn-secondary" onclick="limparSelecaoCulto()">🗑️ Limpar seleção</button>
+        </div>
+
+        <div id="playlist-salvo-msg"
+          style="display:none;margin-top:10px;color:#065F46;background:#D1FAE5;
+                 border-radius:8px;padding:8px 14px;font-size:13px;">
+          ✅ Repertório salvo com sucesso!
+        </div>
+      </div>
+
+      <div class="playlist-toolbar">
+        <input type="text" class="playlist-busca" id="playlist-busca"
+          placeholder="🔍 Buscar música ou artista..." oninput="filtrarPlaylist()" />
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <select id="playlist-filtro-tonalidade"
+            style="padding:9px 12px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;font-family:inherit;"
+            onchange="filtrarPlaylist()">
+            <option value="">🎵 Todas as tonalidades</option>
+            <option>C</option><option>C#/Db</option><option>D</option>
+            <option>D#/Eb</option><option>E</option><option>F</option>
+            <option>F#/Gb</option><option>G</option><option>G#/Ab</option>
+            <option>A</option><option>A#/Bb</option><option>B</option>
+          </select>
+          <button class="btn btn-primary" onclick="abrirModalMusica()">+ Nova Música</button>
+          <button class="btn btn-secondary" id="btn-corrigir-thumbs"
+            title="Busca capas para músicas que foram salvas sem imagem"
+            onclick="corrigirThumbsExistentes()">🖼️ Atualizar capas</button>
+        </div>
+      </div>
+
+      <div class="playlist-grid" id="playlist-grid">
+        <div class="empty-state">Nenhuma música cadastrada ainda.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL: NOVO EVENTO -->
+<!-- MODAL: HABILIDADES DO VOLUNTÁRIO -->
+<div class="modal-overlay" id="modal-habilidades">
+  <div class="modal">
+    <h2>🎵 Habilidades Musicais</h2>
+    <p style="color:#666;font-size:14px;margin-bottom:16px;">
+      <strong id="mh-nome"></strong> — selecione o que este voluntário pode fazer:
+    </p>
+    <div id="mh-checks" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="fecharModalHabilidades()">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarHabilidades()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-evento">
+  <div class="modal">
+    <h2>📅 Novo Evento</h2>
+    <label>Nome do Evento *</label>
+    <input type="text" id="inp-ev-nome" placeholder="Ex: Culto de Domingo" />
+    <label>Data *</label>
+    <input type="date" id="inp-ev-data" />
+    <label>Hora (opcional)</label>
+    <input type="time" id="inp-ev-hora" />
+    <label>Descrição (opcional)</label>
+    <textarea id="inp-ev-desc" placeholder="Detalhes do evento..."></textarea>
+    <label style="margin-top:14px;">
+      <span class="sel-todos" onclick="toggleTodos()">Selecionar todos</span>
+      &nbsp;— Voluntários escalados:
+    </label>
+    <div class="check-list" id="check-vols" style="max-height:none;overflow-y:visible;"></div>
+    <div id="links-gerados" style="display:none; margin-top:16px;">
+      <p style="font-size:13px;font-weight:600;color:#555;margin-bottom:8px;">
+        🔗 Links de confirmação gerados:
+      </p>
+      <div id="lista-links"></div>
+      <p style="font-size:11px;color:#aaa;margin-top:8px;">
+        Copie e envie pelo WhatsApp para cada voluntário.
+      </p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="fecharModalEvento()">Cancelar</button>
+      <button class="btn btn-primary" id="btn-salvar-evento" onclick="salvarEvento()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ALTERAR STATUS -->
+<div class="modal-overlay" id="modal-status-escala">
+  <div class="modal" style="text-align:center;">
+    <div style="font-size:48px;margin-bottom:10px;">🎵</div>
+    <h2 id="mse-nome">Evento</h2>
+    <p id="mse-data" style="color:#2BBFB3;font-weight:700;margin:6px 0 4px;"></p>
+    <p id="mse-vol"  style="color:#888;font-size:14px;margin-bottom:16px;"></p>
+    <div id="mse-funcoes-wrap" style="text-align:left;margin-bottom:16px;display:none;">
+      <p style="font-size:13px;font-weight:600;color:#374151;margin-bottom:10px;">🎵 Vai executar neste evento:</p>
+      <div id="mse-funcoes" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+    </div>
+    <p style="font-size:14px;margin-bottom:20px;">Alterar status de presença:</p>
+    <div id="mse-btns-admin" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-secondary" onclick="alterarStatus('pendente')">⏳ Pendente</button>
+      <button class="btn btn-danger"    onclick="alterarStatus('recusado')">❌ Recusado</button>
+      <button class="btn btn-primary"   onclick="alterarStatus('confirmado')">✅ Confirmado</button>
+    </div>
+    <div id="mse-btns-voluntario" style="display:none;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="alterarStatus('confirmado')">✅ Confirmar presença</button>
+      <button class="btn btn-danger"  onclick="alterarStatus('recusado')">❌ Não poderei ir</button>
+    </div>
+    <div class="modal-actions" style="justify-content:center;margin-top:16px;">
+      <button class="btn btn-secondary" onclick="fecharModalStatus()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DISPONIBILIDADE -->
+<div class="modal-overlay" id="modal-disponibilidade">
+  <div class="modal-box">
+    <button class="modal-close" onclick="fecharModalDisponibilidade()">✕</button>
+    <h2 id="modal-disp-titulo">✅ Confirmar disponibilidade</h2>
+    <p id="modal-disp-subtitulo" style="font-size:13px;color:#888;margin-bottom:16px;"></p>
+    <div id="modal-disp-eventos" style="display:flex;flex-direction:column;gap:10px;"></div>
+    <p id="modal-disp-sem-eventos"
+      style="display:none;color:#bbb;font-size:13px;text-align:center;padding:16px 0;">
+      Nenhuma programação cadastrada neste dia.
+    </p>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+      <button class="btn btn-secondary" onclick="fecharModalDisponibilidade()">Cancelar</button>
+      <button class="btn btn-primary" id="btn-salvar-disp" onclick="salvarDisponibilidade()">✅ Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: AVISO EXPANDIDO -->
+<div class="modal-overlay" id="modal-aviso-expandido">
+  <div class="modal" style="max-width:640px; padding:0; overflow:hidden; border-radius:20px;">
+    <div id="modal-av-imagem-wrap" style="display:none;">
+      <img id="modal-av-imagem" src="" alt="Imagem do aviso"
+        style="width:100%; max-height:480px; object-fit:contain; display:block; background:#f0f0f0;" />
+    </div>
+    <div style="padding:28px 32px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+        <h2 id="modal-av-titulo" style="margin:0; font-size:20px; color:#1a2e2d;"></h2>
+        <button onclick="fecharAvisoExpandido()"
+          style="background:none; border:none; font-size:22px; cursor:pointer; color:#aaa; flex-shrink:0; line-height:1;">✕</button>
+      </div>
+      <div id="modal-av-meta" style="font-size:12px; color:#aaa; margin:6px 0 16px;"></div>
+      <div id="modal-av-texto"
+        style="font-size:15px; color:#444; line-height:1.7; white-space:pre-wrap; max-height:400px; overflow-y:auto;"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="config.js"></script>
+<script src="supabase.js"></script>
+<script src="auth.js"></script>
+
+<!-- MODAL: ESCALAR VOLUNTÁRIOS PARA EVENTO GERAL -->
+<div class="modal-overlay" id="modal-escala-geral">
+  <div class="modal" style="max-width:540px;">
+    <h2>👥 Escalar Voluntários</h2>
+    <p id="escala-geral-evento-nome" style="font-weight:700;color:#2BBFB3;margin-bottom:4px;"></p>
+    <p id="escala-geral-evento-data" style="font-size:13px;color:#888;margin-bottom:16px;"></p>
+    <label style="margin-bottom:10px;display:flex;align-items:center;gap:10px;">
+      <span style="cursor:pointer;color:#2BBFB3;font-size:13px;font-weight:600;"
+        onclick="toggleTodosGeral()">Selecionar todos</span>
+    </label>
+    <div class="check-list" id="check-vols-geral" style="max-height:260px;overflow-y:auto;margin-bottom:16px;"></div>
+    <div id="escala-geral-links-wrap" style="display:none;margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:700;color:#1a2e2d;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #e8e8e8;">
+        🔗 Links de confirmação — envie para cada voluntário:
+      </div>
+      <div id="escala-geral-links-lista"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="fecharModalEscalaGeral()">Fechar</button>
+      <button class="btn btn-primary" id="btn-salvar-escala-geral"
+        onclick="salvarEscalaGeral()">💾 Salvar Escala</button>
+    </div>
+  </div>
+</div>
+
+<script src="escala-geral.js"></script>
+
+<!-- MODAL: NOVA MÚSICA -->
+<div class="modal-overlay" id="modal-playlist">
+  <div class="modal modal-playlist">
+    <button class="modal-close" onclick="fecharModalMusica()">✕</button>
+    <h2 id="modal-playlist-titulo">🎵 Nova Música</h2>
+    <div class="form-group-pl">
+      <label>Link do Spotify *</label>
+      <input type="url" id="inp-spotify-url"
+        placeholder="https://open.spotify.com/track/..."
+        oninput="previewSpotify(this.value)" />
+      <div id="spotify-embed-box" style="display:none;margin-top:8px;"></div>
+      <div id="spotify-preview-box" style="display:none;margin-top:8px;" class="spotify-preview">
+        <img id="spotify-preview-img" src="" alt="" />
+        <div class="spotify-preview-info">
+          <strong id="spotify-preview-titulo">—</strong>
+          <span id="spotify-preview-artista">—</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group-pl">
+      <label>Título da música *</label>
+      <input type="text" id="inp-musica-titulo" placeholder="Ex: Reckless Love" />
+    </div>
+    <div class="form-group-pl">
+      <label>Artista / Banda</label>
+      <input type="text" id="inp-musica-artista" placeholder="Ex: Cory Asbury" />
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <div class="form-group-pl" style="flex:1;min-width:130px;">
+        <label>Tonalidade</label>
+        <select id="inp-musica-tom">
+          <option value="">—</option>
+          <option>C</option><option>C#/Db</option><option>D</option>
+          <option>D#/Eb</option><option>E</option><option>F</option>
+          <option>F#/Gb</option><option>G</option><option>G#/Ab</option>
+          <option>A</option><option>A#/Bb</option><option>B</option>
+        </select>
+      </div>
+      <div class="form-group-pl" style="flex:1;min-width:130px;">
+        <label>BPM</label>
+        <input type="number" id="inp-musica-bpm" placeholder="Ex: 75" min="40" max="220" />
+      </div>
+      <div class="form-group-pl" style="flex:1;min-width:130px;">
+        <label>Categoria</label>
+        <select id="inp-musica-categoria">
+          <option value="">—</option>
+          <option>Louvor</option>
+          <option>Adoração</option>
+          <option>Comunhão</option>
+          <option>Ofertório</option>
+          <option>Especial</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group-pl">
+      <label>Observações</label>
+      <textarea id="inp-musica-obs" rows="2"
+        placeholder="Ex: Letra adaptada, arranje em G..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="fecharModalMusica()">Cancelar</button>
+      <button class="btn btn-primary" id="btn-salvar-musica" onclick="salvarMusica()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+  <script src="/pwa.js"></script>
+  <script src="permissions.js"></script>
+  <script src="ministerios-musica.js"></script> <!-- ou o js da página -->
+  <script src="comunicacao-ministerios.js"></script>
+  <script src="comunicacao-badges.js"></script>
+  <script src="ministerios-nav.js"></script>
+  <script src="conteudos-nav.js"></script>
+
+<script>
+(function () {
+  document.querySelector('.abas').addEventListener('click', function (e) {
+    var btn = e.target.closest('.aba-btn')
+    if (!btn) return
+    var aba = btn.getAttribute('data-aba')
+    if (aba && typeof trocarAba === 'function') trocarAba(aba, btn)
+  })
+
+  function preencherSidebarUser() {
+    var nomeEl = document.getElementById('sidebarUserNome')
+    var iconEl = document.getElementById('sidebarUserIcon')
+    if (!nomeEl || !iconEl) return
+    var perfil  = window.AUTH && window.AUTH.perfil
+    var user    = window.AUTH && window.AUTH.user
+    var nome    = (perfil && perfil.nome) || (user && user.email && user.email.split('@')[0]) || 'Meu perfil'
+    var fotoUrl = perfil && perfil.foto_url ? perfil.foto_url : null
+    nomeEl.textContent = nome
+    if (fotoUrl) {
+      iconEl.innerHTML = '<img src="' + fotoUrl + '" alt="avatar" />'
+    } else {
+      iconEl.textContent = (nome[0] || '👤').toUpperCase()
+    }
+  }
+  preencherSidebarUser()
+  var t = 0
+  var iv = setInterval(function () {
+    preencherSidebarUser()
+    if ((window.AUTH && window.AUTH.perfil) || ++t > 40) clearInterval(iv)
+  }, 150)
+})()
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,1231 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meu Perfil — Sua Igreja</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script src="auth.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .perfil-wrapper {
+      max-width: 720px;
+      margin: 32px auto;
+      padding: 0 16px 60px;
+    }
+    .perfil-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .perfil-avatar-wrap {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      flex-shrink: 0;
+    }
+    .perfil-avatar-btn {
+      position: absolute;
+      bottom: 0; right: 0;
+      background: #2BBFB3;
+      border: none;
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      color: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    }
+    .perfil-header-info h2 { margin: 0 0 4px; color: #1a2e2d; font-size: 22px; }
+    .perfil-header-info p  { margin: 0; color: #888; font-size: 14px; }
+
+    .apelido-wrap { display: flex; align-items: center; gap: 8px; }
+    .btn-editar-apelido {
+      background: none; border: none; cursor: pointer;
+      font-size: 16px; color: #2BBFB3;
+      padding: 2px 6px; border-radius: 6px; transition: background .2s;
+    }
+    .btn-editar-apelido:hover { background: #e8faf9; }
+    .apelido-input-wrap {
+      display: none; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .apelido-input-wrap input {
+      padding: 6px 10px; border: 1.5px solid #2BBFB3;
+      border-radius: 8px; font-size: 15px; outline: none; width: 200px;
+    }
+    .btn-apelido-salvar {
+      background: #2BBFB3; color: white; border: none;
+      padding: 6px 14px; border-radius: 8px; font-size: 13px;
+      font-weight: 600; cursor: pointer;
+    }
+    .btn-apelido-cancelar {
+      background: #eee; color: #555; border: none;
+      padding: 6px 14px; border-radius: 8px; font-size: 13px;
+      font-weight: 600; cursor: pointer;
+    }
+
+    .perfil-card {
+      background: white; border-radius: 12px; padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07); margin-bottom: 20px;
+    }
+    .perfil-card h3 {
+      margin: 0 0 20px; font-size: 16px; color: #1a2e2d;
+      border-bottom: 2px solid #f0f2f5; padding-bottom: 10px;
+    }
+    .perfil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .perfil-grid.col-3 { grid-template-columns: 2fr 1fr 1fr; }
+    .perfil-grid.col-1 { grid-template-columns: 1fr; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; position: relative; }
+    .form-group label { font-size: 13px; font-weight: 600; color: #555; }
+    .form-group input,
+    .form-group select {
+      padding: 10px 12px; border: 1.5px solid #e0e0e0;
+      border-radius: 8px; font-size: 14px; color: #1a2e2d;
+      transition: border .2s; background: #fafafa;
+      box-sizing: border-box;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none; border-color: #2BBFB3; background: white;
+    }
+
+    /* Autocomplete */
+    .ac-box {
+      position: absolute; top: calc(100% + 2px); left: 0; right: 0;
+      background: white; border: 1.5px solid #2BBFB3;
+      border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.12);
+      z-index: 9999; max-height: 200px; overflow-y: auto; display: none;
+    }
+    .ac-item {
+      padding: 9px 12px; font-size: 13px; cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .ac-item:last-child { border-bottom: none; }
+    .ac-item:hover { background: #e8faf9; color: #2BBFB3; }
+    .ac-vazio { padding: 9px 12px; color: #aaa; font-size: 13px; }
+
+    /* Cônjuge */
+    .conjuge-vinculado {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; background: #e8faf9;
+      border: 1.5px solid #2BBFB3; border-radius: 8px;
+      font-size: 14px; color: #1a2e2d; font-weight: 600;
+    }
+    .conjuge-vinculado button {
+      margin-left: auto; background: none; border: none;
+      cursor: pointer; font-size: 16px; color: #e74c3c;
+    }
+
+    /* Toggle */
+    .filhos-toggle { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .toggle-switch { position: relative; width: 44px; height: 24px; }
+    .toggle-switch input { display: none; }
+    .toggle-switch .slider {
+      position: absolute; inset: 0; background: #ccc;
+      border-radius: 24px; cursor: pointer; transition: .3s;
+    }
+    .toggle-switch .slider:before {
+      content: ''; position: absolute;
+      width: 18px; height: 18px; background: white;
+      border-radius: 50%; top: 3px; left: 3px; transition: .3s;
+    }
+    .toggle-switch input:checked + .slider { background: #2BBFB3; }
+    .toggle-switch input:checked + .slider:before { transform: translateX(20px); }
+
+    /* Filhos */
+    .filhos-lista { display: flex; flex-direction: column; gap: 12px; }
+    .filho-item {
+      display: grid; grid-template-columns: 1fr 1fr auto;
+      gap: 10px; align-items: end; padding: 14px;
+      background: #f8fffe; border: 1.5px solid #e0e0e0; border-radius: 10px;
+    }
+    .filho-item.salvo { border-color: #2BBFB3; background: #e8faf9; }
+    .badge-salvo {
+      grid-column: 1 / -1;
+      font-size: 11px; color: #2BBFB3; font-weight: 700; margin-bottom: 4px;
+    }
+    .btn-remover-filho {
+      background: #fee; border: 1.5px solid #f5c6cb; color: #e74c3c;
+      border-radius: 8px; padding: 9px 10px; cursor: pointer;
+      font-size: 16px; align-self: end; line-height: 1;
+    }
+    .btn-remover-filho:hover { background: #f8d7da; }
+    .btn-add-filho {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #e8faf9; border: 1.5px dashed #2BBFB3; color: #2BBFB3;
+      border-radius: 8px; padding: 10px 16px; font-size: 14px;
+      font-weight: 600; cursor: pointer; margin-top: 10px;
+    }
+    .btn-add-filho:hover { background: #d0f5f2; }
+
+    /* Ministérios */
+    .ministerios-checks { display: flex; flex-wrap: wrap; gap: 10px; }
+    .ministerio-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border: 1.5px solid #e0e0e0;
+      border-radius: 20px; cursor: pointer; font-size: 13px;
+      color: #555; background: #fafafa; transition: all .2s; user-select: none;
+    }
+    .ministerio-chip input { display: none; }
+    .ministerio-chip.ativo {
+      border-color: #2BBFB3; background: #e8faf9;
+      color: #2BBFB3; font-weight: 600;
+    }
+
+    .perfil-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
+    .btn-salvar {
+      background: #2BBFB3; color: white; border: none;
+      padding: 11px 28px; border-radius: 8px; font-size: 15px;
+      font-weight: 600; cursor: pointer; transition: background .2s;
+    }
+    .btn-salvar:hover    { background: #23a99e; }
+    .btn-salvar:disabled { background: #aaa; cursor: not-allowed; }
+
+    /* Alerta sem vínculo */
+    .alerta-sem-membro {
+      background: #fff3cd; border: 1.5px solid #ffc107;
+      border-radius: 10px; padding: 16px 20px;
+      font-size: 14px; color: #856404; margin-bottom: 20px;
+      display: none;
+    }
+
+    .toast {
+      position: fixed; bottom: 28px; right: 28px;
+      background: #1a2e2d; color: white; padding: 12px 22px;
+      border-radius: 10px; font-size: 14px; font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0,0,0,.2); opacity: 0;
+      transform: translateY(10px); transition: all .3s;
+      z-index: 9999; pointer-events: none;
+    }
+    .toast.show    { opacity: 1; transform: translateY(0); }
+    .toast.erro    { background: #e74c3c; }
+    .toast.sucesso { background: #2BBFB3; }
+    .toast.aviso   { background: #f39c12; }
+
+    /* ── CEP ── */
+    .cep-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .cep-row input {
+      flex: 1;
+      width: auto !important;
+      min-width: 0;
+    }
+    .cep-spinner { font-size: 15px; animation: cepSpin 0.8s linear infinite; display: none; flex-shrink: 0; }
+    .cep-ok      { color: #10b981; font-size: 15px; display: none; flex-shrink: 0; }
+    .cep-err     { color: #ef4444; font-size: 15px; display: none; flex-shrink: 0; }
+    @keyframes cepSpin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .perfil-grid, .perfil-grid.col-3 { grid-template-columns: 1fr; }
+      .filho-item { grid-template-columns: 1fr auto; }
+    }
+  </style>
+
+  <style>
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 6px 12px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sidebar-user {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: inherit; padding: 5px 10px;
+      border-radius: 10px; transition: background .2s; cursor: pointer;
+    }
+    .sidebar-user:hover { background: rgba(255,255,255,0.12); }
+    .sidebar-user-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0; overflow: hidden;
+    }
+    .sidebar-user-icon img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .sidebar-user-nome {
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sidebar-logout {
+      width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 600;
+      cursor: pointer; padding: 5px 10px; border-radius: 10px;
+      transition: background .2s, color .2s; text-align: left;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sidebar-logout:hover { background: rgba(255,255,255,0.18); color: white; }
+  </style>
+
+  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo"><img src="logo.png" alt="Sua Igreja" /></div>
+  <nav id="sidebar-nav">
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="membros.html">👥 Membros</a>
+    <a href="visitantes.html">🙋 Visitantes</a>
+    <a href="criancas.html">👶 Crianças</a>
+    <a href="pedido-de-oracao.html">🙏 Pedidos de Oração</a>
+    <a href="aniversariantes.html">🎂 Aniversariantes</a>
+
+    <div class="nav-ministerios" id="nav-ministerios">
+      <div class="nav-min-trigger" id="nav-min-trigger">
+        <span>✨ Ministérios</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+      <div id="nav-ministerios-lista">
+        <div class="nav-min-loading">Carregando...</div>
+      </div>
+    </div>
+
+    <a href="agenda.html">📅 Agenda</a>
+    <a href="inscricoes.html">📋 Inscrições</a>
+    <a href="central-voluntarios.html">🎯 Central de Voluntários</a>
+    <a href="mesas.html">🟤 Mesas</a>
+    <a href="financeiro.html">💰 Financeiro</a>
+    <a href="relatorios.html">📈 Relatórios</a>
+    <div class="nav-ministerios" id="nav-conteudos">
+      <div class="nav-min-trigger" id="nav-conteudos-trigger">
+        <span>📚 Conteúdos</span>
+        <span class="nav-min-arrow">▾</span>
+      </div>
+        <div id="nav-conteudos-lista">
+          <a href="conteudos.html?aba=pregacoes"  class="nav-min-item" data-aba="pregacoes">🎙️ Pregações</a>
+          <a href="conteudos.html?aba=cursos"     class="nav-min-item" data-aba="cursos">🎓 Cursos</a>
+          <a href="conteudos.html?aba=biblioteca" class="nav-min-item" data-aba="biblioteca">📖 Biblioteca</a>
+        </div>
+    </div>
+    <a href="usuarios.html">⚙️ Usuários</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="perfil.html" class="sidebar-user active" title="Meu perfil">
+      <span class="sidebar-user-icon" id="sidebarUserIcon">👤</span>
+      <span class="sidebar-user-nome" id="sidebarNome">Carregando...</span>
+    </a>
+    <button class="sidebar-logout" onclick="fazerLogout()">
+      🚪 Sair
+    </button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="perfil-wrapper">
+
+    <!-- Alerta sem vínculo -->
+    <div class="alerta-sem-membro" id="alertaSemMembro">
+      ⚠️ Seu usuário ainda não está vinculado a um membro cadastrado.
+      Entre em contato com o administrador para fazer o vínculo.
+    </div>
+
+    <!-- Header -->
+    <div class="perfil-header">
+      <div class="perfil-avatar-wrap">
+        <div id="avatarContainer"></div>
+        <button class="perfil-avatar-btn"
+          onclick="document.getElementById('inputFoto').click()"
+          title="Alterar foto">✏️</button>
+        <input type="file" id="inputFoto" accept="image/*"
+          style="display:none" onchange="uploadFoto(this)" />
+      </div>
+      <div class="perfil-header-info">
+        <div class="apelido-wrap" id="apelidoDisplay">
+          <h2 id="perfilNome">Carregando...</h2>
+          <button class="btn-editar-apelido" onclick="abrirEditarApelido()" title="Editar nome">✏️</button>
+        </div>
+        <div class="apelido-input-wrap" id="apelidoEditWrap">
+          <input type="text" id="apelidoInput" placeholder="Como quer ser chamado?" maxlength="60" />
+          <button class="btn-apelido-salvar" onclick="salvarApelido()">✔ Salvar</button>
+          <button class="btn-apelido-cancelar" onclick="fecharEditarApelido()">✖</button>
+        </div>
+        <p id="perfilEmail"></p>
+        <p id="perfilRole" style="font-size:12px;color:#2BBFB3;font-weight:600;margin-top:4px;"></p>
+      </div>
+    </div>
+
+    <!-- Endereço -->
+    <div class="perfil-card">
+      <h3>📍 Endereço</h3>
+
+      <!-- ✅ CAMPO CEP CORRIGIDO -->
+      <div style="margin-bottom:16px;">
+        <div class="form-group">
+          <label>CEP</label>
+          <div class="cep-row">
+            <input type="text" id="campo_cep" placeholder="Ex: 35160-158"
+              maxlength="9" oninput="perfilMascaraCep(this)" autocomplete="off" />
+            <span class="cep-spinner" id="perfil-cep-spinner">⏳</span>
+            <span class="cep-ok"  id="perfil-cep-ok">✅</span>
+            <span class="cep-err" id="perfil-cep-err">❌</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="perfil-grid col-3">
+        <div class="form-group">
+          <label>Rua</label>
+          <input type="text" id="campo_rua" placeholder="Nome da rua" />
+        </div>
+        <div class="form-group">
+          <label>Número</label>
+          <input type="text" id="campo_numero" placeholder="Nº" />
+        </div>
+        <div class="form-group">
+          <label>Complemento</label>
+          <input type="text" id="campo_complemento" placeholder="Apto, bloco..." />
+        </div>
+      </div>
+      <div class="perfil-grid" style="margin-top:16px;">
+        <div class="form-group">
+          <label>Bairro</label>
+          <input type="text" id="campo_bairro" placeholder="Bairro" />
+        </div>
+        <div class="form-group">
+          <label>Cidade</label>
+          <input type="text" id="campo_cidade" placeholder="Cidade" />
+        </div>
+      </div>
+      <div class="perfil-grid col-1" style="margin-top:16px;">
+        <div class="form-group">
+          <label>Estado</label>
+          <select id="campo_estado">
+            <option value="">Selecione</option>
+            <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+            <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+            <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+            <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+            <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+            <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+            <option>SP</option><option>SE</option><option>TO</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado Civil -->
+    <div class="perfil-card">
+      <h3>💍 Estado Civil</h3>
+      <div class="perfil-grid col-1">
+        <div class="form-group">
+          <label>Estado Civil</label>
+          <select id="campo_estado_civil" onchange="onEstadoCivilChange()">
+            <option value="">Selecione</option>
+            <option>Solteiro(a)</option>
+            <option>Casado(a)</option>
+            <option>Divorciado(a)</option>
+            <option>Viúvo(a)</option>
+            <option>União Estável</option>
+          </select>
+        </div>
+      </div>
+      <div id="conjugeSection" style="display:none; margin-top:16px;">
+        <div class="form-group">
+          <label>Cônjuge</label>
+          <div id="conjugeBuscaWrap" style="position:relative;">
+            <input type="text" id="campo_conjuge_busca"
+              placeholder="Digite o nome para buscar..."
+              autocomplete="off" />
+            <div class="ac-box" id="acConjuge"></div>
+          </div>
+          <div id="conjugeVinculadoWrap" style="display:none;">
+            <div class="conjuge-vinculado">
+              <span>👫</span>
+              <span id="conjugeVinculadoNome"></span>
+              <button onclick="desvincularConjuge()" title="Remover">✖</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filhos -->
+    <div class="perfil-card">
+      <h3>👶 Filhos</h3>
+      <div class="filhos-toggle">
+        <label class="toggle-switch">
+          <input type="checkbox" id="temFilhosToggle" onchange="onTemFilhosChange()" />
+          <span class="slider"></span>
+        </label>
+        <span id="temFilhosLabel" style="font-size:14px;color:#555;">Não tenho filhos</span>
+      </div>
+      <div id="filhosArea" style="display:none;">
+        <div class="filhos-lista" id="filhosLista"></div>
+        <button class="btn-add-filho" onclick="adicionarFilho()">➕ Adicionar filho</button>
+      </div>
+    </div>
+
+    <!-- Mesa -->
+    <div class="perfil-card">
+      <h3>🍽️ Mesa</h3>
+      <div class="perfil-grid col-1">
+        <div class="form-group">
+          <label>Participa de alguma mesa?</label>
+          <select id="campo_mesa_id">
+            <option value="">Não participa</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Voluntário + Ministérios -->
+    <div class="perfil-card">
+      <h3>⛪ Ministérios</h3>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label style="font-size:13px;font-weight:600;color:#555;margin-bottom:6px;display:block;">
+          Você serve como voluntário na Sua Igreja?
+        </label>
+        <select id="campo_voluntario" onchange="onVoluntarioChange()"
+          style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;width:100%;max-width:300px;background:#fafafa;">
+          <option value="Não">Não</option>
+          <option value="Sim">Sim — sirvo em um ministério</option>
+        </select>
+      </div>
+      <div id="areaMinisterios" style="display:none;">
+        <p style="font-size:13px;color:#888;margin:0 0 14px;">Selecione todos em que você serve:</p>
+        <div class="ministerios-checks" id="ministeriosChecks">
+          <span style="color:#aaa;font-size:13px;">Carregando...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ações -->
+    <div class="perfil-actions">
+      <button class="btn-salvar" id="btnSalvar" onclick="salvarPerfil()">
+        💾 Salvar alterações
+      </button>
+    </div>
+
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   ESTADO GLOBAL
+══════════════════════════════════════════ */
+let membroId        = null
+let perfilId        = null
+let ministerios     = []
+let conjugeMembroId = null
+let filhos          = []
+let _keyCounter     = 0
+
+function onVoluntarioChange() {
+  const vol  = document.getElementById('campo_voluntario')?.value
+  const area = document.getElementById('areaMinisterios')
+  if (!area) return
+  if (vol === 'Sim') {
+    area.style.display = 'block'
+  } else {
+    area.style.display = 'none'
+    document.querySelectorAll('#ministeriosChecks .ministerio-chip input').forEach(inp => {
+      inp.checked = false
+      inp.closest('.ministerio-chip')?.classList.remove('ativo')
+    })
+  }
+}
+
+/* ══════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════ */
+async function initPerfil() {
+  const { data: { session }, error: sessErr } = await db.auth.getSession()
+  if (sessErr || !session) {
+    window.location.href = 'index.html'
+    return
+  }
+
+  const user = session.user
+  perfilId   = user.id
+
+  const { data: perfil, error: perfilErr } = await db
+    .from('perfis')
+    .select('id, nome, email, role, foto_url, membro_id')
+    .eq('id', perfilId)
+    .single()
+
+  if (perfilErr || !perfil) {
+    console.error('Erro ao buscar perfil:', perfilErr)
+    mostrarToast('Erro ao carregar perfil.', 'erro')
+    return
+  }
+
+  membroId = perfil.membro_id || null
+
+  const nome  = perfil.nome || user.email || 'Usuário'
+  const email = perfil.email || user.email || ''
+  const role  = perfil.role === 'admin' ? '⭐ Administrador' : '👤 Membro'
+
+  document.getElementById('perfilNome').textContent  = nome
+  document.getElementById('perfilEmail').textContent = email
+  document.getElementById('perfilRole').textContent  = role
+  document.getElementById('sidebarNome').textContent = nome
+  document.getElementById('apelidoInput').value      = nome
+
+  renderizarAvatar(perfil.foto_url, nome)
+
+  if (!membroId) {
+    document.getElementById('alertaSemMembro').style.display = 'block'
+    document.getElementById('btnSalvar').disabled = true
+    document.getElementById('btnSalvar').title    = 'Sem vínculo com membro'
+  }
+
+  await Promise.all([carregarMesas(), carregarMinisterios()])
+  if (membroId) await carregarMembro()
+
+  ligarAutoConjuge()
+}
+
+/* ══════════════════════════════════════════
+   APELIDO
+══════════════════════════════════════════ */
+function abrirEditarApelido() {
+  document.getElementById('apelidoDisplay').style.display  = 'none'
+  document.getElementById('apelidoEditWrap').style.display = 'flex'
+  document.getElementById('apelidoInput').focus()
+}
+function fecharEditarApelido() {
+  document.getElementById('apelidoDisplay').style.display  = 'flex'
+  document.getElementById('apelidoEditWrap').style.display = 'none'
+}
+async function salvarApelido() {
+  const nome = document.getElementById('apelidoInput').value.trim()
+  if (!nome) return
+  const { error } = await db.from('perfis').update({ nome }).eq('id', perfilId)
+  if (error) { mostrarToast('Erro ao salvar nome', 'erro'); return }
+  document.getElementById('perfilNome').textContent  = nome
+  document.getElementById('sidebarNome').textContent = nome
+  fecharEditarApelido()
+  mostrarToast('Nome atualizado!', 'sucesso')
+}
+
+/* ══════════════════════════════════════════
+   AVATAR
+══════════════════════════════════════════ */
+function renderizarAvatar(fotoUrl, nome) {
+  const c = document.getElementById('avatarContainer')
+  if (fotoUrl) {
+    c.innerHTML = `<img src="${fotoUrl}" alt="Avatar"
+      style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid #2BBFB3;">`
+  } else {
+    const inicial = (nome || 'U')[0].toUpperCase()
+    c.innerHTML = `<div style="width:100px;height:100px;border-radius:50%;background:#2BBFB3;
+      color:white;display:flex;align-items:center;justify-content:center;
+      font-size:36px;font-weight:700;border:3px solid #2BBFB3;">${inicial}</div>`
+  }
+}
+
+async function uploadFoto(input) {
+  const file = input.files[0]
+  if (!file) return
+  const ext     = file.name.split('.').pop()
+  const caminho = `${perfilId}/avatar.${ext}`
+  mostrarToast('Enviando foto...', '')
+  const { error: errUp } = await db.storage.from('avatares').upload(caminho, file, { upsert: true })
+  if (errUp) { mostrarToast('Erro ao enviar foto', 'erro'); return }
+  const { data: urlData } = db.storage.from('avatares').getPublicUrl(caminho)
+  const fotoUrl = urlData.publicUrl + '?t=' + Date.now()
+  await db.from('perfis').update({ foto_url: fotoUrl }).eq('id', perfilId)
+  if (membroId) await db.from('membros').update({ foto_url: fotoUrl }).eq('id', membroId)
+  renderizarAvatar(fotoUrl, document.getElementById('perfilNome').textContent)
+  mostrarToast('Foto atualizada!', 'sucesso')
+}
+
+/* ══════════════════════════════════════════
+   MESAS
+══════════════════════════════════════════ */
+async function carregarMesas() {
+  const { data } = await db.from('mesas').select('id, nome').order('nome')
+  const sel = document.getElementById('campo_mesa_id')
+  ;(data || []).forEach(m => {
+    const opt = document.createElement('option')
+    opt.value = m.id; opt.textContent = m.nome
+    sel.appendChild(opt)
+  })
+}
+
+/* ══════════════════════════════════════════
+   MINISTÉRIOS
+══════════════════════════════════════════ */
+async function carregarMinisterios() {
+  const { data } = await db.from('ministerios').select('id, nome').order('nome')
+  ministerios = data || []
+  const container = document.getElementById('ministeriosChecks')
+  container.innerHTML = ''
+  ministerios.forEach(m => {
+    const chip = document.createElement('label')
+    chip.className  = 'ministerio-chip'
+    chip.dataset.id = m.id
+    chip.innerHTML  = `<input type="checkbox" value="${m.id}"> ${m.nome}`
+    chip.querySelector('input').addEventListener('change', function () {
+      chip.classList.toggle('ativo', this.checked)
+    })
+    container.appendChild(chip)
+  })
+}
+
+/* ══════════════════════════════════════════
+   ESTADO CIVIL
+══════════════════════════════════════════ */
+function onEstadoCivilChange() {
+  const v = document.getElementById('campo_estado_civil').value
+  const mostrar = v === 'Casado(a)' || v === 'União Estável'
+  document.getElementById('conjugeSection').style.display = mostrar ? 'block' : 'none'
+  if (!mostrar) desvincularConjuge()
+}
+
+/* ══════════════════════════════════════════
+   CÔNJUGE — AUTOCOMPLETE
+══════════════════════════════════════════ */
+function ligarAutoConjuge() {
+  const input = document.getElementById('campo_conjuge_busca')
+  const box   = document.getElementById('acConjuge')
+  let   timer = null
+
+  input.addEventListener('input', () => {
+    clearTimeout(timer)
+    const termo = input.value.trim()
+    if (termo.length < 2) { fecharBox(box); return }
+    timer = setTimeout(() => buscarConjugeDB(termo, box), 300)
+  })
+
+  input.addEventListener('focus', () => {
+    const termo = input.value.trim()
+    if (termo.length >= 2) buscarConjugeDB(termo, box)
+  })
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#conjugeBuscaWrap')) fecharBox(box)
+  })
+}
+
+async function buscarConjugeDB(termo, box) {
+  const { data, error } = await db
+    .from('membros')
+    .select('id, nome, foto_url')
+    .ilike('nome', `%${termo}%`)
+    .limit(8)
+
+  box.innerHTML = ''
+
+  if (error || !data || data.length === 0) {
+    box.innerHTML = '<div class="ac-vazio">Nenhum membro encontrado</div>'
+    box.style.display = 'block'
+    return
+  }
+
+  const lista = membroId ? data.filter(m => m.id !== membroId) : data
+
+  if (lista.length === 0) {
+    box.innerHTML = '<div class="ac-vazio">Nenhum membro encontrado</div>'
+    box.style.display = 'block'
+    return
+  }
+
+  lista.forEach(m => {
+    const item = document.createElement('div')
+    item.className = 'ac-item'
+    const av = m.foto_url
+      ? `<img src="${m.foto_url}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">`
+      : `<div style="width:26px;height:26px;border-radius:50%;background:#2BBFB3;color:white;
+           display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">
+           ${m.nome[0].toUpperCase()}</div>`
+    item.innerHTML = `${av} ${m.nome}`
+    item.addEventListener('click', () => {
+      vincularConjuge(m)
+      fecharBox(box)
+    })
+    box.appendChild(item)
+  })
+
+  box.style.display = 'block'
+}
+
+function vincularConjuge(membro) {
+  conjugeMembroId = membro.id
+  document.getElementById('conjugeBuscaWrap').style.display     = 'none'
+  document.getElementById('conjugeVinculadoWrap').style.display = 'block'
+  document.getElementById('conjugeVinculadoNome').textContent   = membro.nome
+}
+
+function desvincularConjuge() {
+  conjugeMembroId = null
+  document.getElementById('campo_conjuge_busca').value           = ''
+  document.getElementById('conjugeBuscaWrap').style.display      = 'block'
+  document.getElementById('conjugeVinculadoWrap').style.display  = 'none'
+  document.getElementById('conjugeVinculadoNome').textContent    = ''
+  fecharBox(document.getElementById('acConjuge'))
+}
+
+function fecharBox(box) { if (box) box.style.display = 'none' }
+
+/* ══════════════════════════════════════════
+   FILHOS
+══════════════════════════════════════════ */
+function onTemFilhosChange() {
+  const tem = document.getElementById('temFilhosToggle').checked
+  document.getElementById('temFilhosLabel').textContent = tem ? 'Tenho filhos' : 'Não tenho filhos'
+  document.getElementById('filhosArea').style.display   = tem ? 'block' : 'none'
+  if (tem && filhos.length === 0) adicionarFilho()
+}
+
+function adicionarFilho(dados = {}) {
+  const key = ++_keyCounter
+  filhos.push({
+    _key:            key,
+    filho_id:        dados.filho_id        || null,
+    nome:            dados.nome            || '',
+    data_nascimento: dados.data_nascimento || ''
+  })
+  renderizarFilhos()
+  setTimeout(() => {
+    const el = document.getElementById(`filhoNome_${key}`)
+    if (el) el.focus()
+  }, 50)
+}
+
+function removerFilho(key) {
+  filhos = filhos.filter(f => f._key !== key)
+  renderizarFilhos()
+  if (filhos.length === 0) {
+    document.getElementById('temFilhosToggle').checked    = false
+    document.getElementById('temFilhosLabel').textContent = 'Não tenho filhos'
+    document.getElementById('filhosArea').style.display   = 'none'
+  }
+}
+
+function renderizarFilhos() {
+  const lista = document.getElementById('filhosLista')
+  lista.innerHTML = ''
+
+  filhos.forEach(f => {
+    const div = document.createElement('div')
+    div.className   = `filho-item${f.filho_id ? ' salvo' : ''}`
+    div.dataset.key = f._key
+
+    div.innerHTML = `
+      ${f.filho_id ? `<div class="badge-salvo">✔ Salvo</div>` : ''}
+      <div class="form-group">
+        <label>Nome</label>
+        <input
+          type="text"
+          id="filhoNome_${f._key}"
+          value="${escHtml(f.nome)}"
+          placeholder="Nome do filho"
+          autocomplete="off"
+        />
+      </div>
+      <div class="form-group">
+        <label>Data de Nascimento</label>
+        <input
+          type="date"
+          id="filhoData_${f._key}"
+          value="${f.data_nascimento || ''}"
+        />
+      </div>
+      <button class="btn-remover-filho"
+        onclick="confirmarRemoverFilho(${f._key}, ${f.filho_id ? `'${f.filho_id}'` : 'null'})"
+        title="Remover">🗑️</button>
+    `
+
+    lista.appendChild(div)
+
+    div.querySelector(`#filhoNome_${f._key}`).addEventListener('input', e => {
+      const filho = filhos.find(x => x._key === f._key)
+      if (filho) filho.nome = e.target.value
+    })
+    div.querySelector(`#filhoData_${f._key}`).addEventListener('change', e => {
+      const filho = filhos.find(x => x._key === f._key)
+      if (filho) filho.data_nascimento = e.target.value
+    })
+  })
+}
+
+async function confirmarRemoverFilho(key, filhoId) {
+  if (filhoId) {
+    const { error } = await db.from('filhos').delete().eq('id', filhoId)
+    if (error) { mostrarToast('Erro ao remover filho', 'erro'); return }
+  }
+  removerFilho(key)
+}
+
+/* ══════════════════════════════════════════
+   CARREGAR MEMBRO + FILHOS DO BANCO
+══════════════════════════════════════════ */
+async function carregarMembro() {
+  const { data: membro, error } = await db
+    .from('membros')
+    .select('*')
+    .eq('id', membroId)
+    .single()
+
+  if (error || !membro) {
+    console.warn('Membro não encontrado:', error)
+    mostrarToast('Erro ao carregar dados do membro.', 'erro')
+    return
+  }
+
+  // ⚠️ campo_cep NÃO é preenchido — CEP não é salvo no banco
+  document.getElementById('campo_rua').value          = membro.rua          || ''
+  document.getElementById('campo_numero').value       = membro.numero       || ''
+  document.getElementById('campo_complemento').value  = membro.complemento  || ''
+  document.getElementById('campo_bairro').value       = membro.bairro       || ''
+  document.getElementById('campo_cidade').value       = membro.cidade       || ''
+  document.getElementById('campo_estado').value       = membro.estado       || ''
+  document.getElementById('campo_estado_civil').value = membro.estado_civil || ''
+
+  onEstadoCivilChange()
+
+  if (membro.conjuge_id) {
+    const { data: conj } = await db
+      .from('membros').select('id, nome').eq('id', membro.conjuge_id).single()
+    if (conj) vincularConjuge(conj)
+  } else if (membro.conjuge) {
+    document.getElementById('campo_conjuge_busca').value = membro.conjuge
+  }
+
+  if (membro.mesa_id) {
+    document.getElementById('campo_mesa_id').value = membro.mesa_id
+  }
+
+  // ── Voluntário ──
+  const campoVol = document.getElementById('campo_voluntario')
+  if (campoVol) {
+    campoVol.value = membro.voluntario === 'Sim' ? 'Sim' : 'Não'
+    onVoluntarioChange()
+  }
+
+  // ── Ministérios — marca os chips salvos ──
+  const ids = Array.isArray(membro.ministerio_ids) ? membro.ministerio_ids : []
+  document.querySelectorAll('#ministeriosChecks .ministerio-chip').forEach(chip => {
+    const inp = chip.querySelector('input')
+    if (ids.includes(inp.value)) {
+      inp.checked = true
+      chip.classList.add('ativo')
+    }
+  })
+
+  // ── Filhos ──
+  const { data: filhosBD, error: erroFilhos } = await db
+    .from('filhos')
+    .select('id, nome, data_nascimento')
+    .eq('membro_id', membroId)
+    .order('created_at')
+
+  if (erroFilhos) {
+    console.warn('Erro ao carregar filhos:', erroFilhos)
+    mostrarToast('Erro ao carregar filhos.', 'erro')
+  } else if (filhosBD && filhosBD.length > 0) {
+    filhosBD.forEach(f => adicionarFilho({
+      filho_id:        f.id,
+      nome:            f.nome            || '',
+      data_nascimento: f.data_nascimento || ''
+    }))
+    document.getElementById('temFilhosToggle').checked    = true
+    document.getElementById('temFilhosLabel').textContent = 'Tenho filhos'
+    document.getElementById('filhosArea').style.display   = 'block'
+  }
+}
+
+/* ══════════════════════════════════════════
+   SALVAR PERFIL
+══════════════════════════════════════════ */
+async function salvarPerfil() {
+  if (!membroId) {
+    mostrarToast('Usuário não vinculado a um membro. Fale com o administrador.', 'aviso')
+    return
+  }
+
+  const btn = document.getElementById('btnSalvar')
+  btn.disabled    = true
+  btn.textContent = 'Salvando...'
+
+  try {
+    // ── Ministérios ──
+    const idsMinisterios = []
+    document.querySelectorAll('#ministeriosChecks .ministerio-chip input:checked').forEach(inp => {
+      idsMinisterios.push(inp.value)
+    })
+
+    const nomesMinisterios = idsMinisterios
+      .map(id => ministerios.find(m => m.id === id)?.nome || '')
+      .filter(Boolean)
+
+    console.log('🟢 Ministérios selecionados:', idsMinisterios, nomesMinisterios)
+
+    // ── Mesa ──
+    const mesaId   = document.getElementById('campo_mesa_id').value || null
+    const mesaSel  = document.getElementById('campo_mesa_id')
+    const mesaNome = mesaId ? (mesaSel.options[mesaSel.selectedIndex]?.text || '') : ''
+
+    // ── Cônjuge ──
+    const estadoCivil = document.getElementById('campo_estado_civil').value
+    const casado      = estadoCivil === 'Casado(a)' || estadoCivil === 'União Estável'
+    const conjugeNome = casado
+      ? (conjugeMembroId
+          ? document.getElementById('conjugeVinculadoNome').textContent
+          : document.getElementById('campo_conjuge_busca').value.trim())
+      : ''
+
+    const payload = {
+      rua:            document.getElementById('campo_rua').value.trim()         || null,
+      numero:         document.getElementById('campo_numero').value.trim()      || null,
+      complemento:    document.getElementById('campo_complemento').value.trim() || null,
+      bairro:         document.getElementById('campo_bairro').value.trim()      || null,
+      cidade:         document.getElementById('campo_cidade').value.trim()      || null,
+      estado:         document.getElementById('campo_estado').value             || null,
+      estado_civil:   estadoCivil                                               || null,
+      conjuge_id:     casado ? (conjugeMembroId || null) : null,
+      conjuge:        conjugeNome                                               || null,
+      mesa_id:        mesaId,
+      mesa:           mesaNome                                                  || null,
+      ministerio_ids: idsMinisterios,
+      ministerio_id:  idsMinisterios[0]            || null,
+      ministerio:     nomesMinisterios.join(', ')  || null,
+      voluntario:     document.getElementById('campo_voluntario')?.value === 'Sim' ? 'Sim' : 'Não',
+    }
+
+    console.log('📦 Payload enviado:', payload)
+
+    const { data: dadosSalvos, error } = await db
+      .from('membros')
+      .update(payload)
+      .eq('id', membroId)
+      .select()
+
+    if (error) {
+      console.error('❌ Erro ao salvar membro:', error)
+      mostrarToast('Erro: ' + error.message, 'erro')
+      return
+    }
+
+    console.log('✅ Membro salvo:', dadosSalvos)
+
+    await sincronizarVoluntarioPerfil(membroId, payload)
+    await salvarFilhos()
+
+    mostrarToast('Perfil atualizado com sucesso! ✅', 'sucesso')
+
+  } catch (e) {
+    console.error('💥 Exceção ao salvar:', e)
+    mostrarToast('Erro inesperado ao salvar.', 'erro')
+  } finally {
+    btn.disabled    = false
+    btn.textContent = '💾 Salvar alterações'
+  }
+}
+
+/* ══════════════════════════════════════════
+   SALVAR FILHOS
+══════════════════════════════════════════ */
+async function salvarFilhos() {
+  const temFilhos = document.getElementById('temFilhosToggle').checked
+
+  if (!temFilhos) {
+    await db.from('filhos').delete().eq('membro_id', membroId)
+    filhos = []
+    return
+  }
+
+  for (const f of filhos) {
+    const nome = (document.getElementById(`filhoNome_${f._key}`)?.value || f.nome).trim()
+    const data = document.getElementById(`filhoData_${f._key}`)?.value || f.data_nascimento || null
+
+    if (!nome) continue
+
+    if (f.filho_id) {
+      const { error } = await db
+        .from('filhos')
+        .update({ nome, data_nascimento: data || null })
+        .eq('id', f.filho_id)
+      if (error) console.warn('Erro ao atualizar filho:', error)
+    } else {
+      const { data: novo, error } = await db
+        .from('filhos')
+        .insert({ nome, data_nascimento: data || null, membro_id: membroId })
+        .select('id')
+        .single()
+
+      if (error) {
+        console.warn('Erro ao inserir filho:', error)
+        mostrarToast(`Erro ao salvar filho "${nome}"`, 'erro')
+      } else if (novo) {
+        f.filho_id = novo.id
+      }
+    }
+  }
+
+  renderizarFilhos()
+}
+
+/* ══════════════════════════════════════════
+   UTILITÁRIOS
+══════════════════════════════════════════ */
+function escHtml(str) {
+  return (str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+
+async function fazerLogout() {
+  await db.auth.signOut()
+  window.location.href = 'index.html'
+}
+
+function mostrarToast(msg, tipo = '') {
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.className   = 'toast show ' + tipo
+  clearTimeout(t._timer)
+  t._timer = setTimeout(() => { t.className = 'toast' }, 3500)
+}
+
+/* ══════════════════════════════════════════
+   SINCRONIZAR VOLUNTÁRIOS
+══════════════════════════════════════════ */
+async function sincronizarVoluntarioPerfil(membroId, payload) {
+  const naoEhVoluntario = payload.voluntario !== 'Sim'
+  const semMinisterios  = !payload.ministerio_ids || payload.ministerio_ids.length === 0
+
+  if (naoEhVoluntario || semMinisterios) {
+    const { error } = await db.from('voluntarios').delete().eq('membro_id', membroId)
+    if (error) console.error('❌ Erro ao remover voluntário:', error)
+    return
+  }
+
+  const { data: membro } = await db
+    .from('membros')
+    .select('nome, telefone, rua, numero, complemento, bairro, cidade, data_nascimento, mesa_id, mesa, status')
+    .eq('id', membroId)
+    .maybeSingle()
+
+  if (!membro) return
+
+  const enderecoCompleto = [membro.rua, membro.numero, membro.complemento, membro.bairro, membro.cidade]
+    .filter(Boolean).join(', ') || null
+
+  const dadosVoluntario = {
+    nome:           membro.nome,
+    telefone:       membro.telefone        || null,
+    nascimento:     membro.data_nascimento || null,
+    endereco:       enderecoCompleto,
+    participa_mesa: membro.mesa_id ? 'sim' : 'nao',
+    mesa:           membro.mesa            || null,
+    ministerio_ids: payload.ministerio_ids,
+    ministerio:     payload.ministerio     || null,
+    status:         membro.status          || 'Ativo',
+    membro_id:      membroId,
+  }
+
+  const { data: existente } = await db
+    .from('voluntarios')
+    .select('id')
+    .eq('membro_id', membroId)
+    .maybeSingle()
+
+  if (existente) {
+    const { error } = await db.from('voluntarios').update(dadosVoluntario).eq('membro_id', membroId)
+    if (error) console.error('❌ Erro ao atualizar voluntário:', error)
+  } else {
+    const { error } = await db.from('voluntarios').insert(dadosVoluntario)
+    if (error) console.error('❌ Erro ao inserir voluntário:', error)
+  }
+}
+
+/* ══════════════════════════════════════════
+   CEP — MÁSCARA E BUSCA
+══════════════════════════════════════════ */
+function perfilMascaraCep(input) {
+  let v = input.value.replace(/\D/g, '').slice(0, 8)
+  if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5)
+  input.value = v
+  if (v.replace(/\D/g, '').length === 8) perfilBuscarCep(v)
+}
+
+async function perfilBuscarCep(cep) {
+  const spinner = document.getElementById('perfil-cep-spinner')
+  const ok      = document.getElementById('perfil-cep-ok')
+  const err     = document.getElementById('perfil-cep-err')
+
+  spinner.style.display = 'inline'
+  ok.style.display      = 'none'
+  err.style.display     = 'none'
+
+  try {
+    const res  = await fetch(`https://viacep.com.br/ws/${cep.replace(/\D/g,'')}/json/`)
+    const data = await res.json()
+
+    spinner.style.display = 'none'
+
+    if (data.erro) { err.style.display = 'inline'; return }
+
+    document.getElementById('campo_rua').value    = data.logradouro || ''
+    document.getElementById('campo_bairro').value = data.bairro     || ''
+    document.getElementById('campo_cidade').value = data.localidade || ''
+    if (data.uf) document.getElementById('campo_estado').value = data.uf
+
+    document.getElementById('campo_numero').focus()
+
+    ok.style.display = 'inline'
+    setTimeout(() => { ok.style.display = 'none' }, 2500)
+
+  } catch (e) {
+    spinner.style.display = 'none'
+    err.style.display     = 'inline'
+    console.error('Erro ao buscar CEP:', e)
+  }
+}
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', initPerfil)
+</script>
+
+<script>
+(function() {
+  function fillSidebar() {
+    const iconEl = document.getElementById('sidebarUserIcon')
+    const nomeEl = document.getElementById('sidebarNome')
+    if (!iconEl || !nomeEl) return
+    const perfil  = window.AUTH?.perfil
+    const user    = window.AUTH?.user
+    const nome    = perfil?.nome || user?.email?.split('@')[0] || 'Meu perfil'
+    const fotoUrl = perfil?.foto_url || null
+    nomeEl.textContent = nome
+    if (fotoUrl) iconEl.innerHTML = '<img src="' + fotoUrl + '" alt="avatar" />'
+    else iconEl.textContent = (nome[0] || '👤').toUpperCase()
+  }
+  fillSidebar()
+  let t = 0
+  const iv = setInterval(() => { fillSidebar(); if (window.AUTH?.perfil || ++t > 40) clearInterval(iv) }, 150)
+})();
+</script>
+
+<script src="/pwa.js"></script>
+<script src="ministerios-nav.js"></script>
+<script src="conteudos-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,1202 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pregações — Sua Igreja</title>
+  <meta name="description" content="Assista às pregações da Sua Igreja. Séries bíblicas, mensagens e ensinamentos para a sua vida." />
+  <meta name="theme-color" content="#2BBFB3" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand:       #2BBFB3;
+      --brand-dark:  #1a9e93;
+      --brand-deep:  #0f6b64;
+      --brand-light: #e8faf9;
+      --brand-mid:   #b2e8e4;
+      --text:        #1a2e2d;
+      --muted:       #6b8b89;
+      --bg:          #ffffff;
+      --bg-soft:     #f4fdfc;
+      --radius:      16px;
+      --dropdown-bg: #071a18;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────────────── */
+    header {
+      width: 100%; padding: 12px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--brand);
+      box-shadow: 0 2px 16px rgba(43,191,179,0.30);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    header.scrolled { background: var(--brand-dark); box-shadow: 0 2px 24px rgba(0,0,0,0.18); }
+    .header-logo img { height: 44px; object-fit: contain; display: block; }
+    .header-right { display: flex; align-items: center; gap: 4px; }
+
+    /* ── NAV DESKTOP ──────────────────────────────────────────────── */
+    .main-nav { display: flex; align-items: center; gap: 2px; list-style: none; }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 8px 13px; border-radius: 8px;
+      color: rgba(255,255,255,0.92); font-size: 13.5px; font-weight: 600;
+      text-decoration: none; cursor: pointer; white-space: nowrap;
+      background: transparent; border: none; font-family: inherit;
+      transition: background 0.2s, color 0.2s; user-select: none;
+    }
+    .nav-link:hover, .nav-item.open > .nav-link { background: rgba(255,255,255,0.15); color: #ffffff; }
+    .nav-link .chevron { width: 13px; height: 13px; flex-shrink: 0; transition: transform 0.25s; opacity: 0.70; }
+    .nav-item.open > .nav-link .chevron { transform: rotate(180deg); opacity: 1; }
+
+    /* ── DROPDOWN ─────────────────────────────────────────────────── */
+    .dropdown {
+      position: absolute; top: calc(100% + 12px); right: 0;
+      background: var(--dropdown-bg);
+      border-radius: 12px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.20);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-width: 210px; padding: 6px;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 200;
+    }
+    .nav-item.open > .dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .dropdown::before {
+      content: ''; position: absolute; top: -7px; right: 20px;
+      border-left: 7px solid transparent; border-right: 7px solid transparent;
+      border-bottom: 7px solid var(--dropdown-bg);
+    }
+    .dropdown-item {
+      display: flex; align-items: center;
+      padding: 11px 14px; border-radius: 8px;
+      color: rgba(255,255,255,0.82); font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(43,191,179,0.18); color: #ffffff; }
+    .dropdown-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 3px 6px; }
+
+    /* ── BOTÃO MEMBROS ────────────────────────────────────────────── */
+    .btn-membros {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px; border-radius: 50px; margin-left: 8px;
+      background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.45);
+      color: #ffffff; font-size: 13px; font-weight: 700;
+      text-decoration: none; white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-membros:hover { background: rgba(255,255,255,0.30); border-color: rgba(255,255,255,0.80); }
+
+    /* ── HAMBURGER ────────────────────────────────────────────────── */
+    .nav-toggle {
+      display: none;
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.40);
+      border-radius: 10px; width: 42px; height: 42px; cursor: pointer;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 5px; transition: background .2s; flex-shrink: 0; margin-left: 8px;
+    }
+    .nav-toggle:hover { background: rgba(255,255,255,0.28); }
+    .nav-toggle span { display: block; width: 18px; height: 2px; background: #ffffff; border-radius: 2px; transition: all .3s; }
+    .nav-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    /* ── MENU MOBILE ──────────────────────────────────────────────── */
+    .mobile-menu-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,40,38,0.55); z-index: 98;
+      opacity: 0; transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .mobile-menu-overlay.active { opacity: 1; pointer-events: all; }
+    .mobile-menu {
+      position: fixed; top: 0; left: 0; width: 300px; height: 100vh;
+      background: var(--brand-dark); z-index: 99;
+      display: flex; flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      overflow-y: auto;
+    }
+    .mobile-menu.active { transform: translateX(0); }
+    .mobile-menu-header {
+      padding: 20px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .mobile-menu-header img { height: 36px; object-fit: contain; }
+    .btn-fechar-mobile {
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.35);
+      color: #fff; width: 34px; height: 34px; border-radius: 50%;
+      font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .btn-fechar-mobile:hover { background: rgba(255,255,255,0.28); }
+    .mobile-nav { padding: 12px 0; flex: 1; }
+    .m-group { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .m-group-btn {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; cursor: pointer; font-family: inherit;
+      color: rgba(255,255,255,0.92); font-size: 14px; font-weight: 700;
+      transition: background 0.2s;
+    }
+    .m-group-btn:hover { background: rgba(255,255,255,0.08); }
+    .m-group-btn .m-chevron { width: 16px; height: 16px; transition: transform 0.25s; opacity: 0.6; }
+    .m-group.open .m-group-btn .m-chevron { transform: rotate(180deg); opacity: 1; }
+    .m-sub { max-height: 0; overflow: hidden; transition: max-height 0.30s ease; background: rgba(0,0,0,0.20); }
+    .m-group.open .m-sub { max-height: 400px; }
+    .m-sub a {
+      display: flex; align-items: center;
+      padding: 12px 20px 12px 32px;
+      color: rgba(255,255,255,0.75); font-size: 13.5px; font-weight: 600;
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .m-sub a:last-child { border-bottom: none; }
+    .m-sub a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .mobile-menu-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .btn-membros-mobile {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 13px;
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.40);
+      border-radius: 12px; color: #ffffff;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-membros-mobile:hover { background: rgba(255,255,255,0.28); }
+
+    /* ── HERO ────────────────────────────────────────────────────────── */
+    .hero {
+      padding: 110px 24px 56px;
+      background: linear-gradient(160deg, var(--brand-deep) 0%, var(--brand-dark) 55%, var(--brand) 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 50%, rgba(255,255,255,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 80% 30%, rgba(43,191,179,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 16px;
+      max-width: 640px; margin: 0 auto;
+      animation: fadeUp 0.8s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: #fff; font-weight: 900;
+      line-height: 1.1; letter-spacing: -0.5px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.15);
+    }
+    .hero h1 em {
+      font-style: normal;
+      position: relative;
+    }
+    .hero h1 em::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 3px; background: rgba(255,255,255,0.5); border-radius: 4px;
+    }
+    .hero p {
+      font-size: clamp(0.92rem, 1.8vw, 1.08rem);
+      color: rgba(255,255,255,0.85); line-height: 1.75;
+      max-width: 400px; font-style: italic;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       MAIN CONTENT — fundo escuro igual às outras páginas
+    ══════════════════════════════════════════════════════ */
+    .main-content { flex: 1; background: #0a2e2b; padding: 48px 24px 72px; }
+    .content-wrapper { max-width: 1140px; margin: 0 auto; }
+
+    /* ── TOOLBAR TOPO ───────────────────────────────────────────────── */
+    .toolbar-top {
+      display: flex; align-items: center; justify-content: flex-end;
+      margin-bottom: 36px;
+    }
+
+    /* ── FILTRO DROPDOWN ─────────────────────────────────────────────── */
+    .filtro-nav { position: relative; }
+    .filtro-nav-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px; border-radius: 8px;
+      background: var(--brand-dark); color: #fff;
+      border: none; font-family: inherit;
+      font-size: 13.5px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+      user-select: none;
+    }
+    .filtro-nav-btn:hover { background: var(--brand-deep); }
+    .filtro-nav-btn .chevron { width: 14px; height: 14px; opacity: 0.75; transition: transform 0.25s; }
+    .filtro-nav.open .filtro-nav-btn .chevron { transform: rotate(180deg); opacity: 1; }
+    .filtro-dropdown {
+      position: absolute; top: calc(100% + 10px); right: 0;
+      background: var(--dropdown-bg);
+      border-radius: 12px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.20);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-width: 220px; padding: 6px;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 200;
+    }
+    .filtro-nav.open .filtro-dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .filtro-dropdown::before {
+      content: ''; position: absolute; top: -7px; right: 18px;
+      border-left: 7px solid transparent; border-right: 7px solid transparent;
+      border-bottom: 7px solid var(--dropdown-bg);
+    }
+    .filtro-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border-radius: 8px;
+      color: rgba(255,255,255,0.80); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background 0.15s, color 0.15s;
+      white-space: nowrap; border: none; background: none;
+      width: 100%; text-align: left; font-family: inherit;
+    }
+    .filtro-option:hover { background: rgba(43,191,179,0.18); color: #fff; }
+    .filtro-option.ativo { color: var(--brand); }
+    .filtro-option.ativo::after { content: '✓'; margin-left: auto; font-size: 12px; }
+    .filtro-option .opt-thumb {
+      width: 36px; height: 24px; border-radius: 5px;
+      object-fit: cover; flex-shrink: 0; background: var(--brand-deep);
+    }
+    .filtro-divider-dd { height: 1px; background: rgba(255,255,255,0.07); margin: 3px 6px; }
+
+    /* ── ESTADOS ─────────────────────────────────────────────────────── */
+    .estado-box {
+      text-align: center; padding: 80px 24px;
+      display: none; flex-direction: column;
+      align-items: center; gap: 14px;
+    }
+    .estado-box.visivel { display: flex; }
+    .estado-icone  { font-size: 3rem; opacity: 0.5; }
+    .estado-titulo { font-size: 1.1rem; font-weight: 700; color: #ffffff; }
+    .estado-sub    { font-size: 0.9rem; color: rgba(255,255,255,0.55); max-width: 300px; line-height: 1.6; }
+
+    /* ── BLOCO POR SÉRIE ─────────────────────────────────────────────── */
+    .serie-block { margin-bottom: 52px; animation: fadeUp 0.4s ease both; }
+    .serie-header {
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 10px; position: relative;
+    }
+    .serie-nome {
+      font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.60);
+      text-transform: uppercase; letter-spacing: 1.5px; text-align: center;
+    }
+    .serie-contador {
+      font-size: 12px; color: rgba(255,255,255,0.40); font-weight: 600;
+      white-space: nowrap; position: absolute; right: 0;
+    }
+
+    /* ── COVERFLOW — DESKTOP ─────────────────────────────────────────── */
+    .coverflow-wrap {
+      position: relative; overflow: hidden;
+      height: 230px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cf-card {
+      position: absolute; width: 320px;
+      border-radius: 14px; overflow: hidden; cursor: pointer;
+      transition: transform 0.38s cubic-bezier(0.4,0,0.2,1),
+                  opacity 0.38s ease, filter 0.38s ease;
+      transform-origin: center center;
+    }
+
+    /* ── SETAS MOBILE ────────────────────────────────────────────────── */
+    .cf-mobile-nav {
+      display: none;
+      align-items: center; justify-content: center;
+      gap: 16px; margin-top: 12px;
+    }
+    .cf-mobile-btn {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--brand-dark); color: #fff;
+      border: none; font-size: 22px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    .cf-mobile-btn:hover  { background: var(--brand-deep); }
+    .cf-mobile-btn:active { transform: scale(0.93); }
+    .cf-mobile-btn:disabled { opacity: 0.25; cursor: default; transform: none; }
+    .cf-mobile-pos {
+      font-size: 12px; color: rgba(255,255,255,0.50); font-weight: 600;
+      min-width: 40px; text-align: center;
+    }
+
+    /* ── SCROLL HORIZONTAL MOBILE ────────────────────────────────────── */
+    .cf-scroll {
+      display: none;
+      overflow-x: auto; overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 12px; padding: 8px 16px;
+    }
+    .cf-scroll::-webkit-scrollbar { display: none; }
+    .cf-scroll-card {
+      flex-shrink: 0; width: 75vw; max-width: 280px;
+      scroll-snap-align: center;
+      border-radius: 14px; overflow: hidden; cursor: pointer;
+      position: relative;
+    }
+    .cf-scroll-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+    .cf-scroll-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(10,40,38,0.20);
+    }
+    .cf-scroll-play div {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.92);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    .cf-scroll-play svg { width: 16px; height: 16px; margin-left: 2px; }
+    .cf-thumb {
+      width: 100%; aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #0d1f1e 0%, #1a9e93 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: visible;
+      border-radius: 14px;
+    }
+    .cf-thumb img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .cf-play {
+      position: relative; z-index: 2;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255,255,255,0.92);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.30);
+      transition: transform 0.2s;
+    }
+    .cf-card:hover .cf-play { transform: scale(1.12); }
+    .cf-play svg { width: 18px; height: 18px; margin-left: 2px; }
+    .cf-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: rgba(10,40,38,0.20);
+      transition: background 0.3s;
+    }
+    .cf-card.ativo .cf-overlay { background: transparent; }
+
+    /* ── MODAL DE VÍDEO ──────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10,40,38,0.90);
+      z-index: 300; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.ativo { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: #0d1f1e;
+      border-radius: 20px; overflow: hidden;
+      width: 100%; max-width: 860px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.55);
+      transform: scale(0.94) translateY(16px);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      display: flex; flex-direction: column;
+    }
+    .modal-overlay.ativo .modal-box { transform: scale(1) translateY(0); }
+    .modal-video {
+      position: relative; width: 100%;
+      aspect-ratio: 16 / 9; background: #000;
+    }
+    .modal-video iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; border: none; display: block;
+    }
+    .modal-info {
+      padding: 20px 24px;
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 16px;
+    }
+    .modal-info-text { flex: 1; }
+    .modal-info-serie {
+      font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--brand); margin-bottom: 6px;
+    }
+    .modal-info-titulo {
+      font-size: 1.05rem; font-weight: 800; color: #fff;
+      line-height: 1.3; margin-bottom: 6px;
+    }
+    .modal-info-meta {
+      font-size: 12px; color: rgba(255,255,255,0.55);
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .modal-fechar {
+      background: rgba(255,255,255,0.10);
+      border: 1.5px solid rgba(255,255,255,0.20);
+      color: rgba(255,255,255,0.80);
+      width: 36px; height: 36px; border-radius: 50%;
+      font-size: 18px; cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal-fechar:hover { background: rgba(255,255,255,0.22); color: #fff; }
+    .modal-nav-btn {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      z-index: 10;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(0,0,0,0.50);
+      border: 1.5px solid rgba(255,255,255,0.30);
+      color: #fff; font-size: 28px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .modal-nav-btn:hover  { background: rgba(255,255,255,0.20); }
+    .modal-nav-btn:active { background: rgba(255,255,255,0.30); }
+    .modal-nav-btn:disabled { opacity: 0.15; cursor: default; }
+    .modal-nav-prev { left: 12px; }
+    .modal-nav-next { right: 12px; }
+
+    /* ── FOOTER ──────────────────────────────────────────────────────── */
+    /* footer: estilos via site-footer.js */
+
+    /* ── DRAWER ORAÇÃO ───────────────────────────────────────────────── */
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(10,40,38,0.55); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .drawer-overlay.active { opacity: 1; pointer-events: all; }
+    .drawer { position: fixed; top: 0; right: 0; width: 100%; max-width: 440px; height: 100vh; background: #fff; z-index: 301; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); box-shadow: -8px 0 40px rgba(0,0,0,0.18); }
+    .drawer.active { transform: translateX(0); }
+    .drawer-header { background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%); padding: 28px 24px 24px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-shrink: 0; }
+    .drawer-header-text h2 { color:#fff; font-size:20px; font-weight:800; }
+    .drawer-header-text p  { color:rgba(255,255,255,0.82); font-size:13px; margin-top:4px; line-height:1.5; }
+    .btn-fechar-drawer { background: rgba(255,255,255,0.20); border: 1.5px solid rgba(255,255,255,0.40); color: #fff; width:34px; height:34px; border-radius:50%; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background 0.2s; }
+    .btn-fechar-drawer:hover { background:rgba(255,255,255,0.35); }
+    .drawer-body { flex:1; overflow-y:auto; padding:28px 24px; display:flex; flex-direction:column; gap:18px; }
+    .drawer-field { display:flex; flex-direction:column; gap:6px; }
+    .drawer-field label { font-size:13px; font-weight:700; color:#444; }
+    .drawer-field input, .drawer-field textarea { width:100%; padding:11px 14px; border:1.5px solid #e0e0e0; border-radius:10px; font-size:14px; font-family:inherit; background:#fafafa; color:var(--text); transition:border-color 0.2s, background 0.2s; }
+    .drawer-field input:focus, .drawer-field textarea:focus { outline:none; border-color:var(--brand); background:#fff; }
+    .drawer-field textarea { min-height:120px; resize:vertical; }
+    .drawer-hint { font-size:11px; color:#aaa; line-height:1.5; margin-top:-8px; }
+    .drawer-divider { width:100%; height:1px; background:#f0f0f0; }
+    .btn-enviar-oracao { width:100%; padding:14px; background:linear-gradient(135deg, var(--brand), var(--brand-dark)); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; box-shadow:0 4px 16px rgba(43,191,179,0.35); }
+    .btn-enviar-oracao:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(43,191,179,0.45); }
+    .btn-enviar-oracao:disabled { opacity:0.65; cursor:not-allowed; transform:none; }
+    .drawer-sucesso { display:none; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; padding:40px 20px; flex:1; }
+    .drawer-sucesso.show { display:flex; }
+    .drawer-sucesso .icone-sucesso { font-size:4rem; }
+    .drawer-sucesso h3 { font-size:20px; font-weight:800; color:var(--text); }
+    .drawer-sucesso p  { font-size:14px; color:var(--muted); line-height:1.7; max-width:280px; }
+    .btn-novo-pedido { margin-top:8px; padding:10px 28px; border-radius:50px; border:2px solid var(--brand); background:#fff; color:var(--brand); font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+    .btn-novo-pedido:hover { background:var(--brand); color:#fff; }
+
+    /* ── RESPONSIVO ──────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      header { padding: 12px 16px; }
+      .main-nav, .btn-membros { display: none; }
+      .nav-toggle { display: flex; }
+      .mobile-menu-overlay { display: block; pointer-events: none; }
+      .hero { padding: 90px 20px 48px; }
+      .main-content { padding: 32px 16px 56px; }
+      .coverflow-wrap { display: none; }
+      .cf-scroll { display: flex; }
+      .cf-mobile-nav { display: flex; }
+      .modal-overlay { padding: 0; align-items: flex-end; }
+      .modal-box { border-radius: 20px 20px 0 0; max-width: 100%; width: 100%; }
+      .modal-nav-btn { width: 40px; height: 40px; font-size: 22px; }
+      .modal-nav-prev { left: 8px; }
+      .modal-nav-next { right: 8px; }
+      .modal-info { flex-direction: column; padding: 14px 16px; }
+      .footer-top { grid-template-columns: 1fr; padding: 0 24px; gap: 20px; }
+      .footer-left  { align-items: center; }
+      .footer-tagline { text-align: center; }
+      .footer-right { align-items: center; text-align: center; }
+      .footer-divider { width: calc(100% - 48px); }
+    }
+    @media (max-width: 580px) {
+      .drawer { max-width: 100%; }
+      .coverflow-wrap { display: none; }
+      .cf-scroll { display: flex; }
+      .cf-mobile-nav { display: flex; }
+      .modal-info-titulo { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────────────────────────── -->
+  <header id="main-header">
+    <div class="header-logo">
+      <a href="index.html"><img src="logo.png" alt="Sua Igreja" /></a>
+    </div>
+    <div class="header-right">
+      <ul class="main-nav" id="main-nav">
+        <li class="nav-item" data-nav="sobre">
+          <button class="nav-link" onclick="toggleNav('sobre')">
+            Sobre Nós
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="dropdown">
+            <a class="dropdown-item" href="quem-somos.html">Quem Somos</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="o-que-cremos.html">O Que Cremos</a>
+          </div>
+        </li>
+        <li class="nav-item" data-nav="conteudo">
+          <button class="nav-link" onclick="toggleNav('conteudo')">
+            Conteúdo
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="dropdown">
+            <a class="dropdown-item" href="pregacoes.html">Pregações</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="cursos.html">Cursos</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="downloads.html">Downloads</a>
+          </div>
+        </li>
+        <li class="nav-item" data-nav="fale">
+          <button class="nav-link" onclick="toggleNav('fale')">
+            Fale Conosco
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="dropdown">
+            <a class="dropdown-item" href="#" onclick="fecharTodosNavs(); abrirDrawer(); return false;">Pedido de Oração</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="agendamento-pastoral.html">Agendamento Pastoral</a>
+          </div>
+        </li>
+      </ul>
+      <a href="login.html" class="btn-membros">🔑 Área de Membros</a>
+      <button class="nav-toggle" id="nav-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── MENU MOBILE ─────────────────────────────────────────────────── -->
+  <div class="mobile-menu-overlay" id="mobile-overlay" onclick="fecharMobileMenu()"></div>
+  <nav class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-header">
+      <img src="logo.png" alt="Sua Igreja" />
+      <button class="btn-fechar-mobile" onclick="fecharMobileMenu()">✕</button>
+    </div>
+    <div class="mobile-nav">
+      <div class="m-group" id="m-sobre">
+        <button class="m-group-btn" onclick="toggleMobileGroup('m-sobre')">
+          Sobre Nós
+          <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="m-sub">
+          <a href="quem-somos.html">Quem Somos</a>
+          <a href="o-que-cremos.html">O Que Cremos</a>
+        </div>
+      </div>
+      <div class="m-group" id="m-conteudo">
+        <button class="m-group-btn" onclick="toggleMobileGroup('m-conteudo')">
+          Conteúdo
+          <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="m-sub">
+          <a href="pregacoes.html">Pregações</a>
+          <a href="cursos.html">Cursos</a>
+          <a href="downloads.html">Downloads</a>
+        </div>
+      </div>
+      <div class="m-group" id="m-fale">
+        <button class="m-group-btn" onclick="toggleMobileGroup('m-fale')">
+          Fale Conosco
+          <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="m-sub">
+          <a href="#" onclick="fecharMobileMenu(); abrirDrawer(); return false;">Pedido de Oração</a>
+          <a href="agendamento-pastoral.html">Agendamento Pastoral</a>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-menu-footer">
+      <a href="login.html" class="btn-membros-mobile">🔑 Área de Membros</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Pregações da<br/><em>Sua Igreja</em></h1>
+      <p>Séries bíblicas e mensagens que trazem leveza e vida para o seu dia a dia.</p>
+    </div>
+  </section>
+
+  <!-- ── CONTEÚDO PRINCIPAL ──────────────────────────────────────────── -->
+  <main class="main-content">
+    <div class="content-wrapper">
+
+      <div class="toolbar-top">
+        <div class="filtro-nav" id="filtro-nav">
+          <button class="filtro-nav-btn" onclick="toggleFiltroNav()" id="filtro-nav-btn">
+            <span id="filtro-label-atual">Todas as séries</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="filtro-dropdown" id="filtro-dropdown">
+            <button class="filtro-option ativo" data-id="todos" onclick="selecionarFiltro('todos','Todas as séries')">
+              Todas as séries
+            </button>
+            <div class="filtro-divider-dd"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="estado-box visivel" id="estado-carregando">
+        <div class="estado-icone">⏳</div>
+        <div class="estado-titulo">Carregando pregações...</div>
+        <div class="estado-sub">Buscando os vídeos cadastrados.</div>
+      </div>
+
+      <div class="estado-box" id="estado-vazio">
+        <div class="estado-icone">📭</div>
+        <div class="estado-titulo">Nenhuma pregação encontrada</div>
+        <div class="estado-sub">Não há vídeos cadastrados nessa série ainda. Em breve novos conteúdos chegarão!</div>
+      </div>
+
+      <div id="series-container"></div>
+
+    </div>
+  </main>
+
+  <!-- ── FOOTER ──────────────────────────────────────────────────────── -->
+  <div data-site-footer></div>
+
+  <!-- ── MODAL DE VÍDEO ──────────────────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-overlay" onclick="fecharModalFora(event)">
+    <div class="modal-box" id="modal-box">
+      <div class="modal-video" id="modal-video-wrap">
+        <iframe id="modal-iframe" src="" title="Pregação"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+        <button class="modal-nav-btn modal-nav-prev" id="modal-btn-prev" onclick="navegarModal(-1)">&#8249;</button>
+        <button class="modal-nav-btn modal-nav-next" id="modal-btn-next" onclick="navegarModal(1)">&#8250;</button>
+      </div>
+      <div class="modal-info">
+        <div class="modal-info-text">
+          <div class="modal-info-serie"  id="modal-serie"></div>
+          <div class="modal-info-titulo" id="modal-titulo"></div>
+          <div class="modal-info-meta"   id="modal-meta"></div>
+        </div>
+        <button class="modal-fechar" onclick="fecharModal()" title="Fechar">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DRAWER ORAÇÃO ───────────────────────────────────────────────── -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
+  <div class="drawer" id="drawer-oracao">
+    <div class="drawer-header">
+      <div class="drawer-header-text">
+        <h2>Pedido de Oração</h2>
+        <p>Compartilhe seu pedido conosco.<br/>Vamos orar por você! 🙏</p>
+      </div>
+      <button class="btn-fechar-drawer" onclick="fecharDrawer()">✕</button>
+    </div>
+    <div class="drawer-body" id="drawer-form-body">
+      <div class="drawer-field">
+        <label>Nome completo <span style="color:#e74c3c">*</span></label>
+        <input type="text" id="oracao-nome" placeholder="Ex: Maria Souza" />
+      </div>
+      <div class="drawer-field">
+        <label>Telefone / WhatsApp</label>
+        <input type="text" id="oracao-telefone" placeholder="(31) 99999-9999" />
+        <span class="drawer-hint">Opcional — para que possamos entrar em contato.</span>
+      </div>
+      <div class="drawer-divider"></div>
+      <div class="drawer-field">
+        <label>Seu pedido de oração <span style="color:#e74c3c">*</span></label>
+        <textarea id="oracao-pedido" placeholder="Escreva aqui o seu pedido de oração..."></textarea>
+      </div>
+      <p id="drawer-erro" style="display:none;font-size:13px;color:#e74c3c;background:#fff0f0;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-weight:600;"></p>
+      <button class="btn-enviar-oracao" id="btn-enviar" onclick="enviarPedidoOracao()">🙏 Enviar Pedido de Oração</button>
+    </div>
+    <div class="drawer-sucesso" id="drawer-sucesso">
+      <div class="icone-sucesso">🙏</div>
+      <h3>Pedido enviado!</h3>
+      <p>Recebemos seu pedido de oração.<br/>Nossa equipe vai orar por você com muito carinho.</p>
+      <button class="btn-novo-pedido" onclick="resetDrawer()">+ Enviar outro pedido</button>
+    </div>
+  </div>
+
+  <!-- ── SCRIPTS ─────────────────────────────────────────────────────── -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script>
+    let todasPlaylists = []
+    let todosItens     = []
+    let todosConteudos = []
+    let serieAtiva     = 'todos'
+    const cfAtivos     = {}
+
+    function extrairYoutubeId(url) {
+      if (!url) return null
+      const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
+      return m ? m[1] : null
+    }
+    function formatarData(str) {
+      if (!str) return ''
+      const [y, m, d] = str.split('-')
+      return `${d}/${m}/${y}`
+    }
+    function esc(s) {
+      if (!s) return ''
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+    }
+    function thumbPl(pl) {
+      if (pl.thumbnail_url) return pl.thumbnail_url
+      return thumbYt(pl)
+    }
+    function thumbYt(pl) {
+      if (pl._avulsa) {
+        const c = todosConteudos.find(x => x.id === pl._conteudoId)
+        if (!c) return ''
+        if (c.thumbnail_url) return c.thumbnail_url
+        const ytId = extrairYoutubeId(c.link_externo)
+        if (ytId) return `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`
+        return ''
+      }
+      const itens = todosItens.filter(i => i.playlist_id === pl.id).sort((a,b)=>(a.ordem??0)-(b.ordem??0))
+      for (const item of itens) {
+        const c = todosConteudos.find(x => x.id === item.conteudo_id)
+        if (!c) continue
+        if (c.thumbnail_url) return c.thumbnail_url
+        const ytId = extrairYoutubeId(c.link_externo)
+        if (ytId) return `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`
+      }
+      return ''
+    }
+    function videosDePlaylist(plId) {
+      if (plId.startsWith('__avulsa_')) {
+        const conteudoId = plId.slice('__avulsa_'.length)
+        const c = todosConteudos.find(x => x.id === conteudoId)
+        return c ? [c] : []
+      }
+      return todosItens
+        .filter(i => i.playlist_id === plId)
+        .sort((a,b) => (a.ordem??0)-(b.ordem??0))
+        .map(i => todosConteudos.find(c => c.id === i.conteudo_id))
+        .filter(Boolean)
+    }
+    function latestDate(plId) {
+      const videos = videosDePlaylist(plId)
+      return videos.reduce((best, v) => (v.data_publicacao||'') > best ? (v.data_publicacao||'') : best, '')
+    }
+
+    function toggleFiltroNav() {
+      document.getElementById('filtro-nav').classList.toggle('open')
+    }
+    function selecionarFiltro(id, label) {
+      serieAtiva = id
+      document.getElementById('filtro-label-atual').textContent = label
+      document.querySelectorAll('.filtro-option').forEach(o => {
+        o.classList.toggle('ativo', o.dataset.id === id)
+      })
+      document.getElementById('filtro-nav').classList.remove('open')
+      renderSeries()
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#filtro-nav') && !e.target.closest('.nav-item')) {
+        document.getElementById('filtro-nav')?.classList.remove('open')
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('open'))
+      }
+    })
+
+    function renderDropdown() {
+      const dd = document.getElementById('filtro-dropdown')
+      dd.querySelectorAll('.filtro-option:not([data-id="todos"]), .filtro-divider-dd:not(:first-of-type)').forEach(el => el.remove())
+      todasPlaylists.slice().filter(pl => !pl._avulsa).sort((a,b) => (a.ordem??0)-(b.ordem??0)).forEach(pl => {
+        const thumb = thumbPl(pl)
+        const ytFallback = pl.thumbnail_url ? thumbYt(pl) : ''
+        const div = document.createElement('div')
+        div.className = 'filtro-divider-dd'
+        dd.appendChild(div)
+        const btn = document.createElement('button')
+        btn.className = 'filtro-option'
+        btn.dataset.id = pl.id
+        btn.onclick = () => selecionarFiltro(pl.id, pl.nome)
+        const onerr = ytFallback
+          ? `onerror="this.onerror=null;this.src='${esc(ytFallback)}'"`
+          : `onerror="this.style.display='none'"`
+        btn.innerHTML = `${thumb ? `<img class="opt-thumb" src="${esc(thumb)}" alt="" ${onerr}>` : ''}<span>${esc(pl.nome)}</span>`
+        dd.appendChild(btn)
+      })
+    }
+
+    function moverMobile(plId, dir, total) {
+      const scroll = document.getElementById('cfs-' + plId)
+      if (!scroll) return
+      const cards = scroll.querySelectorAll('.cf-scroll-card')
+      if (!cards.length) return
+      const cardW = cards[0].offsetWidth + 12
+      let idx = Math.round(scroll.scrollLeft / cardW)
+      idx = Math.max(0, Math.min(total - 1, idx + dir))
+      scroll.scrollTo({ left: idx * cardW, behavior: 'smooth' })
+      setTimeout(() => atualizarNavMobile(plId, total), 350)
+    }
+
+    function atualizarNavMobile(plId, total) {
+      const scroll = document.getElementById('cfs-' + plId)
+      if (!scroll) return
+      const cards = scroll.querySelectorAll('.cf-scroll-card')
+      if (!cards.length) return
+      const cardW = cards[0].offsetWidth + 12
+      const idx = Math.round(scroll.scrollLeft / cardW)
+      const prev = document.getElementById('cfprev-' + plId)
+      const next = document.getElementById('cfnext-' + plId)
+      const pos  = document.getElementById('cfpos-'  + plId)
+      if (prev) prev.disabled = idx <= 0
+      if (next) next.disabled = idx >= total - 1
+      if (pos)  pos.textContent = `${idx + 1} / ${total}`
+    }
+
+    function renderCoverflow(plId, videos) {
+      const wrap   = document.getElementById('cf-'  + plId)
+      const scroll = document.getElementById('cfs-' + plId)
+
+      if (wrap) {
+        const idx = cfAtivos[plId] ?? 0
+        const W = 320, GAP = 28
+        wrap.innerHTML = ''
+        videos.forEach((v, i) => {
+          const rel = i - idx
+          const absRel = Math.abs(rel)
+          if (absRel > 2) return
+          const card = document.createElement('div')
+          card.className = 'cf-card' + (rel === 0 ? ' ativo' : '')
+          const scale = rel === 0 ? 1 : absRel === 1 ? 0.76 : 0.60
+          const xBase = rel === 0 ? 0
+            : rel > 0 ? (W * 0.60 + GAP) * Math.min(rel, 2)
+            : (W * 0.60 + GAP) * Math.max(rel, -2)
+          card.style.cssText = `transform:translateX(${xBase}px) scale(${scale});z-index:${rel===0?10:absRel===1?5:1};opacity:${rel===0?1:absRel===1?0.60:0.30};filter:blur(${rel===0?0:absRel===1?1.5:3}px);`
+          const ytId  = extrairYoutubeId(v.link_externo)
+          const thumb = v.thumbnail_url || (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '')
+          const sz    = rel === 0 ? '44px' : '32px'
+          const svgSz = rel === 0 ? '18px' : '13px'
+          card.innerHTML = `<div class="cf-thumb" style="border-radius:14px;overflow:hidden;">
+            ${thumb ? `<img src="${esc(thumb)}" alt="" loading="lazy">` : ''}
+            <div class="cf-overlay"></div>
+            <div class="cf-play" style="width:${sz};height:${sz};">
+              <svg viewBox="0 0 24 24" fill="#0f6b64" style="width:${svgSz};height:${svgSz};margin-left:2px"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>`
+          card.addEventListener('click', () => {
+            if (rel !== 0) { cfAtivos[plId] = i; renderCoverflow(plId, videos) }
+            else { abrirVideoModal(v.id, plId) }
+          })
+          wrap.appendChild(card)
+        })
+      }
+
+      if (scroll) {
+        scroll.innerHTML = ''
+        videos.forEach((v) => {
+          const ytId  = extrairYoutubeId(v.link_externo)
+          const thumb = v.thumbnail_url || (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '')
+          const card  = document.createElement('div')
+          card.className = 'cf-scroll-card'
+          card.innerHTML = `
+            ${thumb ? `<img src="${esc(thumb)}" alt="${esc(v.titulo)}" loading="lazy">` : '<div style="aspect-ratio:16/9;background:#0d1f1e;"></div>'}
+            <div class="cf-scroll-play">
+              <div><svg viewBox="0 0 24 24" fill="#0f6b64"><path d="M8 5v14l11-7z"/></svg></div>
+            </div>`
+          card.addEventListener('click', () => abrirVideoModal(v.id, plId))
+          scroll.appendChild(card)
+        })
+      }
+    }
+
+    function renderSeries() {
+      const container = document.getElementById('series-container')
+      container.innerHTML = ''
+      let plsParaRender = todasPlaylists.slice().sort((a,b) => latestDate(b.id).localeCompare(latestDate(a.id)))
+      if (serieAtiva !== 'todos') {
+        plsParaRender = plsParaRender.filter(p => p.id === serieAtiva || (!p._avulsa && p.id === serieAtiva))
+      }
+      const totalItens = plsParaRender.reduce((acc, pl) => acc + videosDePlaylist(pl.id).length, 0)
+      if (totalItens === 0) {
+        document.getElementById('estado-vazio').classList.add('visivel')
+        return
+      }
+      document.getElementById('estado-vazio').classList.remove('visivel')
+      plsParaRender.forEach((pl, pi) => {
+        const videos = videosDePlaylist(pl.id)
+        if (!videos.length) return
+        if (!(pl.id in cfAtivos)) cfAtivos[pl.id] = 0
+        const block = document.createElement('div')
+        block.className = 'serie-block'
+        block.style.animationDelay = `${pi * 0.08}s`
+        block.innerHTML = (pl._avulsa
+          ? `<div class="serie-header"><span class="serie-nome">${esc(videos[0]?.titulo || pl.nome)}</span></div>`
+          : `<div class="serie-header"><span class="serie-nome">${esc(pl.nome)}</span><span class="serie-contador">${videos.length} vídeo${videos.length !== 1 ? 's' : ''}</span></div>`
+        ) + `
+          <div class="coverflow-wrap" id="cf-${pl.id}"></div>
+          <div class="cf-scroll" id="cfs-${pl.id}"></div>
+          <div class="cf-mobile-nav" id="cfnav-${pl.id}">
+            <button class="cf-mobile-btn" id="cfprev-${pl.id}" onclick="moverMobile('${pl.id}',-1,${videos.length})">&#8249;</button>
+            <span class="cf-mobile-pos" id="cfpos-${pl.id}">1 / ${videos.length}</span>
+            <button class="cf-mobile-btn" id="cfnext-${pl.id}" onclick="moverMobile('${pl.id}',1,${videos.length})">&#8250;</button>
+          </div>`
+        container.appendChild(block)
+        renderCoverflow(pl.id, videos)
+        const cfWrap = document.getElementById('cf-' + pl.id)
+        if (cfWrap) adicionarSwipeCoverflow(cfWrap, pl.id, videos)
+        const cfScroll = document.getElementById('cfs-' + pl.id)
+        if (cfScroll) {
+          cfScroll.addEventListener('scroll', () => atualizarNavMobile(pl.id, videos.length), { passive: true })
+        }
+      })
+    }
+
+    let modalPlId = null
+    let modalIdx  = 0
+
+    function abrirVideoModal(conteudoId, plId) {
+      const c = todosConteudos.find(x => x.id === conteudoId)
+      if (!c) return
+      const ytId = extrairYoutubeId(c.link_externo)
+      if (!ytId) { if (c.link_externo) window.open(c.link_externo, '_blank'); return }
+      if (plId) {
+        modalPlId = plId
+        const videos = videosDePlaylist(plId)
+        modalIdx = videos.findIndex(v => v.id === conteudoId)
+      } else {
+        const item = todosItens.find(i => i.conteudo_id === conteudoId)
+        if (item) {
+          modalPlId = item.playlist_id
+          const videos = videosDePlaylist(item.playlist_id)
+          modalIdx = videos.findIndex(v => v.id === conteudoId)
+        } else { modalPlId = null; modalIdx = 0 }
+      }
+      carregarNoModal(c)
+      document.getElementById('modal-overlay').classList.add('ativo')
+      document.body.style.overflow = 'hidden'
+      atualizarNavModal()
+    }
+
+    function carregarNoModal(c) {
+      const ytId = extrairYoutubeId(c.link_externo)
+      document.getElementById('modal-iframe').src =
+        `https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1&autoplay=1`
+      const pl = todasPlaylists.find(p => todosItens.some(i => i.playlist_id === p.id && i.conteudo_id === c.id))
+      document.getElementById('modal-serie').textContent  = pl?.nome || c.serie || ''
+      document.getElementById('modal-titulo').textContent = c.titulo || ''
+      const metas = []
+      if (c.data_publicacao) metas.push(`📅 ${formatarData(c.data_publicacao)}`)
+      if (c.serie) metas.push(`📌 ${c.serie}`)
+      document.getElementById('modal-meta').textContent = metas.join('  ·  ')
+    }
+
+    function atualizarNavModal() {
+      const videos = modalPlId ? videosDePlaylist(modalPlId) : []
+      const prev = document.getElementById('modal-btn-prev')
+      const next = document.getElementById('modal-btn-next')
+      prev.disabled = modalIdx <= 0
+      next.disabled = modalIdx >= videos.length - 1
+      if (modalPlId) { cfAtivos[modalPlId] = modalIdx; renderCoverflow(modalPlId, videos) }
+    }
+
+    function navegarModal(dir) {
+      if (!modalPlId) return
+      const videos = videosDePlaylist(modalPlId)
+      const novo = modalIdx + dir
+      if (novo < 0 || novo >= videos.length) return
+      modalIdx = novo
+      carregarNoModal(videos[novo])
+      atualizarNavModal()
+    }
+
+    function fecharModal() {
+      document.getElementById('modal-overlay').classList.remove('ativo')
+      document.getElementById('modal-iframe').src = ''
+      document.body.style.overflow = ''
+      modalPlId = null
+    }
+    function fecharModalFora(e) {
+      if (e.target === document.getElementById('modal-overlay')) fecharModal()
+    }
+
+    async function carregarDados() {
+      try {
+        const { data: pls, error: e1 } = await db
+          .from('pregacao_playlists').select('*').order('ordem', { ascending: true })
+        if (e1) throw e1
+        todasPlaylists = pls || []
+
+        const { data: itens, error: e2 } = await db
+          .from('pregacao_playlist_itens')
+          .select('playlist_id, conteudo_id, ordem')
+          .order('ordem', { ascending: true })
+        if (e2) throw e2
+        todosItens = itens || []
+
+        const { data: ctds, error: e3 } = await db
+          .from('conteudos')
+          .select('id, titulo, descricao, serie, link_externo, arquivo_url, thumbnail_url, data_publicacao, subtipo')
+          .eq('tipo', 'pregacao')
+          .eq('publicado', true)
+          .order('data_publicacao', { ascending: false })
+        if (e3) throw e3
+        todosConteudos = ctds || []
+
+        const vinculadosSet = new Set(todosItens.map(i => i.conteudo_id))
+        todosConteudos.filter(c => !vinculadosSet.has(c.id)).forEach(c => {
+          todasPlaylists.push({ id: '__avulsa_' + c.id, nome: c.titulo, _avulsa: true, _conteudoId: c.id, _data: c.data_publicacao })
+        })
+
+        renderDropdown()
+        document.getElementById('estado-carregando').classList.remove('visivel')
+        if (!todosConteudos.length) {
+          document.getElementById('estado-vazio').classList.add('visivel')
+        } else {
+          renderSeries()
+        }
+      } catch (err) {
+        console.error('[Sua Igreja]', err)
+        document.getElementById('estado-carregando').classList.remove('visivel')
+        document.getElementById('estado-vazio').classList.add('visivel')
+        document.querySelector('#estado-vazio .estado-titulo').textContent = 'Erro ao carregar'
+        document.querySelector('#estado-vazio .estado-sub').textContent = 'Tente novamente em alguns instantes.'
+      }
+    }
+
+    function toggleNav(id) {
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('open', item.dataset.nav === id && !item.classList.contains('open'))
+      })
+    }
+    function fecharTodosNavs() {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('open'))
+    }
+
+    function toggleMobileMenu() {
+      const menu    = document.getElementById('mobile-menu')
+      const overlay = document.getElementById('mobile-overlay')
+      const toggle  = document.getElementById('nav-toggle')
+      const open    = menu.classList.toggle('active')
+      overlay.classList.toggle('active', open)
+      toggle.classList.toggle('open', open)
+      document.body.style.overflow = open ? 'hidden' : ''
+    }
+    function fecharMobileMenu() {
+      document.getElementById('mobile-menu').classList.remove('active')
+      document.getElementById('mobile-overlay').classList.remove('active')
+      document.getElementById('nav-toggle').classList.remove('open')
+      document.body.style.overflow = ''
+    }
+    function toggleMobileGroup(id) {
+      const group   = document.getElementById(id)
+      const wasOpen = group.classList.contains('open')
+      document.querySelectorAll('.m-group').forEach(g => g.classList.remove('open'))
+      if (!wasOpen) group.classList.add('open')
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape')     { fecharTodosNavs(); fecharMobileMenu(); fecharModal(); fecharDrawer() }
+      if (e.key === 'ArrowRight') { navegarModal(1) }
+      if (e.key === 'ArrowLeft')  { navegarModal(-1) }
+    })
+
+    function adicionarSwipeCoverflow(el, plId, videos) {
+      let startX = 0
+      el.addEventListener('touchstart', e => { startX = e.touches[0].clientX }, { passive: true })
+      el.addEventListener('touchend', e => {
+        const diff = startX - e.changedTouches[0].clientX
+        if (Math.abs(diff) < 40) return
+        const dir  = diff > 0 ? 1 : -1
+        const idx  = cfAtivos[plId] ?? 0
+        const novo = Math.max(0, Math.min(videos.length - 1, idx + dir))
+        if (novo !== idx) { cfAtivos[plId] = novo; renderCoverflow(plId, videos) }
+      }, { passive: true })
+    }
+
+    ;(function() {
+      let startX = 0
+      const overlay = document.getElementById('modal-overlay')
+      overlay.addEventListener('touchstart', e => { startX = e.touches[0].clientX }, { passive: true })
+      overlay.addEventListener('touchend', e => {
+        const diff = startX - e.changedTouches[0].clientX
+        if (Math.abs(diff) < 50) return
+        navegarModal(diff > 0 ? 1 : -1)
+      }, { passive: true })
+    })()
+
+    function abrirDrawer() {
+      document.getElementById('drawer-overlay').classList.add('active')
+      document.getElementById('drawer-oracao').classList.add('active')
+      document.body.style.overflow = 'hidden'
+    }
+    function fecharDrawer() {
+      document.getElementById('drawer-overlay').classList.remove('active')
+      document.getElementById('drawer-oracao').classList.remove('active')
+      document.body.style.overflow = ''
+    }
+    function resetDrawer() {
+      document.getElementById('oracao-nome').value     = ''
+      document.getElementById('oracao-telefone').value = ''
+      document.getElementById('oracao-pedido').value   = ''
+      document.getElementById('drawer-erro').style.display = 'none'
+      document.getElementById('drawer-form-body').style.display = 'flex'
+      document.getElementById('drawer-sucesso').classList.remove('show')
+    }
+    async function enviarPedidoOracao() {
+      const nome     = document.getElementById('oracao-nome').value.trim()
+      const telefone = document.getElementById('oracao-telefone').value.trim() || null
+      const pedido   = document.getElementById('oracao-pedido').value.trim()
+      const erroEl   = document.getElementById('drawer-erro')
+      const btnEl    = document.getElementById('btn-enviar')
+      erroEl.style.display = 'none'
+      if (!nome)   { erroEl.textContent = '⚠️ O nome é obrigatório.';         erroEl.style.display = 'block'; document.getElementById('oracao-nome').focus();   return }
+      if (!pedido) { erroEl.textContent = '⚠️ Escreva seu pedido de oração.'; erroEl.style.display = 'block'; document.getElementById('oracao-pedido').focus(); return }
+      btnEl.disabled = true; btnEl.textContent = '⏳ Enviando...'
+      const { error } = await db.from('pedidos_oracao').insert({ nome, telefone, pedido, origem: 'Site', status: 'Pendente' })
+      btnEl.disabled = false; btnEl.innerHTML = '🙏 Enviar Pedido de Oração'
+      if (error) { erroEl.textContent = '❌ Erro ao enviar. Tente novamente.'; erroEl.style.display = 'block'; return }
+      document.getElementById('drawer-form-body').style.display = 'none'
+      document.getElementById('drawer-sucesso').classList.add('show')
+    }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50)
+    })
+
+    document.addEventListener('DOMContentLoaded', carregarDados)
+  </script>
+  <script src="/pwa.js"></script>
+  <script src="site-footer.js"></script>
+</body>
+</html>

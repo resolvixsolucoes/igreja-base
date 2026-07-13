@@ -1,0 +1,1478 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sua Igreja</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand:       #2BBFB3;
+      --brand-dark:  #1a9e93;
+      --brand-deep:  #0f6b64;
+      --brand-light: #e8faf9;
+      --brand-mid:   #b2e8e4;
+      --text:        #1a2e2d;
+      --muted:       #6b8b89;
+      --bg:          #ffffff;
+      --radius:      16px;
+      --section-min-height: 600px;
+      --section-padding: 64px 24px;
+      --dropdown-bg: #071a18;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════
+       HEADER
+    ══════════════════════════════════════════════════════════════════ */
+    header {
+      width: 100%; padding: 12px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--brand);
+      box-shadow: 0 2px 16px rgba(43,191,179,0.30);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    header.scrolled { background: var(--brand-dark); box-shadow: 0 2px 24px rgba(0,0,0,0.18); }
+
+    .header-logo img { height: 44px; object-fit: contain; display: block; }
+
+    .header-right { display: flex; align-items: center; gap: 4px; }
+
+    /* ── NAV DESKTOP ────────────────────────────────────────────────── */
+    .main-nav { display: flex; align-items: center; gap: 2px; list-style: none; }
+
+    .nav-item { position: relative; }
+
+    .nav-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 8px 13px; border-radius: 8px;
+      color: rgba(255,255,255,0.92); font-size: 13.5px; font-weight: 600;
+      text-decoration: none; cursor: pointer; white-space: nowrap;
+      background: transparent; border: none; font-family: inherit;
+      transition: background 0.2s, color 0.2s; user-select: none;
+    }
+    .nav-link:hover, .nav-item.open > .nav-link {
+      background: rgba(255,255,255,0.15); color: #ffffff;
+    }
+    .nav-link .chevron {
+      width: 13px; height: 13px; flex-shrink: 0;
+      transition: transform 0.25s; opacity: 0.70;
+    }
+    .nav-item.open > .nav-link .chevron { transform: rotate(180deg); opacity: 1; }
+
+    /* ── DROPDOWN ───────────────────────────────────────────────────── */
+    .dropdown {
+      position: absolute; top: calc(100% + 12px); right: 0;
+      background: var(--dropdown-bg);
+      border-radius: 12px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.20);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-width: 210px; padding: 6px;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 200;
+    }
+    .nav-item.open > .dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .dropdown::before {
+      content: ''; position: absolute; top: -7px; right: 20px;
+      border-left: 7px solid transparent; border-right: 7px solid transparent;
+      border-bottom: 7px solid var(--dropdown-bg);
+    }
+    .dropdown-item {
+      display: flex; align-items: center;
+      padding: 11px 14px; border-radius: 8px;
+      color: rgba(255,255,255,0.82); font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(43,191,179,0.18); color: #ffffff; }
+    .dropdown-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 3px 6px; }
+
+    /* ── BOTÃO MEMBROS ──────────────────────────────────────────────── */
+    .btn-membros {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px; border-radius: 50px; margin-left: 8px;
+      background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.45);
+      color: #ffffff; font-size: 13px; font-weight: 700;
+      text-decoration: none; white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-membros:hover { background: rgba(255,255,255,0.30); border-color: rgba(255,255,255,0.80); }
+
+    /* ── HAMBURGER ──────────────────────────────────────────────────── */
+    .btn-membros-icon {
+      display: none;
+      align-items: center; justify-content: center; gap: 6px;
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.40);
+      border-radius: 10px; height: 42px; padding: 0 14px;
+      color: #fff; font-size: 13px; font-weight: 700;
+      text-decoration: none; flex-shrink: 0;
+      transition: background .2s; white-space: nowrap;
+    }
+    .btn-membros-icon:hover { background: rgba(255,255,255,0.28); }
+    .nav-toggle {
+      display: none;
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.40);
+      border-radius: 10px; width: 42px; height: 42px; cursor: pointer;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 5px; transition: background .2s; flex-shrink: 0; margin-left: 8px;
+    }
+    .nav-toggle:hover { background: rgba(255,255,255,0.28); }
+    .nav-toggle span { display: block; width: 18px; height: 2px; background: #ffffff; border-radius: 2px; transition: all .3s; }
+    .nav-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    /* ══════════════════════════════════════════════════════════════════
+       MENU MOBILE
+    ══════════════════════════════════════════════════════════════════ */
+    .mobile-menu-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,40,38,0.55); z-index: 98;
+      opacity: 0; transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .mobile-menu-overlay.active { opacity: 1; pointer-events: all; }
+    .mobile-menu {
+      position: fixed; top: 0; left: 0; width: 300px; height: 100vh;
+      background: var(--brand-dark); z-index: 99;
+      display: flex; flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      overflow-y: auto;
+    }
+    .mobile-menu.active { transform: translateX(0); }
+    .mobile-menu-header {
+      padding: 20px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .mobile-menu-header img { height: 36px; object-fit: contain; }
+    .btn-fechar-mobile {
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.35);
+      color: #fff; width: 34px; height: 34px; border-radius: 50%;
+      font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .btn-fechar-mobile:hover { background: rgba(255,255,255,0.28); }
+    .mobile-nav { padding: 12px 0; flex: 1; }
+    .m-group { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .m-group-btn {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; cursor: pointer; font-family: inherit;
+      color: rgba(255,255,255,0.92); font-size: 14px; font-weight: 700;
+      transition: background 0.2s;
+    }
+    .m-group-btn:hover { background: rgba(255,255,255,0.08); }
+    .m-group-btn .m-chevron { width: 16px; height: 16px; transition: transform 0.25s; opacity: 0.6; }
+    .m-group.open .m-group-btn .m-chevron { transform: rotate(180deg); opacity: 1; }
+    .m-sub { max-height: 0; overflow: hidden; transition: max-height 0.30s ease; background: rgba(0,0,0,0.20); }
+    .m-group.open .m-sub { max-height: 400px; }
+    .m-sub a {
+      display: flex; align-items: center;
+      padding: 12px 20px 12px 32px;
+      color: rgba(255,255,255,0.75); font-size: 13.5px; font-weight: 600;
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .m-sub a:last-child { border-bottom: none; }
+    .m-sub a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .mobile-menu-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .btn-membros-mobile {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 13px;
+      background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.40);
+      border-radius: 12px; color: #ffffff;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-membros-mobile:hover { background: rgba(255,255,255,0.28); }
+
+    /* ══════════════════════════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════════════════════════ */
+    .hero {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 82px 24px 36px;
+      position: relative; overflow: hidden;
+      background-image: url('hero-bg.jpg');
+      background-size: cover; background-position: center;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(15,107,100,0.78) 0%, rgba(26,158,147,0.65) 45%, rgba(26,158,147,0.85) 100%);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 18px; max-width: 680px;
+      animation: fadeUp 0.9s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.18); color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.40);
+      border-radius: 50px; padding: 7px 20px;
+      font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+      backdrop-filter: blur(8px);
+    }
+    .hero-badge span { opacity: 0.55; font-weight: 400; font-size: 10px; }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.6rem); color: #ffffff; font-weight: 900;
+      line-height: 1.1; letter-spacing: -0.5px; text-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    }
+    .hero h1 em { color: #ffffff; font-style: normal; position: relative; }
+    .hero h1 em::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 4px; background: rgba(255,255,255,0.50); border-radius: 4px;
+    }
+    .hero-divider { width: 44px; height: 3px; background: rgba(255,255,255,0.55); border-radius: 4px; }
+    .hero p {
+      font-size: clamp(0.95rem, 1.8vw, 1.12rem);
+      color: rgba(255,255,255,0.88); line-height: 1.75;
+      max-width: 420px; font-style: italic; text-shadow: 0 1px 8px rgba(0,0,0,0.10);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════
+       SEÇÕES — base comum
+    ══════════════════════════════════════════════════════════════════ */
+    .section-video,
+    .section-cards,
+    .section-generosidade {
+      min-height: var(--section-min-height);
+      padding: var(--section-padding);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+
+    /* ── MOSAICO ────────────────────────────────────────────────────── */
+    .mosaic-bg {
+      position: absolute; inset: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 4px; z-index: 0;
+    }
+    .mosaic-bg .mosaic-img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center; display: block;
+      filter: brightness(0.45) saturate(0.8);
+    }
+    .mosaic-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(15,107,100,0.60) 0%, rgba(43,191,179,0.32) 50%, rgba(15,107,100,0.60) 100%);
+      z-index: 1;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════
+       SEÇÃO VÍDEO
+    ══════════════════════════════════════════════════════════════════ */
+    .section-video { background: #0d1f1e; }
+
+    .video-container {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 20px;
+    }
+
+    .video-section-title { text-align: center; }
+    .video-section-title h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; color: #ffffff;
+      letter-spacing: -0.5px; text-shadow: 0 2px 24px rgba(0,0,0,0.30); line-height: 1.15;
+    }
+    .video-section-title h2 em { font-style: normal; }
+    .video-section-title .titulo-divider {
+      width: 44px; height: 3px; background: rgba(255,255,255,0.50);
+      border-radius: 4px; margin: 10px auto 0;
+    }
+
+    /* Wrapper do iframe — sem nada sobreposto */
+    .video-wrapper {
+      width: 100%; max-width: 320px;
+      aspect-ratio: 9 / 16;
+      border-radius: 24px; overflow: hidden;
+      box-shadow: 0 0 0 3px rgba(43,191,179,0.60), 0 0 0 6px rgba(43,191,179,0.20), 0 24px 64px rgba(0,0,0,0.55);
+    }
+    .video-wrapper iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* ── BOTÃO SOM — fora do wrapper, abaixo do vídeo ───────────────── */
+    #btn-som {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,0,0,0.65); color: #ffffff;
+      border: 2px solid rgba(255,255,255,0.55); border-radius: 50px;
+      padding: 12px 24px; font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+      animation: pulse-som 1.8s ease-in-out infinite;
+      transition: background 0.2s, opacity 0.4s, transform 0.15s;
+      /* mobile-friendly */
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      /* mínimo de área de toque confortável */
+      min-height: 48px;
+    }
+    #btn-som:hover  { background: rgba(43,191,179,0.85); border-color: #fff; }
+    #btn-som:active { transform: scale(0.96); }
+    #btn-som.oculto { opacity: 0; pointer-events: none; animation: none; }
+
+    @keyframes pulse-som {
+      0%,100% { box-shadow: 0 0 0 0   rgba(255,255,255,0.35); }
+      50%     { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+    }
+
+    /* ══════════════════════════════════════════════════════════════════
+       PILARES
+    ══════════════════════════════════════════════════════════════════ */
+    .section-cards { background: #0a2e2b; }
+    .cards-dark-overlay {
+      position: absolute; inset: 0; z-index: 0;
+      background: linear-gradient(135deg, rgba(5,20,18,0.72) 0%, rgba(15,107,100,0.38) 50%, rgba(5,20,18,0.72) 100%);
+    }
+    .section-header { text-align: center; margin-bottom: 40px; position: relative; z-index: 2; }
+    .section-header h2 {
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 900;
+      color: #ffffff; line-height: 1.2; text-shadow: 0 2px 16px rgba(0,0,0,0.30);
+    }
+    .section-header-divider { width: 44px; height: 3px; background: var(--brand); border-radius: 4px; margin: 12px auto 0; }
+    .cards-grid {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 16px; width: 100%; max-width: 520px; position: relative; z-index: 2;
+    }
+    .card {
+      width: 100%; background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(43,191,179,0.30);
+      border-radius: var(--radius); padding: 28px 32px;
+      display: flex; flex-direction: column; gap: 10px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s, background 0.25s;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.35); border-color: rgba(43,191,179,0.70); background: rgba(255,255,255,0.12); }
+    .card h3 { font-size: 1.05rem; font-weight: 800; color: var(--brand); }
+    .card p  { font-size: 0.9rem; color: rgba(255,255,255,0.80); line-height: 1.75; }
+    .card-valores { display: flex; flex-direction: column; gap: 8px; margin-top: 2px; }
+    .card-valores-item { display: inline-flex; align-items: center; gap: 10px; font-size: 0.9rem; color: rgba(255,255,255,0.80); }
+    .card-valores-item::before { content: ''; width: 6px; height: 6px; background: var(--brand); border-radius: 50%; flex-shrink: 0; }
+
+    /* ══════════════════════════════════════════════════════════════════
+       GENEROSIDADE
+    ══════════════════════════════════════════════════════════════════ */
+    .section-generosidade { background: #0d1f1e; }
+
+    .generosidade-header { text-align: center; margin-bottom: 44px; position: relative; z-index: 2; }
+    .generosidade-header h2 {
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 900;
+      color: #ffffff; line-height: 1.2; text-shadow: 0 2px 16px rgba(0,0,0,0.30);
+    }
+    .generosidade-header-divider { width: 44px; height: 3px; background: var(--brand); border-radius: 4px; margin: 12px auto 0; }
+
+    .generosidade-inner {
+      max-width: 1060px; width: 100%; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 56px; align-items: center; position: relative; z-index: 2;
+    }
+    .generosidade-img-wrap { display: flex; justify-content: center; align-items: center; }
+    .generosidade-img-wrap img {
+      width: 100%; max-width: 480px; border-radius: 20px; display: block;
+      box-shadow: 0 0 0 2px rgba(43,191,179,0.40), 0 0 0 5px rgba(43,191,179,0.12), 0 28px 64px rgba(0,0,0,0.60);
+    }
+    .generosidade-content { display: flex; flex-direction: column; gap: 20px; }
+    .generosidade-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(43,191,179,0.20); border: 1px solid rgba(43,191,179,0.50);
+      border-radius: 50px; padding: 6px 16px;
+      font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--brand); width: fit-content; backdrop-filter: blur(6px);
+    }
+    .generosidade-content h3 {
+      font-size: clamp(1.5rem, 2.8vw, 2.2rem); font-weight: 900; color: #ffffff;
+      line-height: 1.15; letter-spacing: -0.4px; text-shadow: 0 2px 16px rgba(0,0,0,0.25);
+    }
+    .generosidade-content h3 em { font-style: normal; color: var(--brand); }
+    .generosidade-divider { width: 44px; height: 3px; background: var(--brand); border-radius: 4px; }
+    .generosidade-content p { font-size: 0.97rem; color: rgba(255,255,255,0.82); line-height: 1.80; }
+    .generosidade-content p strong { color: #ffffff; }
+
+    /* ── BLOCO PIX ──────────────────────────────────────────────────── */
+    .pix-block {
+      background: rgba(0,0,0,0.35); border: 1.5px solid rgba(43,191,179,0.35);
+      border-radius: 14px; padding: 18px 20px;
+      display: flex; flex-direction: column; gap: 12px;
+      backdrop-filter: blur(8px);
+    }
+    .pix-block-label {
+      font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.50);
+    }
+
+    /* chave PIX — display block, largura total */
+    .pix-chave {
+      display: block; width: 100%;
+      background: rgba(0,0,0,0.40); border: 1px solid rgba(43,191,179,0.35);
+      border-radius: 8px; padding: 12px 16px;
+      font-size: 14px; font-weight: 700; color: #ffffff;
+      letter-spacing: 0.5px; font-family: 'Courier New', monospace;
+      word-break: break-all;
+    }
+
+    /* botão copiar — largura total, fora de qualquer flex que possa interferir */
+    .btn-copiar-pix {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 14px 20px;
+      background: var(--brand); color: #fff;
+      border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 800; font-family: inherit;
+      cursor: pointer; white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+      /* mobile-friendly */
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      min-height: 48px;
+    }
+    .btn-copiar-pix:hover   { background: var(--brand-dark); transform: translateY(-1px); }
+    .btn-copiar-pix:active  { transform: scale(0.97); }
+    .btn-copiar-pix.copiado { background: #22c55e; }
+
+    .pix-info { font-size: 11px; color: rgba(255,255,255,0.40); line-height: 1.5; }
+
+    /* ══════════════════════════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════════════════════════ */
+    /* footer: estilos via site-footer.js */
+
+    /* ══════════════════════════════════════════════════════════════════
+       DRAWER ORAÇÃO
+    ══════════════════════════════════════════════════════════════════ */
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(10,40,38,0.55);
+      z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .drawer-overlay.active { opacity: 1; pointer-events: all; }
+    .drawer {
+      position: fixed; top: 0; right: 0; width: 100%; max-width: 440px; height: 100vh;
+      background: #fff; z-index: 301; display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: -8px 0 40px rgba(0,0,0,0.18);
+    }
+    .drawer.active { transform: translateX(0); }
+    .drawer-header {
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+      padding: 28px 24px 24px; display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 16px; flex-shrink: 0;
+    }
+    .drawer-header-text h2 { color:#fff; font-size:20px; font-weight:800; }
+    .drawer-header-text p  { color:rgba(255,255,255,0.82); font-size:13px; margin-top:4px; line-height:1.5; }
+    .btn-fechar-drawer {
+      background: rgba(255,255,255,0.20); border: 1.5px solid rgba(255,255,255,0.40);
+      color: #fff; width:34px; height:34px; border-radius:50%; font-size:16px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; transition:background 0.2s;
+    }
+    .btn-fechar-drawer:hover { background:rgba(255,255,255,0.35); }
+    .drawer-body { flex:1; overflow-y:auto; padding:28px 24px; display:flex; flex-direction:column; gap:18px; }
+    .drawer-field { display:flex; flex-direction:column; gap:6px; }
+    .drawer-field label { font-size:13px; font-weight:700; color:#444; }
+    .drawer-field input, .drawer-field textarea {
+      width:100%; padding:11px 14px; border:1.5px solid #e0e0e0; border-radius:10px;
+      font-size:14px; font-family:inherit; background:#fafafa; color:var(--text);
+      transition:border-color 0.2s, background 0.2s;
+    }
+    .drawer-field input:focus, .drawer-field textarea:focus { outline:none; border-color:var(--brand); background:#fff; }
+    .drawer-field textarea { min-height:120px; resize:vertical; }
+    .drawer-hint { font-size:11px; color:#aaa; line-height:1.5; margin-top:-8px; }
+    .drawer-divider { width:100%; height:1px; background:#f0f0f0; }
+    .btn-enviar-oracao {
+      width:100%; padding:14px;
+      background:linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:800;
+      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+      transition:all 0.2s; box-shadow:0 4px 16px rgba(43,191,179,0.35);
+      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+    }
+    .btn-enviar-oracao:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(43,191,179,0.45); }
+    .btn-enviar-oracao:disabled { opacity:0.65; cursor:not-allowed; transform:none; }
+    .drawer-sucesso {
+      display:none; flex-direction:column; align-items:center; justify-content:center;
+      gap:16px; text-align:center; padding:40px 20px; flex:1;
+    }
+    .drawer-sucesso.show { display:flex; }
+    .drawer-sucesso .icone-sucesso { font-size:4rem; }
+    .drawer-sucesso h3 { font-size:20px; font-weight:800; color:var(--text); }
+    .drawer-sucesso p  { font-size:14px; color:var(--muted); line-height:1.7; max-width:280px; }
+    .btn-novo-pedido {
+      margin-top:8px; padding:10px 28px; border-radius:50px;
+      border:2px solid var(--brand); background:#fff; color:var(--brand);
+      font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s;
+      touch-action: manipulation;
+    }
+    .btn-novo-pedido:hover { background:var(--brand); color:#fff; }
+
+    /* ══════════════════════════════════════════════════════════════════
+       RESPONSIVO
+    ══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      header { padding: 12px 16px; }
+      .main-nav, .btn-membros { display: none; }
+      .btn-membros-icon { display: flex; }
+      .nav-toggle { display: flex; }
+      .mobile-menu-overlay { display: block; pointer-events: none; }
+    }
+
+    @media (max-width: 900px) {
+      .section-video,
+      .section-cards,
+      .section-generosidade { min-height: 500px; padding: 48px 20px; }
+
+      .hero { padding: 32px 20px 32px; }
+      .hero h1 { font-size: 1.9rem; }
+      .hero p  { font-size: 0.93rem; }
+
+      .mosaic-bg { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); }
+
+      .video-wrapper { max-width: 260px; }
+
+      /* botão som já está fora do wrapper — só ajusta tamanho */
+      #btn-som { font-size: 13px; padding: 12px 20px; }
+
+      .cards-grid { max-width: 100%; }
+
+      .generosidade-inner { grid-template-columns: 1fr; gap: 32px; }
+      .generosidade-img-wrap img { max-width: 100%; }
+      .generosidade-content h3 { font-size: 1.5rem; }
+
+      /* PIX em mobile: chave e botão empilhados, largura total */
+      .pix-chave      { font-size: 13px; }
+      .btn-copiar-pix { font-size: 15px; padding: 16px; }
+
+      .footer-top { grid-template-columns: 1fr; padding: 0 24px; gap: 20px; }
+      .footer-left  { align-items: center; }
+      .footer-tagline { text-align: center; }
+      .footer-right { align-items: center; text-align: center; }
+      .footer-divider { width: calc(100% - 48px); }
+    }
+
+    @media (max-width: 580px) { .drawer { max-width: 100%; } }
+
+    /* ══════════════════════════════════════════════════════════════════
+       SEÇÃO EVENTOS PÚBLICOS
+    ══════════════════════════════════════════════════════════════════ */
+    .section-eventos {
+      background: #071a18;
+      padding: 14px 24px 16px;
+      display: flex; flex-direction: column; align-items: center;
+      overflow: hidden;
+    }
+    .eventos-header { text-align: center; margin-bottom: 36px; }
+    .eventos-header h2 {
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 900;
+      color: #ffffff; line-height: 1.2; text-shadow: 0 2px 16px rgba(0,0,0,0.30);
+    }
+    .eventos-header-divider { width: 44px; height: 3px; background: var(--brand); border-radius: 4px; margin: 12px auto 0; }
+
+    /* Carousel */
+    .eventos-carousel {
+      position: relative; width: 80%; max-width: 80%;
+    }
+    .carousel-viewport {
+      overflow: hidden; border-radius: 0;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* Card */
+    .evento-card {
+      flex: 0 0 100%;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 40% 60%;
+      min-height: 50px;
+    }
+    .evento-card-img-wrap {
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .evento-card-img {
+      max-width: 100%; max-height: 450px;
+      width: auto; height: auto;
+      display: block; object-fit: contain;
+    }
+    .evento-card-noimg {
+      background: linear-gradient(135deg, rgba(43,191,179,0.25) 0%, rgba(15,107,100,0.40) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+    }
+    .evento-card-body {
+      padding: 8px 28px;
+      display: flex; flex-direction: column; justify-content: center; gap: 4px;
+    }
+    .evento-card-meta {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .evento-card-data {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(43,191,179,0.20); border: 1px solid rgba(43,191,179,0.45);
+      border-radius: 50px; padding: 5px 14px;
+      font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+      color: var(--brand); white-space: nowrap;
+    }
+    .evento-card-tipo {
+      display: inline-flex; align-items: center; gap: 5px;
+      border-radius: 50px; padding: 5px 12px;
+      font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.65);
+      white-space: nowrap;
+    }
+    .evento-card-body h3 {
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 900;
+      color: #ffffff; line-height: 1.2;
+    }
+    .evento-card-body p {
+      font-size: 0.9rem; color: rgba(255,255,255,0.72); line-height: 1.75;
+    }
+    .btn-evento-inscricao {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 50px;
+      background: var(--brand); color: #fff;
+      font-size: 13px; font-weight: 800; text-decoration: none;
+      border: none; cursor: pointer; width: fit-content;
+      transition: background 0.2s, transform 0.15s;
+      touch-action: manipulation;
+    }
+    .btn-evento-inscricao:hover { background: var(--brand-dark); transform: translateY(-1px); }
+
+    /* Setas e dots */
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(0,0,0,0.55); border: 1.5px solid rgba(255,255,255,0.20);
+      color: #fff; font-size: 24px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(6px);
+      transition: background 0.2s, opacity 0.2s;
+      z-index: 10;
+    }
+    .carousel-btn:hover { background: rgba(43,191,179,0.60); }
+    .carousel-btn:disabled { opacity: 0.25; pointer-events: none; }
+    .carousel-prev { left: -22px; }
+    .carousel-next { right: -22px; }
+    .carousel-dots {
+      display: flex; justify-content: center; gap: 8px;
+      margin-top: 20px;
+    }
+    .carousel-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.25); border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .carousel-dot.active { background: var(--brand); transform: scale(1.3); }
+
+    @media (max-width: 900px) {
+      .section-eventos { padding: 40px 16px 52px; }
+      .evento-card { grid-template-columns: 1fr; }
+      .evento-card-img-wrap { height: auto; }
+      .evento-card-img { max-width: 100%; max-height: none; width: 100%; height: auto; }
+      .evento-card-body { padding: 24px 20px; }
+      .carousel-prev { left: -6px; }
+      .carousel-next { right: -6px; }
+    }
+  </style>
+  <meta name="theme-color" content="#2BBFB3" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════════════════ -->
+<header id="main-header">
+  <div class="header-logo">
+    <a href="index.html"><img src="logo.png" alt="Sua Igreja" /></a>
+  </div>
+  <div class="header-right">
+    <ul class="main-nav" id="main-nav">
+
+      <li class="nav-item" data-nav="sobre">
+        <button class="nav-link" onclick="toggleNav('sobre')">
+          Sobre Nós
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="dropdown">
+          <a class="dropdown-item" href="quem-somos.html">Quem Somos</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="o-que-cremos.html">O Que Cremos</a>
+        </div>
+      </li>
+
+      <li class="nav-item" data-nav="conteudo">
+        <button class="nav-link" onclick="toggleNav('conteudo')">
+          Conteúdo
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="dropdown">
+          <a class="dropdown-item" href="pregacoes.html">Pregações</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="cursos-login.html">Cursos</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="downloads.html">Downloads</a>
+        </div>
+      </li>
+
+      <li class="nav-item" data-nav="fale">
+        <button class="nav-link" onclick="toggleNav('fale')">
+          Fale Conosco
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="dropdown">
+          <a class="dropdown-item" href="#" onclick="fecharTodosNavs(); abrirDrawer(); return false;">Pedido de Oração</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="agendamento-pastoral.html">Agendamento Pastoral</a>
+        </div>
+      </li>
+
+    </ul>
+    <a href="login.html" class="btn-membros">🔑 Área de Membros</a>
+    <a href="login.html" class="btn-membros-icon">🔑 Entrar</a>
+    <button class="nav-toggle" id="nav-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     MENU MOBILE
+══════════════════════════════════════════════════════════════════ -->
+<div class="mobile-menu-overlay" id="mobile-overlay" onclick="fecharMobileMenu()"></div>
+<nav class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-header">
+    <img src="logo.png" alt="Sua Igreja" />
+    <button class="btn-fechar-mobile" onclick="fecharMobileMenu()">✕</button>
+  </div>
+  <div class="mobile-nav">
+    <div class="m-group" id="m-sobre">
+      <button class="m-group-btn" onclick="toggleMobileGroup('m-sobre')">
+        Sobre Nós
+        <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="m-sub">
+        <a href="quem-somos.html">Quem Somos</a>
+        <a href="o-que-cremos.html">O Que Cremos</a>
+      </div>
+    </div>
+    <div class="m-group" id="m-conteudo">
+      <button class="m-group-btn" onclick="toggleMobileGroup('m-conteudo')">
+        Conteúdo
+        <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="m-sub">
+        <a href="pregacoes.html">Pregações</a>
+        <a href="cursos-login.html">Cursos</a>
+        <a href="downloads.html">Downloads</a>
+      </div>
+    </div>
+    <div class="m-group" id="m-fale">
+      <button class="m-group-btn" onclick="toggleMobileGroup('m-fale')">
+        Fale Conosco
+        <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="m-sub">
+        <a href="#" onclick="fecharMobileMenu(); abrirDrawer(); return false;">Pedido de Oração</a>
+        <a href="agendamento-pastoral.html">Agendamento Pastoral</a>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-menu-footer">
+    <a href="login.html" class="btn-membros-mobile">🔑 Área de Membros</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">BÍBLICA <span>●</span> SIMPLES <span>●</span> CONTEMPORÂNEA</div>
+    <h1>Bem-vindo à<br/><em>Sua Igreja</em></h1>
+    <p>Ser uma Sua Igreja para um mundo exausto.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SEÇÃO EVENTOS PÚBLICOS (só aparece quando há eventos cadastrados)
+══════════════════════════════════════════════════════════════════ -->
+<section class="section-eventos" id="section-eventos" style="display:none;">
+  <div class="eventos-carousel" id="eventos-carousel">
+    <div class="carousel-viewport">
+      <div class="carousel-track" id="carousel-track"></div>
+    </div>
+    <button class="carousel-btn carousel-prev" id="carousel-prev" onclick="carouselPrev()">&#8249;</button>
+    <button class="carousel-btn carousel-next" id="carousel-next" onclick="carouselNext()">&#8250;</button>
+    <div class="carousel-dots" id="carousel-dots"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SEÇÃO VÍDEO
+══════════════════════════════════════════════════════════════════ -->
+<section class="section-video" id="section-video">
+  <div class="mosaic-bg">
+    <img class="mosaic-img" src="https://i.imgur.com/wsr1jkb.jpeg" alt="" />
+    <img class="mosaic-img" src="https://i.imgur.com/5Czmd4S.jpeg" alt="" />
+    <img class="mosaic-img" src="https://i.imgur.com/P2YBW0S.jpeg" alt="" />
+    <img class="mosaic-img" src="https://i.imgur.com/P2YBW0S.jpeg" alt="" />
+    <img class="mosaic-img" src="https://i.imgur.com/wsr1jkb.jpeg" alt="" />
+    <img class="mosaic-img" src="https://i.imgur.com/5Czmd4S.jpeg" alt="" />
+  </div>
+  <div class="mosaic-overlay"></div>
+
+  <div class="video-container">
+    <div class="video-section-title">
+      <h2>Venha Ser <em>Leve</em></h2>
+      <div class="titulo-divider"></div>
+    </div>
+
+    <!-- Iframe sem nada sobreposto -->
+    <div class="video-wrapper">
+      <iframe
+        id="video-iframe"
+        src=""
+        title="Sua Igreja"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <!-- Botão FORA do wrapper — recebe toque sem concorrência com o iframe -->
+    <button id="btn-som" onclick="ativarSom()">
+      🔇 Toque para ativar o som
+    </button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PILARES
+══════════════════════════════════════════════════════════════════ -->
+<section class="section-cards">
+  <div class="cards-dark-overlay"></div>
+  <div class="section-header">
+    <h2>Valores da nossa comunidade</h2>
+    <div class="section-header-divider"></div>
+  </div>
+  <div class="cards-grid">
+    <div class="card">
+      <h3>Missão</h3>
+      <p>Ser uma Sua Igreja para um mundo exausto.</p>
+    </div>
+    <div class="card">
+      <h3>Visão</h3>
+      <p>Uma comunidade onde cada pessoa exausta encontre leveza em Jesus.</p>
+    </div>
+    <div class="card">
+      <h3>Valores</h3>
+      <div class="card-valores">
+        <span class="card-valores-item">Bíblica</span>
+        <span class="card-valores-item">Simples</span>
+        <span class="card-valores-item">Contemporânea</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     GENEROSIDADE
+══════════════════════════════════════════════════════════════════ -->
+<section class="section-generosidade">
+  <div class="mosaic-bg">
+    <img class="mosaic-img" src="https://i.imgur.com/wsr1jkb.jpeg" alt="" />
+    <img class="mosaic-img" src="https://i.imgur.com/5Czmd4S.jpeg" alt="" />
+    <img class="mosaic-img" src="https://i.imgur.com/P2YBW0S.jpeg" alt="" />
+    <img class="mosaic-img" src="https://i.imgur.com/P2YBW0S.jpeg" alt="" />
+    <img class="mosaic-img" src="https://i.imgur.com/wsr1jkb.jpeg" alt="" />
+    <img class="mosaic-img" src="https://i.imgur.com/5Czmd4S.jpeg" alt="" />
+  </div>
+  <div class="mosaic-overlay"></div>
+
+  <div class="generosidade-header">
+    <h2>Faça parte com sua generosidade</h2>
+    <div class="generosidade-header-divider"></div>
+  </div>
+
+  <div class="generosidade-inner">
+    <div class="generosidade-img-wrap">
+      <img src="" alt="QR Code PIX — Sua Igreja" id="pix-qr" />
+    </div>
+    <div class="generosidade-content">
+      <span class="generosidade-badge">🚀 Generosidade</span>
+      <h3>Vamos avançar <em>juntos!</em></h3>
+      <div class="generosidade-divider"></div>
+      <p>Sua <strong>generosidade</strong> nos trouxe até aqui e é ela que nos leva mais longe. Contribua com a Sua Igreja e faça parte desta história de transformação.</p>
+      <p>Escaneie o QR Code ao lado ou copie a chave PIX abaixo. Toda contribuição, grande ou pequena, faz a diferença. 🙏</p>
+
+      <div class="pix-block" id="pix-block">
+        <span class="pix-block-label" id="pix-label">Chave PIX</span>
+
+        <!-- Chave em bloco próprio — sem concorrência com o botão -->
+        <span class="pix-chave" id="pix-chave"></span>
+
+        <!-- Botão largura total, fora de qualquer flex-row que reduza a área de toque -->
+        <button class="btn-copiar-pix" id="btn-copiar" onclick="copiarPix()">
+          📋 Copiar chave PIX
+        </button>
+
+        <span class="pix-info" id="pix-info">Transferência instantânea e segura</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════════════ -->
+<div data-site-footer></div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DRAWER INSCRIÇÃO EM EVENTO
+══════════════════════════════════════════════════════════════════ -->
+<div class="drawer-overlay" id="drawer-inscricao-overlay" onclick="fecharInscricao()"></div>
+<div class="drawer" id="drawer-inscricao">
+  <div class="drawer-header">
+    <div class="drawer-header-text">
+      <h2 id="drawer-inscricao-titulo">Inscrição</h2>
+      <p>Preencha seus dados para garantir sua vaga. 🎉</p>
+    </div>
+    <button class="btn-fechar-drawer" onclick="fecharInscricao()">✕</button>
+  </div>
+  <div class="drawer-body" id="drawer-inscricao-body">
+    <div class="drawer-field">
+      <label>Nome completo <span style="color:#e74c3c">*</span></label>
+      <input type="text" id="insc-nome" placeholder="Ex: Maria Souza" />
+    </div>
+    <div class="drawer-field">
+      <label>Data de Nascimento <span style="color:#e74c3c">*</span></label>
+      <input type="date" id="insc-nascimento" />
+    </div>
+    <div class="drawer-field">
+      <label>E-mail <span style="color:#aaa;font-size:11px;font-weight:400;">(opcional)</span></label>
+      <input type="email" id="insc-email" placeholder="Ex: maria@email.com" />
+    </div>
+    <div class="drawer-divider"></div>
+    <div class="drawer-field">
+      <label>CEP <span style="color:#e74c3c">*</span></label>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="insc-cep" placeholder="00000-000" maxlength="9" oninput="mascararCep(this)" style="flex:1;" />
+        <button type="button" onclick="buscarCep()" id="btn-cep"
+          style="padding:11px 16px;border-radius:10px;border:1.5px solid var(--brand);background:var(--brand);color:#fff;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .2s;">
+          🔍 Buscar
+        </button>
+      </div>
+      <span class="drawer-hint" id="cep-status" style="color:#aaa;"></span>
+    </div>
+    <div class="drawer-field">
+      <label>Rua / Logradouro <span style="color:#e74c3c">*</span></label>
+      <input type="text" id="insc-rua" placeholder="Ex: Rua das Flores" />
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="drawer-field">
+        <label>Número <span style="color:#e74c3c">*</span></label>
+        <input type="text" id="insc-numero" placeholder="Ex: 123" />
+      </div>
+      <div class="drawer-field">
+        <label>Complemento <span style="color:#aaa;font-size:11px;font-weight:400;">(opcional)</span></label>
+        <input type="text" id="insc-complemento" placeholder="Ex: Apto 4" />
+      </div>
+    </div>
+    <div class="drawer-field">
+      <label>Bairro <span style="color:#e74c3c">*</span></label>
+      <input type="text" id="insc-bairro" placeholder="Ex: Centro" />
+    </div>
+    <div class="drawer-field">
+      <label>Cidade <span style="color:#e74c3c">*</span></label>
+      <input type="text" id="insc-cidade" placeholder="Ex: Belo Horizonte/MG" />
+    </div>
+    <div class="drawer-divider"></div>
+    <div class="drawer-field">
+      <label>Telefone / WhatsApp <span style="color:#e74c3c">*</span></label>
+      <input type="tel" id="insc-telefone" placeholder="(31) 99999-9999" />
+    </div>
+    <p id="insc-erro" style="display:none;font-size:13px;color:#e74c3c;background:#fff0f0;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-weight:600;"></p>
+    <button class="btn-enviar-oracao" id="btn-insc-enviar" onclick="enviarInscricao()">✍️ Confirmar Inscrição</button>
+  </div>
+  <div class="drawer-sucesso" id="drawer-inscricao-sucesso">
+    <div class="icone-sucesso">🎉</div>
+    <h3>Inscrição confirmada!</h3>
+    <p>Sua inscrição foi recebida.<br/>Nos vemos no evento!</p>
+    <button class="btn-novo-pedido" onclick="fecharInscricao()">Fechar</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DRAWER ORAÇÃO
+══════════════════════════════════════════════════════════════════ -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
+<div class="drawer" id="drawer-oracao">
+  <div class="drawer-header">
+    <div class="drawer-header-text">
+      <h2>Pedido de Oração</h2>
+      <p>Compartilhe seu pedido conosco.<br/>Vamos orar por você! 🙏</p>
+    </div>
+    <button class="btn-fechar-drawer" onclick="fecharDrawer()">✕</button>
+  </div>
+  <div class="drawer-body" id="drawer-form-body">
+    <div class="drawer-field">
+      <label>Nome completo <span style="color:#e74c3c">*</span></label>
+      <input type="text" id="oracao-nome" placeholder="Ex: Maria Souza" />
+    </div>
+    <div class="drawer-field">
+      <label>Telefone / WhatsApp</label>
+      <input type="text" id="oracao-telefone" placeholder="(31) 99999-9999" />
+      <span class="drawer-hint">Opcional — para que possamos entrar em contato.</span>
+    </div>
+    <div class="drawer-divider"></div>
+    <div class="drawer-field">
+      <label>Seu pedido de oração <span style="color:#e74c3c">*</span></label>
+      <textarea id="oracao-pedido" placeholder="Escreva aqui o seu pedido de oração..."></textarea>
+    </div>
+    <p id="drawer-erro" style="display:none;font-size:13px;color:#e74c3c;background:#fff0f0;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-weight:600;"></p>
+    <button class="btn-enviar-oracao" id="btn-enviar" onclick="enviarPedidoOracao()">🙏 Enviar Pedido de Oração</button>
+  </div>
+  <div class="drawer-sucesso" id="drawer-sucesso">
+    <div class="icone-sucesso">🙏</div>
+    <h3>Pedido enviado!</h3>
+    <p>Recebemos seu pedido de oração.<br/>Nossa equipe vai orar por você com muito carinho.</p>
+    <button class="btn-novo-pedido" onclick="resetDrawer()">+ Enviar outro pedido</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabase.js"></script>
+<script>
+
+  /* ── NAV DESKTOP ──────────────────────────────────────────────────── */
+  function toggleNav(id) {
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.toggle('open', item.dataset.nav === id && !item.classList.contains('open'))
+    })
+  }
+  function fecharTodosNavs() {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('open'))
+  }
+  document.addEventListener('click', e => { if (!e.target.closest('.nav-item')) fecharTodosNavs() })
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { fecharTodosNavs(); fecharMobileMenu(); fecharDrawer() }
+  })
+
+  /* ── MENU MOBILE ──────────────────────────────────────────────────── */
+  function toggleMobileMenu() {
+    const menu    = document.getElementById('mobile-menu')
+    const overlay = document.getElementById('mobile-overlay')
+    const toggle  = document.getElementById('nav-toggle')
+    const open    = menu.classList.toggle('active')
+    overlay.classList.toggle('active', open)
+    toggle.classList.toggle('open', open)
+    document.body.style.overflow = open ? 'hidden' : ''
+  }
+  function fecharMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active')
+    document.getElementById('mobile-overlay').classList.remove('active')
+    document.getElementById('nav-toggle').classList.remove('open')
+    document.body.style.overflow = ''
+  }
+  function toggleMobileGroup(id) {
+    const group   = document.getElementById(id)
+    const wasOpen = group.classList.contains('open')
+    document.querySelectorAll('.m-group').forEach(g => g.classList.remove('open'))
+    if (!wasOpen) group.classList.add('open')
+  }
+
+  /* ── SCROLL ───────────────────────────────────────────────────────── */
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50)
+  })
+
+  /* ── PIX ──────────────────────────────────────────────────────────── */
+  ;(function initPix() {
+    const cfg = (window.APP_CONFIG && window.APP_CONFIG.PIX) || {}
+    const block = document.getElementById('pix-block')
+    if (!cfg.chave) { if (block) block.style.display = 'none'; return }
+    const partes = ['Chave PIX', cfg.titular, cfg.banco].filter(Boolean).join(' · ')
+    const elLabel = document.getElementById('pix-label')
+    const elChave = document.getElementById('pix-chave')
+    const elInfo  = document.getElementById('pix-info')
+    if (elLabel) elLabel.textContent = partes
+    if (elChave) elChave.textContent = cfg.chave
+    if (elInfo && cfg.tipo) elInfo.textContent = `${cfg.tipo} · Transferência instantânea e segura`
+  })()
+
+  function copiarPix() {
+    const btn = document.getElementById('btn-copiar')
+
+    /* Tenta Clipboard API primeiro */
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(((window.APP_CONFIG && window.APP_CONFIG.PIX && window.APP_CONFIG.PIX.chave) || '')).then(() => {
+        confirmarCopia(btn)
+      }).catch(() => {
+        copiarFallback(btn)
+      })
+    } else {
+      copiarFallback(btn)
+    }
+  }
+
+  /* Fallback para iOS Safari e browsers sem Clipboard API */
+  function copiarFallback(btn) {
+    const el = document.createElement('input')
+    el.value = ((window.APP_CONFIG && window.APP_CONFIG.PIX && window.APP_CONFIG.PIX.chave) || '')
+    el.setAttribute('readonly', '')
+    el.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;'
+    document.body.appendChild(el)
+    el.focus()
+    el.select()
+    el.setSelectionRange(0, el.value.length) /* iOS */
+    try {
+      document.execCommand('copy')
+      confirmarCopia(btn)
+    } catch(e) {
+      btn.textContent = '⚠️ Copie manualmente'
+    }
+    document.body.removeChild(el)
+  }
+
+  function confirmarCopia(btn) {
+    btn.innerHTML   = '✅ Chave copiada!'
+    btn.classList.add('copiado')
+    setTimeout(() => {
+      btn.innerHTML = '📋 Copiar chave PIX'
+      btn.classList.remove('copiado')
+    }, 2800)
+  }
+
+  /* ── DRAWER INSCRIÇÃO ────────────────────────────────────────────── */
+  let _inscricaoEventoId = null
+
+  window.mascararCep = function(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 8)
+    if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5)
+    input.value = v
+    if (v.replace(/\D/g, '').length === 8) buscarCep()
+  }
+
+  async function _fetchCep(cep) {
+    /* Tenta BrasilAPI primeiro, depois ViaCEP como fallback */
+    const apis = [
+      {
+        url:    `https://brasilapi.com.br/api/cep/v2/${cep}`,
+        mapeia: d => ({
+          rua:    d.street       || '',
+          bairro: d.neighborhood || '',
+          cidade: d.city && d.state ? `${d.city}/${d.state}` : (d.city || ''),
+          ok:     !!d.cep,
+        }),
+      },
+      {
+        url:    `https://viacep.com.br/ws/${cep}/json/`,
+        mapeia: d => ({
+          rua:    d.logradouro || '',
+          bairro: d.bairro     || '',
+          cidade: d.localidade && d.uf ? `${d.localidade}/${d.uf}` : (d.localidade || ''),
+          ok:     !d.erro,
+        }),
+      },
+    ]
+    for (const api of apis) {
+      try {
+        const res  = await fetch(api.url, { signal: AbortSignal.timeout(5000) })
+        if (!res.ok) continue
+        const data = await res.json()
+        const r    = api.mapeia(data)
+        if (r.ok) return r
+      } catch(_) { /* tenta próxima */ }
+    }
+    return null
+  }
+
+  window.buscarCep = async function() {
+    const cep      = document.getElementById('insc-cep').value.replace(/\D/g, '')
+    if (cep.length !== 8) return
+    const statusEl = document.getElementById('cep-status')
+    const btnEl    = document.getElementById('btn-cep')
+    statusEl.style.color = '#888'
+    statusEl.textContent = '⏳ Buscando...'
+    btnEl.disabled = true
+
+    const resultado = await _fetchCep(cep)
+
+    if (!resultado) {
+      statusEl.style.color = '#e74c3c'
+      statusEl.textContent = '❌ CEP não encontrado. Preencha o endereço manualmente.'
+    } else {
+      document.getElementById('insc-rua').value    = resultado.rua
+      document.getElementById('insc-bairro').value = resultado.bairro
+      document.getElementById('insc-cidade').value = resultado.cidade
+      statusEl.style.color = '#22c55e'
+      statusEl.textContent = '✅ Endereço preenchido!'
+      document.getElementById('insc-numero').focus()
+    }
+    btnEl.disabled = false
+  }
+
+  window.abrirInscricao = function(eventoId, nomeEvento) {
+    _inscricaoEventoId = eventoId
+    document.getElementById('drawer-inscricao-titulo').textContent = nomeEvento
+    document.getElementById('insc-nome').value        = ''
+    document.getElementById('insc-nascimento').value  = ''
+    document.getElementById('insc-email').value       = ''
+    document.getElementById('insc-cep').value         = ''
+    document.getElementById('insc-rua').value         = ''
+    document.getElementById('insc-numero').value      = ''
+    document.getElementById('insc-complemento').value = ''
+    document.getElementById('insc-bairro').value      = ''
+    document.getElementById('insc-cidade').value      = ''
+    document.getElementById('insc-telefone').value    = ''
+    document.getElementById('cep-status').textContent = ''
+    document.getElementById('insc-erro').style.display = 'none'
+    document.getElementById('drawer-inscricao-body').style.display    = 'flex'
+    document.getElementById('drawer-inscricao-sucesso').classList.remove('show')
+    document.getElementById('drawer-inscricao-overlay').classList.add('active')
+    document.getElementById('drawer-inscricao').classList.add('active')
+    document.body.style.overflow = 'hidden'
+  }
+
+  window.fecharInscricao = function() {
+    document.getElementById('drawer-inscricao-overlay').classList.remove('active')
+    document.getElementById('drawer-inscricao').classList.remove('active')
+    document.body.style.overflow = ''
+  }
+
+  window.enviarInscricao = async function() {
+    const nome        = document.getElementById('insc-nome').value.trim()
+    const nascimento  = document.getElementById('insc-nascimento').value      || null
+    const email       = document.getElementById('insc-email').value.trim()    || null
+    const cep         = document.getElementById('insc-cep').value.replace(/\D/g,'') || null
+    const rua         = document.getElementById('insc-rua').value.trim()      || null
+    const numero      = document.getElementById('insc-numero').value.trim()   || null
+    const complemento = document.getElementById('insc-complemento').value.trim() || null
+    const bairro      = document.getElementById('insc-bairro').value.trim()   || null
+    const cidade      = document.getElementById('insc-cidade').value.trim()   || null
+    const telefone    = document.getElementById('insc-telefone').value.trim() || null
+    const erroEl      = document.getElementById('insc-erro')
+    const btnEl       = document.getElementById('btn-insc-enviar')
+    erroEl.style.display = 'none'
+
+    if (!nome)       { erroEl.textContent = '⚠️ O nome é obrigatório.';              erroEl.style.display = 'block'; document.getElementById('insc-nome').focus();        return }
+    if (!nascimento) { erroEl.textContent = '⚠️ Informe a data de nascimento.';      erroEl.style.display = 'block'; document.getElementById('insc-nascimento').focus();  return }
+    if (!cep)        { erroEl.textContent = '⚠️ Informe o CEP.';                     erroEl.style.display = 'block'; document.getElementById('insc-cep').focus();         return }
+    if (!rua)        { erroEl.textContent = '⚠️ Informe a rua.';                     erroEl.style.display = 'block'; document.getElementById('insc-rua').focus();         return }
+    if (!numero)     { erroEl.textContent = '⚠️ Informe o número.';                  erroEl.style.display = 'block'; document.getElementById('insc-numero').focus();      return }
+    if (!bairro)     { erroEl.textContent = '⚠️ Informe o bairro.';                  erroEl.style.display = 'block'; document.getElementById('insc-bairro').focus();      return }
+    if (!cidade)     { erroEl.textContent = '⚠️ Informe a cidade.';                  erroEl.style.display = 'block'; document.getElementById('insc-cidade').focus();      return }
+    if (!telefone)   { erroEl.textContent = '⚠️ O telefone é obrigatório.';          erroEl.style.display = 'block'; document.getElementById('insc-telefone').focus();    return }
+
+    btnEl.disabled = true; btnEl.textContent = '⏳ Enviando...'
+    const { error } = await db.from('inscricoes_eventos').insert({
+      evento_id: _inscricaoEventoId,
+      nome, data_nascimento: nascimento, email,
+      cep, rua, numero, complemento, bairro, cidade, telefone
+    })
+    btnEl.disabled = false; btnEl.textContent = '✍️ Confirmar Inscrição'
+
+    if (error) { erroEl.textContent = '❌ Erro ao enviar. Tente novamente.'; erroEl.style.display = 'block'; return }
+    document.getElementById('drawer-inscricao-body').style.display = 'none'
+    document.getElementById('drawer-inscricao-sucesso').classList.add('show')
+  }
+
+  /* ── DRAWER ───────────────────────────────────────────────────────── */
+  function abrirDrawer() {
+    document.getElementById('drawer-overlay').classList.add('active')
+    document.getElementById('drawer-oracao').classList.add('active')
+    document.body.style.overflow = 'hidden'
+  }
+  function fecharDrawer() {
+    document.getElementById('drawer-overlay').classList.remove('active')
+    document.getElementById('drawer-oracao').classList.remove('active')
+    document.body.style.overflow = ''
+  }
+  function resetDrawer() {
+    document.getElementById('oracao-nome').value     = ''
+    document.getElementById('oracao-telefone').value = ''
+    document.getElementById('oracao-pedido').value   = ''
+    document.getElementById('drawer-erro').style.display = 'none'
+    document.getElementById('drawer-form-body').style.display = 'flex'
+    document.getElementById('drawer-sucesso').classList.remove('show')
+  }
+  async function enviarPedidoOracao() {
+    const nome     = document.getElementById('oracao-nome').value.trim()
+    const telefone = document.getElementById('oracao-telefone').value.trim() || null
+    const pedido   = document.getElementById('oracao-pedido').value.trim()
+    const erroEl   = document.getElementById('drawer-erro')
+    const btnEl    = document.getElementById('btn-enviar')
+    erroEl.style.display = 'none'
+    if (!nome)   { erroEl.textContent = '⚠️ O nome é obrigatório.';         erroEl.style.display = 'block'; document.getElementById('oracao-nome').focus();   return }
+    if (!pedido) { erroEl.textContent = '⚠️ Escreva seu pedido de oração.'; erroEl.style.display = 'block'; document.getElementById('oracao-pedido').focus(); return }
+    btnEl.disabled = true; btnEl.textContent = '⏳ Enviando...'
+    const { error } = await db.from('pedidos_oracao').insert({ nome, telefone, pedido, origem: 'Site', status: 'Pendente' })
+    btnEl.disabled = false; btnEl.innerHTML = '🙏 Enviar Pedido de Oração'
+    if (error) { erroEl.textContent = '❌ Erro ao enviar. Tente novamente.'; erroEl.style.display = 'block'; return }
+    document.getElementById('drawer-form-body').style.display = 'none'
+    document.getElementById('drawer-sucesso').classList.add('show')
+  }
+
+  /* ── EVENTOS PÚBLICOS ────────────────────────────────────────────── */
+  const FINALIDADE_EMOJI = {
+    culto: '🟣', conferencia: '🔵', curso: '🟡', treinamento: '🟠',
+    reuniao: '⚫', cafe: '🟤', festividade: '🟢', pastoral: '🔴',
+  }
+  const FINALIDADE_LABEL = {
+    culto: 'Culto', conferencia: 'Conferência', curso: 'Curso',
+    treinamento: 'Treinamento', reuniao: 'Reunião', cafe: 'Café',
+    festividade: 'Festividade', pastoral: 'Pastoral',
+  }
+
+  function formatarDataEvento(dataStr) {
+    const [a, m, d] = dataStr.split('-').map(Number)
+    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
+    return `${d} de ${meses[m-1]}. de ${a}`
+  }
+
+  function formatarHora(horaStr) {
+    if (!horaStr) return ''
+    return ' · ' + horaStr.slice(0, 5) + 'h'
+  }
+
+  let _carouselIdx  = 0
+  let _carouselTotal = 0
+
+  function _goToSlide(idx) {
+    _carouselIdx = Math.max(0, Math.min(idx, _carouselTotal - 1))
+    document.getElementById('carousel-track').style.transform = `translateX(-${_carouselIdx * 100}%)`
+    document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === _carouselIdx))
+    document.getElementById('carousel-prev').disabled = _carouselIdx === 0
+    document.getElementById('carousel-next').disabled = _carouselIdx === _carouselTotal - 1
+  }
+  window.carouselPrev = () => _goToSlide(_carouselIdx - 1)
+  window.carouselNext = () => _goToSlide(_carouselIdx + 1)
+
+  ;(async function carregarEventosPublicos() {
+    const { data, error } = await db.rpc('eventos_publicos_site')
+    if (error || !data || data.length === 0) return
+
+    const track = document.getElementById('carousel-track')
+    const dots  = document.getElementById('carousel-dots')
+    _carouselTotal = data.length
+
+    data.forEach((ev, i) => {
+      const emoji = FINALIDADE_EMOJI[ev.finalidade] || '📅'
+      const label = FINALIDADE_LABEL[ev.finalidade] || ev.finalidade
+
+      const imgHtml = ev.imagem_url
+        ? `<div class="evento-card-img-wrap"><img class="evento-card-img" src="${ev.imagem_url}" alt="${ev.nome}" /></div>`
+        : `<div class="evento-card-noimg">${emoji}</div>`
+
+      const descHtml = ev.descricao_curta
+        ? `<p>${ev.descricao_curta}</p>`
+        : ''
+
+      const evNomeEsc = ev.nome.replace(/'/g, "\\'").replace(/"/g, '&quot;')
+
+      const card = document.createElement('div')
+      card.className = 'evento-card'
+      card.innerHTML = `
+        ${imgHtml}
+        <div class="evento-card-body">
+          <div class="evento-card-meta">
+            <span class="evento-card-data">📅 ${formatarDataEvento(ev.data)}${formatarHora(ev.hora)}</span>
+          </div>
+          <h3>${ev.nome}</h3>
+          ${descHtml}
+          <button class="btn-evento-inscricao" onclick="abrirInscricao('${ev.id}','${evNomeEsc}')">✍️ Inscreva-se</button>
+        </div>`
+      track.appendChild(card)
+
+      if (data.length > 1) {
+        const dot = document.createElement('button')
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '')
+        dot.setAttribute('aria-label', `Evento ${i+1}`)
+        dot.onclick = () => _goToSlide(i)
+        dots.appendChild(dot)
+      }
+    })
+
+    if (data.length === 1) {
+      document.getElementById('carousel-prev').style.display = 'none'
+      document.getElementById('carousel-next').style.display = 'none'
+    } else {
+      _goToSlide(0)
+    }
+
+    document.getElementById('section-eventos').style.display = 'flex'
+  })()
+
+  /* ── VÍDEO ────────────────────────────────────────────────────────── */
+  ;(function () {
+    const iframe   = document.getElementById('video-iframe')
+    const btnSom   = document.getElementById('btn-som')
+    const VIDEO_ID = (window.APP_CONFIG && window.APP_CONFIG.VIDEO_APRESENTACAO) || ''
+    if (!VIDEO_ID) { /* sem vídeo configurado: oculta o iframe */ if (iframe) iframe.style.display = 'none'; if (btnSom) btnSom.style.display = 'none'; return }
+    let   played   = false
+
+    const SRC_MUTED =
+      'https://www.youtube.com/embed/' + VIDEO_ID +
+      '?rel=0&modestbranding=1&enablejsapi=1&autoplay=1&mute=1&playsinline=1'
+
+    function enviarComando(func, args) {
+      try {
+        iframe.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func, args }), '*'
+        )
+      } catch(_) {}
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !played) {
+          played = true
+          observer.disconnect()
+          iframe.src = SRC_MUTED
+        }
+      })
+    }, { threshold: 0.4 })
+    observer.observe(document.getElementById('section-video'))
+
+    window.ativarSom = function () {
+      enviarComando('unMute',    [])
+      enviarComando('setVolume', [50])
+      btnSom.classList.add('oculto')
+    }
+  })()
+
+</script>
+<script src="/pwa.js"></script>
+<script src="site-footer.js"></script>
+</body>
+</html>

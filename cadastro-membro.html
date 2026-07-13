@@ -1,0 +1,827 @@
+﻿@<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro de Membro — Sua Igreja</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #f0fffe;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      width: 100%;
+      padding: 18px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #2BBFB3;
+      box-shadow: 0 2px 16px rgba(43,191,179,0.30);
+    }
+    .header-logo img { height: 50px; object-fit: contain; }
+
+    .page-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 60px;
+    }
+
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .page-header h1 { font-size: 1.5rem; color: #1a2e2d; font-weight: 800; }
+    .page-header p  { font-size: 0.92rem; color: #6b8b89; }
+
+    .form-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 8px 40px rgba(43,191,179,0.10);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #2BBFB3;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e0faf8;
+      margin-top: 4px;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: #444; }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fafafa;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #2BBFB3;
+      background: #fff;
+    }
+
+    .input-row { display: flex; gap: 10px; }
+    .input-row .form-group { flex: 1; }
+    .input-row .form-group.flex-2 { flex: 2; }
+
+    .autocomplete-wrap { position: relative; }
+    .autocomplete-list {
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      background: #fff;
+      border: 1.5px solid #2BBFB3;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      max-height: 180px;
+      overflow-y: auto;
+      z-index: 50;
+      display: none;
+    }
+    .autocomplete-list.show { display: block; }
+    .autocomplete-item {
+      padding: 9px 13px;
+      font-size: 13px;
+      cursor: pointer;
+      color: #333;
+      border-bottom: 1px solid #f0fffe;
+      transition: background 0.15s;
+    }
+    .autocomplete-item:hover { background: #e8faf9; }
+    .autocomplete-item small { color: #999; font-size: 11px; margin-left: 6px; }
+
+    #lista-filhos-pub .filho-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    #lista-filhos-pub .filho-row .autocomplete-wrap { flex: 1; }
+
+    .btn-remove-filho {
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      color: #e74c3c;
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 13px;
+      flex-shrink: 0;
+      transition: background 0.15s;
+      margin-top: 2px;
+    }
+    .btn-remove-filho:hover { background: #ffe0e0; }
+
+    .btn-add {
+      background: #e8faf9;
+      border: 1.5px dashed #2BBFB3;
+      color: #1a9e93;
+      border-radius: 10px;
+      padding: 9px 14px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.15s;
+      width: fit-content;
+    }
+    .btn-add:hover { background: #d0f5f2; }
+
+    .mesa-selecionada { display: flex; align-items: center; gap: 8px; }
+    .mesa-selecionada input[type="text"] {
+      flex: 1;
+      background: #e8faf9;
+      border-color: #2BBFB3;
+      color: #1a6e68;
+      font-weight: 600;
+      cursor: default;
+    }
+    .btn-trocar-mesa {
+      background: #fff;
+      border: 1.5px solid #2BBFB3;
+      color: #2BBFB3;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .btn-trocar-mesa:hover { background: #e8faf9; }
+
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 14px;
+      background: #f8fffe;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #333;
+      cursor: pointer;
+    }
+    .checkbox-item input[type="checkbox"],
+    .checkbox-item input[type="radio"] {
+      width: 16px; height: 16px;
+      accent-color: #2BBFB3;
+      cursor: pointer;
+      padding: 0; border: none; background: none;
+      flex-shrink: 0;
+    }
+    .checkbox-loading {
+      font-size: 13px;
+      color: #999;
+      font-style: italic;
+      padding: 6px 2px;
+    }
+
+    .btn-submit {
+      background: #2BBFB3;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(43,191,179,0.30);
+    }
+    .btn-submit:hover {
+      background: #1fa89d;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(43,191,179,0.35);
+    }
+    .btn-submit:disabled { background: #a8deda; cursor: not-allowed; transform: none; }
+
+    .feedback {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+      padding: 20px 0 8px;
+    }
+    .feedback.show { display: flex; }
+    .feedback-icon { font-size: 3rem; }
+    .feedback h2 { font-size: 1.3rem; color: #1a2e2d; font-weight: 800; }
+    .feedback p  { font-size: 0.95rem; color: #6b8b89; line-height: 1.6; }
+    .feedback-error { color: #e74c3c !important; }
+    .required { color: #e74c3c; margin-left: 2px; }
+
+    @media (max-width: 680px) {
+      header { padding: 14px 20px; }
+    }
+    @media (max-width: 480px) {
+      .form-card { padding: 24px 18px; }
+      .input-row { flex-direction: column; gap: 12px; }
+    }
+
+    /* ── CEP ── */
+    .cep-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .cep-row input { flex: 1; }
+    .cep-spinner { font-size: 15px; animation: cepSpin 0.8s linear infinite; display: none; flex-shrink: 0; }
+    .cep-ok      { color: #10b981; font-size: 15px; display: none; flex-shrink: 0; }
+    .cep-err     { color: #ef4444; font-size: 15px; display: none; flex-shrink: 0; }
+    @keyframes cepSpin { to { transform: rotate(360deg); } }
+
+  </style>
+  <meta name="theme-color" content="#2BBFB3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sua Igreja" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+</head>
+<body>
+
+  <header>
+    <div class="header-logo">
+      <img src="logo.png" alt="Sua Igreja" />
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="page-header">
+      <h1>Cadastro de Membro</h1>
+      <p>Preencha o formulário abaixo para se cadastrar na Sua Igreja.</p>
+    </div>
+
+    <div class="form-card" id="form-card">
+
+      <div class="form-section-title">📋 Dados Pessoais</div>
+
+      <div class="form-group">
+        <label>Nome completo <span class="required">*</span></label>
+        <input type="text" id="pub-nome" placeholder="Ex: João da Silva" />
+      </div>
+
+      <div class="input-row">
+        <div class="form-group">
+          <label>Data de Nascimento</label>
+          <input type="date" id="pub-nascimento" />
+        </div>
+        <div class="form-group flex-2">
+          <label>Telefone / WhatsApp</label>
+          <input type="text" id="pub-telefone" placeholder="(31) 99999-9999" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Estado Civil</label>
+        <select id="pub-estado-civil"
+          onchange="toggleCampoPub('pub-conjuge-wrap', this.value === 'Casado')">
+          <option value="Solteiro">Solteiro(a)</option>
+          <option value="Casado">Casado(a)</option>
+          <option value="Divorciado">Divorciado(a)</option>
+          <option value="Viúvo">Viúvo(a)</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="pub-conjuge-wrap" style="display:none;">
+        <label>Nome do cônjuge</label>
+        <div class="autocomplete-wrap">
+          <input type="text" id="pub-conjuge" placeholder="Digite o nome..."
+            autocomplete="off"
+            oninput="buscarMembro(this.value,'lista-conjuge','pub-conjuge','pub-conjuge-id')"
+            onfocus="buscarMembro(this.value,'lista-conjuge','pub-conjuge','pub-conjuge-id')" />
+          <div class="autocomplete-list" id="lista-conjuge"></div>
+        </div>
+        <input type="hidden" id="pub-conjuge-id" />
+      </div>
+
+      <div class="form-section-title">📍 Endereço</div>
+      <div class="form-group">
+        <label>CEP</label>
+        <div class="cep-row">
+          <input type="text" id="pub-cep" placeholder="Ex: 35160-158"
+            maxlength="9" oninput="pubMascaraCep(this)" />
+          <span class="cep-spinner" id="pub-cep-spinner">⏳</span>
+          <span class="cep-ok"  id="pub-cep-ok">✅</span>
+          <span class="cep-err" id="pub-cep-err">❌</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Rua</label>
+        <input type="text" id="pub-rua" placeholder="Ex: Rua das Flores" />
+      </div>
+
+      <div class="input-row">
+        <div class="form-group">
+          <label>Número</label>
+          <input type="text" id="pub-numero" placeholder="Ex: 123" />
+        </div>
+        <div class="form-group flex-2">
+          <label>Complemento</label>
+          <input type="text" id="pub-complemento" placeholder="Ex: Apto 2" />
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="form-group">
+          <label>Bairro</label>
+          <input type="text" id="pub-bairro" placeholder="Ex: Centro" />
+        </div>
+        <div class="form-group">
+          <label>Cidade</label>
+          <input type="text" id="pub-cidade" placeholder="Ex: Sua Cidade" />
+        </div>
+      </div>
+
+      <div class="form-section-title">👶 Filhos</div>
+
+      <div class="form-group">
+        <label>Possui filhos?</label>
+        <select id="pub-possui-filhos"
+          onchange="toggleCampoPub('pub-filhos-wrap', this.value === 'Sim')">
+          <option value="Não">Não</option>
+          <option value="Sim">Sim</option>
+        </select>
+      </div>
+
+      <div id="pub-filhos-wrap" style="display:none;">
+        <div id="lista-filhos-pub"></div>
+        <button type="button" class="btn-add" onclick="adicionarFilhoPub()">
+          + Adicionar filho
+        </button>
+      </div>
+
+      <div class="form-section-title">⛪ Na Igreja</div>
+
+      <div class="form-group">
+        <label>Participa de alguma mesa?</label>
+        <select id="pub-participa-mesa"
+          onchange="toggleCampoPub('pub-mesas-wrap', this.value==='Sim'); if(this.value==='Sim') carregarMesas()">
+          <option value="Não">Não</option>
+          <option value="Sim">Sim</option>
+        </select>
+      </div>
+
+      <div id="pub-mesas-wrap" style="display:none;">
+        <div class="form-group">
+          <label>Selecione a mesa:</label>
+          <div class="checkbox-list" id="lista-mesas">
+            <span class="checkbox-loading">Carregando mesas...</span>
+          </div>
+          <div class="mesa-selecionada" id="mesa-resumo" style="display:none;">
+            <input type="text" id="mesa-resumo-nome" readonly />
+            <button type="button" class="btn-trocar-mesa" onclick="trocarMesa()">✏️ Trocar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>É voluntário da Leve?</label>
+        <select id="pub-voluntario"
+          onchange="toggleCampoPub('pub-ministerios-wrap', this.value==='Sim'); if(this.value==='Sim') carregarMinisterios()">
+          <option value="Não">Não</option>
+          <option value="Sim">Sim</option>
+        </select>
+      </div>
+
+      <div id="pub-ministerios-wrap" style="display:none;">
+        <div class="form-group">
+          <label>Selecione o(s) ministério(s):</label>
+          <div class="checkbox-list" id="lista-ministerios">
+            <span class="checkbox-loading">Carregando ministérios...</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-submit" id="btn-enviar" onclick="enviarCadastro()">
+        ✅ Enviar Cadastro
+      </button>
+
+      <div class="feedback" id="feedback-sucesso">
+        <div class="feedback-icon">🎉</div>
+        <h2>Cadastro enviado!</h2>
+        <p>Obrigado, <strong id="feedback-nome"></strong>!<br/>
+           Seu cadastro foi registrado com sucesso.</p>
+      </div>
+
+      <div class="feedback" id="feedback-erro">
+        <div class="feedback-icon">⚠️</div>
+        <h2 class="feedback-error">Ops! Algo deu errado.</h2>
+        <p id="feedback-erro-msg">Tente novamente em instantes.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div data-site-footer></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>  <script src="supabase.js"></script>
+  <script>
+
+    // ── Cache ────────────────────────────────────────────────────────
+    let todosOsMembros        = []
+    let todasCriancas         = []
+    let mesasCarregadas       = false
+    let ministeriosCarregados = false
+    let mesasData             = []
+    let ministeriosData       = []
+
+    async function preCarregarDados() {
+      const [{ data: membros }, { data: criancas }] = await Promise.all([
+        db.from('membros').select('id, nome').order('nome'),
+        db.from('filhos').select('id, nome, data_nascimento').order('nome'),
+      ])
+      todosOsMembros = membros || []
+      todasCriancas  = criancas || []
+    }
+    preCarregarDados()
+
+    // ── Máscara e busca de CEP ────────────────────────────────────────
+    function pubMascaraCep(input) {
+      let v = input.value.replace(/\D/g, '').slice(0, 8)
+      if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5)
+      input.value = v
+      if (v.replace(/\D/g, '').length === 8) pubBuscarCep(v)
+    }
+
+    async function pubBuscarCep(cep) {
+      const spinner = document.getElementById('pub-cep-spinner')
+      const ok      = document.getElementById('pub-cep-ok')
+      const err     = document.getElementById('pub-cep-err')
+
+      spinner.style.display = 'inline'
+      ok.style.display      = 'none'
+      err.style.display     = 'none'
+
+      try {
+        const res  = await fetch(`https://viacep.com.br/ws/${cep.replace(/\D/g,'')}/json/`)
+        const data = await res.json()
+
+        spinner.style.display = 'none'
+
+        if (data.erro) { err.style.display = 'inline'; return }
+
+        document.getElementById('pub-rua').value    = data.logradouro || ''
+        document.getElementById('pub-bairro').value = data.bairro     || ''
+        document.getElementById('pub-cidade').value = data.localidade || ''
+
+        document.getElementById('pub-numero').focus()
+
+        ok.style.display = 'inline'
+        setTimeout(() => { ok.style.display = 'none' }, 2500)
+
+      } catch (e) {
+        spinner.style.display = 'none'
+        err.style.display     = 'inline'
+        console.error('Erro ao buscar CEP:', e)
+      }
+    }
+
+
+    // ── Toggle campos ────────────────────────────────────────────────
+    function toggleCampoPub(id, mostrar) {
+      document.getElementById(id).style.display = mostrar ? 'block' : 'none'
+    }
+
+    // ── Fechar autocomplete ao clicar fora ───────────────────────────
+    document.addEventListener('click', e => {
+      document.querySelectorAll('.autocomplete-list').forEach(l => {
+        if (!l.closest('.autocomplete-wrap').contains(e.target))
+          l.classList.remove('show')
+      })
+    })
+
+    // ── Autocomplete cônjuge ─────────────────────────────────────────
+    function buscarMembro(termo, listaId, inputId, hiddenId) {
+      const lista = document.getElementById(listaId)
+      if (!termo || termo.length < 2) { lista.classList.remove('show'); return }
+      const t = termo.toLowerCase()
+      const resultados = todosOsMembros.filter(m => m.nome.toLowerCase().includes(t)).slice(0, 8)
+      lista.innerHTML = resultados.length
+        ? resultados.map(m => `
+            <div class="autocomplete-item"
+              onmousedown="selecionarMembro('${m.id}','${m.nome.replace(/'/g,"\\'")}','${inputId}','${hiddenId}','${listaId}')">
+              ${m.nome}
+            </div>`).join('')
+        : '<div class="autocomplete-item" style="color:#999;cursor:default">Nenhum membro encontrado</div>'
+      lista.classList.add('show')
+    }
+
+    function selecionarMembro(id, nome, inputId, hiddenId, listaId) {
+      document.getElementById(inputId).value  = nome
+      document.getElementById(hiddenId).value = id
+      document.getElementById(listaId).classList.remove('show')
+    }
+
+    // ── Autocomplete filhos ──────────────────────────────────────────
+    function buscarFilho(termo, listaId, inputNomeId, hiddenId, hiddenTipoId) {
+      const lista = document.getElementById(listaId)
+      if (!termo || termo.length < 2) { lista.classList.remove('show'); return }
+      const t = termo.toLowerCase()
+      const rCriancas = todasCriancas.filter(c => c.nome.toLowerCase().includes(t)).slice(0, 4)
+        .map(c => ({ id: c.id, nome: c.nome, tipo: 'filho' }))
+      const rMembros = todosOsMembros.filter(m => m.nome.toLowerCase().includes(t)).slice(0, 4)
+        .map(m => ({ id: m.id, nome: m.nome, tipo: 'membro' }))
+      const resultados = [...rCriancas, ...rMembros].slice(0, 8)
+      lista.innerHTML = resultados.length
+        ? resultados.map(r => `
+            <div class="autocomplete-item"
+              onmousedown="selecionarFilho('${r.id}','${r.nome.replace(/'/g,"\\'")}','${r.tipo}','${inputNomeId}','${hiddenId}','${hiddenTipoId}','${listaId}')">
+              ${r.nome} <small>${r.tipo === 'filho' ? '👶 cadastrado' : '👤 membro'}</small>
+            </div>`).join('')
+        : '<div class="autocomplete-item" style="color:#999;cursor:default">Nenhum resultado</div>'
+      lista.classList.add('show')
+    }
+
+    function selecionarFilho(id, nome, tipo, inputNomeId, hiddenId, hiddenTipoId, listaId) {
+      document.getElementById(inputNomeId).value  = nome
+      document.getElementById(hiddenId).value     = id
+      document.getElementById(hiddenTipoId).value = tipo
+      document.getElementById(listaId).classList.remove('show')
+    }
+
+    // ── Filhos dinâmicos ─────────────────────────────────────────────
+    let filhoIdx = 0
+    function adicionarFilhoPub(nome = '', nascimento = '', idExistente = '', tipoExistente = '') {
+      const lista = document.getElementById('lista-filhos-pub')
+      const idx   = filhoIdx++
+      const row   = document.createElement('div')
+      row.className = 'filho-row'
+      row.innerHTML = `
+        <div class="autocomplete-wrap" style="flex:1">
+          <input type="text" id="filho-nome-${idx}" placeholder="Nome do filho"
+            value="${nome}" autocomplete="off"
+            oninput="buscarFilho(this.value,'filho-lista-${idx}','filho-nome-${idx}','filho-id-${idx}','filho-tipo-${idx}')"
+            onfocus="buscarFilho(this.value,'filho-lista-${idx}','filho-nome-${idx}','filho-id-${idx}','filho-tipo-${idx}')" />
+          <div class="autocomplete-list" id="filho-lista-${idx}"></div>
+        </div>
+        <input type="date" id="filho-nasc-${idx}" value="${nascimento}"
+          style="max-width:150px; flex-shrink:0;" />
+        <input type="hidden" id="filho-id-${idx}"   value="${idExistente}" />
+        <input type="hidden" id="filho-tipo-${idx}" value="${tipoExistente}" />
+        <button type="button" class="btn-remove-filho"
+          onclick="this.closest('.filho-row').remove()">✕</button>
+      `
+      lista.appendChild(row)
+    }
+
+    function obterFilhosPub() {
+      const filhos = []
+      document.querySelectorAll('#lista-filhos-pub .filho-row').forEach(row => {
+        const nome = row.querySelector('[id^="filho-nome-"]').value.trim()
+        const nasc = row.querySelector('[id^="filho-nasc-"]').value
+        const id   = row.querySelector('[id^="filho-id-"]').value
+        const tipo = row.querySelector('[id^="filho-tipo-"]').value
+        if (nome) filhos.push({ nome, nascimento: nasc || null, id: id || null, tipo: tipo || null })
+      })
+      return filhos
+    }
+
+    // ── Mesas ────────────────────────────────────────────────────────
+    async function carregarMesas() {
+      if (mesasCarregadas) return
+      mesasCarregadas = true
+      const lista = document.getElementById('lista-mesas')
+      const { data, error } = await db.from('mesas').select('id, nome').order('nome')
+      if (error || !data?.length) {
+        lista.innerHTML = '<span class="checkbox-loading">Nenhuma mesa encontrada.</span>'
+        return
+      }
+      mesasData = data
+      lista.innerHTML = data.map(m => `
+        <label class="checkbox-item">
+          <input type="radio" name="mesa" value="${m.id}"
+            data-nome="${m.nome.replace(/"/g,'&quot;')}"
+            onchange="confirmarMesa('${m.id}','${m.nome.replace(/'/g,"\\'")}')"/>
+          ${m.nome}
+        </label>`).join('')
+    }
+
+    function confirmarMesa(id, nome) {
+      document.getElementById('lista-mesas').style.display  = 'none'
+      document.getElementById('mesa-resumo').style.display  = 'flex'
+      document.getElementById('mesa-resumo-nome').value     = nome
+    }
+
+    function trocarMesa() {
+      document.getElementById('mesa-resumo').style.display  = 'none'
+      document.getElementById('lista-mesas').style.display  = 'flex'
+      document.getElementById('mesa-resumo-nome').value     = ''
+      const marcado = document.querySelector('#lista-mesas input[type=radio]:checked')
+      if (marcado) marcado.checked = false
+    }
+
+    // ── Ministérios ──────────────────────────────────────────────────
+    async function carregarMinisterios() {
+      if (ministeriosCarregados) return
+      ministeriosCarregados = true
+      const lista = document.getElementById('lista-ministerios')
+      const { data, error } = await db.from('ministerios').select('id, nome, icone').order('nome')
+      if (error || !data?.length) {
+        lista.innerHTML = '<span class="checkbox-loading">Nenhum ministério encontrado.</span>'
+        return
+      }
+      ministeriosData = data
+      lista.innerHTML = data.map(m => `
+        <label class="checkbox-item">
+          <input type="checkbox" name="ministerio" value="${m.id}" />
+          ${m.icone ?? ''} ${m.nome}
+        </label>`).join('')
+    }
+
+    // ── ENVIAR CADASTRO ──────────────────────────────────────────────
+    async function enviarCadastro() {
+      const nome = document.getElementById('pub-nome').value.trim()
+      if (!nome) {
+        alert('Por favor, informe o nome completo.')
+        document.getElementById('pub-nome').focus()
+        return
+      }
+
+      const btn = document.getElementById('btn-enviar')
+      btn.disabled    = true
+      btn.textContent = '⏳ Enviando...'
+
+      const estadoCivil   = document.getElementById('pub-estado-civil').value
+      const possuiFilhos  = document.getElementById('pub-possui-filhos').value
+      const participaMesa = document.getElementById('pub-participa-mesa').value
+      const voluntario    = document.getElementById('pub-voluntario').value
+
+      // Mesa
+      const mesaRadio = document.querySelector('#lista-mesas input[type=radio]:checked')
+      const mesaId    = (participaMesa === 'Sim' && mesaRadio) ? mesaRadio.value : null
+      const mesaObj   = mesasData.find(m => m.id === mesaId) ?? null
+
+      // Ministérios
+      const minChecks     = document.querySelectorAll('#lista-ministerios input[type=checkbox]:checked')
+      const ministerioIds = voluntario === 'Sim' ? Array.from(minChecks).map(c => c.value) : []
+      const minNomes      = ministerioIds
+        .map(id => ministeriosData.find(m => m.id === id)?.nome)
+        .filter(Boolean).join(', ')
+
+      // ── 1. Inserir membro ────────────────────────────────────────
+      const payload = {
+        nome,
+        data_nascimento: document.getElementById('pub-nascimento').value      || null,
+        telefone:        document.getElementById('pub-telefone').value.trim() || null,
+        estado_civil:    estadoCivil,
+        conjuge: estadoCivil === 'Casado'
+          ? document.getElementById('pub-conjuge').value.trim() || null
+          : null,
+        rua:         document.getElementById('pub-rua').value.trim()         || null,
+        numero:      document.getElementById('pub-numero').value.trim()      || null,
+        complemento: document.getElementById('pub-complemento').value.trim() || null,
+        bairro:      document.getElementById('pub-bairro').value.trim()      || null,
+        cidade:      document.getElementById('pub-cidade').value.trim()      || null,
+        voluntario,
+        mesa_id:        mesaId,
+        mesa:           mesaObj?.nome ?? null,
+        ministerio_ids: ministerioIds,
+        ministerio:     minNomes || null,
+        status:         'Ativo',
+      }
+
+      console.log('📤 Payload membro:', payload)
+
+      const { data: membro, error: erroMembro } = await db
+        .from('membros').insert(payload).select('id').single()
+
+      if (erroMembro) {
+        console.error('❌ Erro ao inserir membro:', erroMembro)
+        mostrarErro(erroMembro.message, btn)
+        return
+      }
+
+      const membroId = membro?.id
+      console.log('✅ Membro inserido, ID:', membroId)
+
+      if (!membroId) { mostrarErro('ID do membro não retornado.', btn); return }
+
+      // ── 2. Filhos ────────────────────────────────────────────────
+      if (possuiFilhos === 'Sim') {
+        const filhos = obterFilhosPub()
+        console.log('👶 Filhos a inserir:', filhos)
+
+        for (const f of filhos) {
+          if (!f.nome) continue
+
+          if (f.id && f.tipo === 'filho') {
+            // Filho já existe na tabela — vincula ao novo membro
+            console.log('🔗 Vinculando filho existente:', f.nome)
+            const { error: e } = await db
+              .from('filhos')
+              .update({ membro_id: membroId })
+              .eq('id', f.id)
+            if (e) console.error('❌ Erro ao vincular filho:', e.message)
+            else   console.log('✅ Filho vinculado:', f.nome)
+
+          } else {
+            // Novo filho — insert somente com colunas que existem na tabela
+            const insertData = {
+              nome:            f.nome,
+              data_nascimento: f.nascimento || null,
+              membro_id:       membroId,
+            }
+            console.log('➕ Inserindo novo filho:', insertData)
+            const { data: filhoInserido, error: e } = await db
+              .from('filhos')
+              .insert(insertData)
+              .select()
+              .single()
+
+            if (e) console.error('❌ Erro ao inserir filho:', e.message, '| Payload:', insertData)
+            else   console.log('✅ Filho inserido:', filhoInserido)
+          }
+        }
+      }
+
+      // ── 3. Atualizar contagem da mesa ────────────────────────────
+      if (mesaId) {
+        const { count } = await db
+          .from('membros')
+          .select('id', { count: 'exact', head: true })
+          .eq('mesa_id', mesaId)
+        await db.from('mesas').update({ total_membros: count ?? 0 }).eq('id', mesaId)
+        console.log('✅ Total da mesa atualizado:', count)
+      }
+
+      // ── 4. Voluntário ────────────────────────────────────────────
+      if (voluntario === 'Sim' && ministerioIds.length > 0) {
+        const dadosVoluntario = {
+          nome,
+          telefone:       payload.telefone,
+          nascimento:     payload.data_nascimento,
+          endereco:       [payload.rua, payload.numero, payload.complemento,
+                           payload.bairro, payload.cidade].filter(Boolean).join(', ') || null,
+          participa_mesa: mesaId ? 'sim' : 'nao',
+          mesa:           mesaObj?.nome ?? null,
+          ministerio_ids: ministerioIds,
+          ministerio:     minNomes || null,
+          status:         'Ativo',
+          membro_id:      membroId,
+        }
+        console.log('🎸 Inserindo voluntário:', dadosVoluntario)
+        const { error: erroVol } = await db.from('voluntarios').insert(dadosVoluntario)
+        if (erroVol) console.error('❌ Erro ao inserir voluntário:', erroVol.message)
+        else         console.log('✅ Voluntário inserido')
+      }
+
+      // ── Sucesso ──────────────────────────────────────────────────
+      document.querySelectorAll('.form-card > *:not(#feedback-sucesso):not(#feedback-erro)')
+        .forEach(el => el.style.display = 'none')
+      document.getElementById('feedback-nome').textContent = nome.split(' ')[0]
+      document.getElementById('feedback-sucesso').classList.add('show')
+    }
+
+    function mostrarErro(msg, btn) {
+      console.error('❌', msg)
+      document.getElementById('feedback-erro-msg').textContent = msg
+      document.getElementById('feedback-erro').classList.add('show')
+      btn.disabled    = false
+      btn.textContent = '✅ Enviar Cadastro'
+    }
+
+  </script>
+  <script src="/pwa.js"></script>
+  <script src="site-footer.js"></script>
+</body>
+</html>
