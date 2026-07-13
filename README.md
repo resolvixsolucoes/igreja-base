@@ -62,19 +62,43 @@ Toda a configuração de uma igreja (nome, credenciais Supabase, cores, contatos
 
 ---
 
-## Screenshots
+## Demo ao vivo
 
-> Prints reais das telas em produção. Fique à vontade pra explorar o código dos módulos correspondentes.
+🌐 **[igreja-base.vercel.app](https://igreja-base.vercel.app)** — instância pública de vitrine
 
-<!-- SCREENSHOTS: substitua os placeholders pelas imagens reais quando quiser -->
+Login pra explorar o painel administrativo:
+- **E-mail:** `demo@resolvixsolucoes.com.br`
+- **Senha:** `demo123456`
 
-| Dashboard | Financeiro | Levinho (infantil) |
-|-----------|------------|-------------------|
-| _adicione o print aqui_ | _adicione o print aqui_ | _adicione o print aqui_ |
+O demo roda em cima de dados fictícios do "Ministério Semente" — uma igreja imaginária com 10 membros, 6 ministérios, 5 eventos, 3 células, seed financeiro e 16 conteúdos (pregações + biblioteca).
 
-| Agenda | Membros | LMS de cursos |
-|--------|---------|---------------|
-| _adicione o print aqui_ | _adicione o print aqui_ | _adicione o print aqui_ |
+### Vídeo de navegação
+
+https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/demo.mp4
+
+> Percorre em ~1 minuto a home pública, pregações, downloads, agendamento pastoral, dashboard admin, membros, financeiro, agenda, mesas, central de voluntários, ministérios (Levinho e Louvor), relatórios, conteúdos e usuários.
+
+### Screenshots
+
+**Área pública (visitantes):**
+
+| Home | Quem Somos | O Que Cremos |
+|:-:|:-:|:-:|
+| ![Home](docs/screenshots/01-home.png) | ![Quem Somos](docs/screenshots/02-quem-somos.png) | ![O Que Cremos](docs/screenshots/03-o-que-cremos.png) |
+| **Pregações** | **Downloads** | **Agendamento Pastoral** |
+| ![Pregações](docs/screenshots/04-pregacoes.png) | ![Downloads](docs/screenshots/05-downloads.png) | ![Agendamento](docs/screenshots/06-agendamento-pastoral.png) |
+
+**Painel administrativo (área de membros):**
+
+| Dashboard | Membros | Financeiro |
+|:-:|:-:|:-:|
+| ![Dashboard](docs/screenshots/07-dashboard.png) | ![Membros](docs/screenshots/08-membros.png) | ![Financeiro](docs/screenshots/09-financeiro.png) |
+| **Agenda** | **Mesas** | **Central de Voluntários** |
+| ![Agenda](docs/screenshots/10-agenda.png) | ![Mesas](docs/screenshots/11-mesas.png) | ![Voluntários](docs/screenshots/12-central-voluntarios.png) |
+| **Ministérios** | **Levinho (infantil)** | **Louvor / Música** |
+| ![Ministérios](docs/screenshots/13-ministerios.png) | ![Levinho](docs/screenshots/14-ministerio-levinho.png) | ![Louvor](docs/screenshots/15-ministerio-louvor.png) |
+| **Relatórios** | **Conteúdos** | **Usuários / Permissões** |
+| ![Relatórios](docs/screenshots/16-relatorios.png) | ![Conteúdos](docs/screenshots/17-conteudos.png) | ![Usuários](docs/screenshots/18-usuarios.png) |
 
 ---
 
