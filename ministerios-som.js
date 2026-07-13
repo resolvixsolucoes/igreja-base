@@ -1386,7 +1386,7 @@ function exportarPDF() {
       r.voluntarios?.nome || '—', r.status,
       r.respondido_em ? new Date(r.respondido_em).toLocaleDateString('pt-BR') : '—'
     ]),
-    headStyles: { fillColor: [43, 191, 179] },
+    headStyles: { fillColor: [107, 142, 78] },
     alternateRowStyles: { fillColor: [240, 255, 254] },
     styles: { fontSize: 10 }
   })

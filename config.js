@@ -78,8 +78,8 @@ window.APP_CONFIG = {
   },
 
   // ID do vídeo do YouTube que aparece na home (deixe vazio pra esconder)
-  // Placeholder da demo — troque pelo vídeo institucional real da sua igreja
-  VIDEO_APRESENTACAO: 'dQw4w9WgXcQ',
+  // Placeholder da demo: "Fundo Musical Para Oração e Adoração" (instrumental worship)
+  VIDEO_APRESENTACAO: 'wSJq8KV5tvo',
 
   // Assinatura digital do pastor (caminho relativo, opcional)
   ASSINATURA_PASTOR: 'plataforma/assets/assinatura-pastor.png',

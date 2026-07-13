@@ -243,7 +243,7 @@ function rfExportarPDF() {
       rfFormatarMoeda(parseFloat(l.valor || 0)),
       l.financeiro_categorias?.nome ?? '—',
     ]),
-    headStyles: { fillColor: [43, 191, 179] },
+    headStyles: { fillColor: [107, 142, 78] },
     alternateRowStyles: { fillColor: [245, 255, 254] },
     styles: { fontSize: 9 },
   })
@@ -419,7 +419,7 @@ function exportarPDFFrequenciaCultos() {
       ..._fcSalas.map(s => e.criancas[s.id] ?? '—'),
       e.temDado ? e.totalGeral : '—',
     ]),
-    headStyles: { fillColor: [43, 191, 179] },
+    headStyles: { fillColor: [107, 142, 78] },
     alternateRowStyles: { fillColor: [245, 255, 254] },
     styles: { fontSize: 9 },
   })
@@ -508,7 +508,7 @@ function exportarPDFVisitantes() {
       v.como_conheceu || '—',
       v.contactado ? 'Sim' : 'Não',
     ]),
-    headStyles: { fillColor: [43, 191, 179] },
+    headStyles: { fillColor: [107, 142, 78] },
     alternateRowStyles: { fillColor: [245, 255, 254] },
     styles: { fontSize: 9 },
   })

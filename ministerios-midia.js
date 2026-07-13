@@ -1442,7 +1442,7 @@ function exportarPDF() {
       r.respondido_em ? new Date(r.respondido_em).toLocaleDateString('pt-BR') : ''
     ]),
     styles: { fontSize: 10 },
-    headStyles: { fillColor: [43, 191, 179] }
+    headStyles: { fillColor: [107, 142, 78] }
   })
   doc.save('relatorio-midia.pdf')
 }
