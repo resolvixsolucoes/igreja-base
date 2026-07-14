@@ -3,8 +3,8 @@
 -- Rode no SQL Editor do Supabase depois do deploy dos arquivos HTML/JS.
 --
 -- Impacto:
---   - Nome do ministério no sidebar e listagens                → "Kids"
---   - Label da página em permissoes_paginas                    → "Kids"
+--   - Nome do ministério no sidebar e listagens         → "Kids"
+--   - Label da página em `paginas`                      → "Kids"
 --   - Slug 'ministerios_levinho' é PRESERVADO (compatibilidade
 --     com URLs e código legado — nada quebra)
 -- =====================================================================
@@ -14,11 +14,11 @@ update public.ministerios
    set nome = 'Kids'
  where nome ilike 'levinho';
 
--- 2) Renomeia o label na tabela `permissoes_paginas` (mantém o key/slug)
-update public.permissoes_paginas
+-- 2) Renomeia o label na tabela `paginas` (mantém a key/slug)
+update public.paginas
    set label = 'Kids'
  where key = 'ministerios_levinho';
 
 -- Verificação (opcional — rode em uma segunda query pra conferir)
 -- select id, nome from public.ministerios where nome ilike '%kids%';
--- select key, label from public.permissoes_paginas where key = 'ministerios_levinho';
+-- select key, label from public.paginas where key = 'ministerios_levinho';
