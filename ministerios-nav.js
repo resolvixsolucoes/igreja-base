@@ -8,6 +8,7 @@
     'louvor':      ['👥 Voluntários|voluntarios', '👑 Líderes|lideres', '📅 Escala|escala', '🎵 Playlist|playlist', '📊 Relatórios|relatorios'],
     'infantil':    ['👥 Voluntários|voluntarios', '👑 Líderes|lideres', '📢 Avisos|avisos'],
     'levinho':     ['👥 Voluntários|voluntarios', '👑 Líderes|lideres', '📅 Escala|escala', '🧒 Presentes|presentes', '📚 Materiais|materiais', '📢 Avisos|avisos', '📊 Relatórios|relatorios'],
+    'kids':        ['👥 Voluntários|voluntarios', '👑 Líderes|lideres', '📅 Escala|escala', '🧒 Presentes|presentes', '📚 Materiais|materiais', '📢 Avisos|avisos', '📊 Relatórios|relatorios'],
     'recepcao':    ['👥 Voluntários|voluntarios', '👑 Líderes|lideres', '📅 Escala|escala', '📢 Avisos|avisos'],
     'comunicacao': ['👥 Voluntários|voluntarios', '👑 Líderes|lideres', '📅 Escala|escala', '📢 Avisos|avisos', '📊 Relatórios|relatorios'],
     'integracao':  ['👥 Voluntários|voluntarios', '👑 Líderes|lideres', '📅 Escala|escala', '📢 Avisos|avisos', '📊 Relatórios|relatorios'],

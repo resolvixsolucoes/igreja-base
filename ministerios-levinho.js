@@ -92,14 +92,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 //  RESOLVE IDs
 // ================================================================
 async function resolverMinisterioId() {
-  const tentativas = ['%levinho%', '%Levinho%', '%LEVINHO%']
+  const tentativas = ['%kids%', '%Kids%', '%KIDS%', '%levinho%', '%Levinho%', '%LEVINHO%']
   for (const termo of tentativas) {
     const { data, error } = await _db
       .from('ministerios').select('id')
       .ilike('nome', termo).maybeSingle()
     if (!error && data) { MINISTERIO_ID = data.id; return }
   }
-  console.error('Ministério Levinho não encontrado.')
+  console.error('Ministério Kids não encontrado.')
 }
 
 async function resolverMeuVoluntarioId() {
@@ -2065,7 +2065,7 @@ function exportarPDF() {
   const { jsPDF } = window.jspdf
   const doc       = new jsPDF()
   doc.setFontSize(16)
-  doc.text('Relatório de Escala — Ministério Levinho', 14, 20)
+  doc.text('Relatório de Escala — Ministério Kids', 14, 20)
   doc.setFontSize(10)
   doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 14, 28)
   doc.autoTable({

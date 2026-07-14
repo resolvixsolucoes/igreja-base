@@ -63,7 +63,7 @@ Arquivos finais devem ficar em `docs/videos/` com os nomes indicados.
 | 0–10s | Página de login → digita e-mail e senha do demo → entra | Formulário limpo, "esqueci a senha" |
 | 10–20s | Chega no dashboard, scroll pelos KPIs | Total de membros, visitantes do mês, aniversariantes da semana, saldo financeiro |
 | 20–35s | Foca no calendário do mês do dashboard | Eventos coloridos por finalidade (culto, curso, café...) |
-| 35–50s | Abre a cascata "Ministérios" no menu lateral | Lista dinâmica: Levinho, Louvor, Comunicação, Integração, Mídia, Som |
+| 35–50s | Abre a cascata "Ministérios" no menu lateral | Lista dinâmica: Kids, Louvor, Comunicação, Integração, Mídia, Som |
 | 50–60s | Passa o cursor por Conteúdos (cascata) e pelo footer da sidebar | Perfil do usuário logado, botão sair |
 
 ---
@@ -139,7 +139,7 @@ Arquivos finais devem ficar em `docs/videos/` com os nomes indicados.
 
 ---
 
-## 🎬 Vídeo 08 — Levinho (ministério infantil) `videos/08-levinho.mp4`
+## 🎬 Vídeo 08 — Kids (ministério infantil) `videos/08-levinho.mp4`
 
 **Duração:** ~65s
 **Objetivo:** módulo especializado infantil — check-in por QR, salas por faixa etária, responsáveis.
@@ -148,7 +148,7 @@ Arquivos finais devem ficar em `docs/videos/` com os nomes indicados.
 
 | Tempo | Ação | O que destacar |
 |---|---|---|
-| 0–10s | Página do Levinho: salas por faixa etária | Ex: Berçário, Maternal, Infantil I/II, Juniores |
+| 0–10s | Página do Kids: salas por faixa etária | Ex: Berçário, Maternal, Infantil I/II, Juniores |
 | 10–20s | Clica numa sala → lista de crianças cadastradas | Foto, idade, responsável, alergias/observações |
 | 20–35s | Abre `/levinho-checkin.html` | Fluxo de check-in: buscar criança → confirmar responsável → imprimir etiqueta |
 | 35–50s | Volta pra sala → aba de **Voluntários** | Escala do dia, materiais que cada voluntário leva |

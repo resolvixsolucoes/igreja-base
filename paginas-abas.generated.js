@@ -93,7 +93,7 @@ window.PAGINAS_ABAS_GRANULAR = {
     ],
   },
   "ministerios_levinho": {
-    label: "🧒 Ministério — Levinho",
+    label: "🧒 Ministério — Kids",
     abas: [
     { slug: "_default", label: "— Geral (acesso)" },
     { slug: "voluntarios", label: "👥 Voluntários" },

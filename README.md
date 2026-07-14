@@ -13,8 +13,8 @@ Este repositório é a **base neutra** de uma plataforma desenvolvida em produç
 | Módulo | O que cobre |
 |--------|-------------|
 | **Membresia** | Cadastro completo (dados pessoais, endereço, cônjuge, filhos), busca, edição, aniversariantes, exportação, deduplicação por telefone |
-| **Ministérios** | Levinho (infantil), Música, Comunicação, Integração, Mídia, Som — cada um com escalas, disponibilidade, materiais |
-| **Levinho (infantil)** | Salas por faixa etária, check-in por QR, controle de responsáveis, visitantes recorrentes, materiais por voluntário, ajustes por checkin |
+| **Ministérios** | Kids (infantil), Música, Comunicação, Integração, Mídia, Som — cada um com escalas, disponibilidade, materiais |
+| **Kids (infantil)** | Salas por faixa etária, check-in por QR, controle de responsáveis, visitantes recorrentes, materiais por voluntário, ajustes por checkin |
 | **Financeiro** | Entradas, saídas, categorias hierárquicas, contas bancárias, recorrências, fechamento mensal, comprovantes, log de auditoria |
 | **Agenda** | Eventos gerais, agendamentos pastorais, aconselhamento, badges de notificação, filtros por ministério |
 | **Comunicação** | Comunicados por ministério, badges de não-lidas por membro, roteamento |
@@ -92,7 +92,7 @@ Cada vídeo tem até 70 segundos e explora as principais funções de um módulo
 | 05 | Agenda — programações recorrentes + disponibilidades pastorais em massa | [▶️ 05-agenda.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/05-agenda.mp4) |
 | 06 | Financeiro — entradas, categorias hierárquicas, recorrências, fechamento | [▶️ 06-financeiro.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/06-financeiro.mp4) |
 | 07 | Ministérios + Voluntários — Louvor com repertório, check-in por QR | [▶️ 07-ministerios.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/07-ministerios.mp4) |
-| 08 | Levinho (infantil) — salas por faixa etária, check-in QR, responsáveis | [▶️ 08-levinho.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/08-levinho.mp4) |
+| 08 | Kids (infantil) — salas por faixa etária, check-in QR, responsáveis | [▶️ 08-kids.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/08-kids.mp4) |
 | 09 | Conteúdos + LMS — pregações, biblioteca, cursos, aulas, certificado | [▶️ 09-conteudos-lms.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/09-conteudos-lms.mp4) |
 | 10 | Relatórios + Permissões — frequência, PDF, matriz página × aba × ação | [▶️ 10-relatorios-usuarios.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/10-relatorios-usuarios.mp4) |
 
@@ -113,8 +113,8 @@ Cada vídeo tem até 70 segundos e explora as principais funções de um módulo
 | ![Dashboard](docs/screenshots/07-dashboard.png) | ![Membros](docs/screenshots/08-membros.png) | ![Financeiro](docs/screenshots/09-financeiro.png) |
 | **Agenda** | **Mesas** | **Central de Voluntários** |
 | ![Agenda](docs/screenshots/10-agenda.png) | ![Mesas](docs/screenshots/11-mesas.png) | ![Voluntários](docs/screenshots/12-central-voluntarios.png) |
-| **Ministérios** | **Levinho (infantil)** | **Louvor / Música** |
-| ![Ministérios](docs/screenshots/13-ministerios.png) | ![Levinho](docs/screenshots/14-ministerio-levinho.png) | ![Louvor](docs/screenshots/15-ministerio-louvor.png) |
+| **Ministérios** | **Kids (infantil)** | **Louvor / Música** |
+| ![Ministérios](docs/screenshots/13-ministerios.png) | ![Kids](docs/screenshots/14-ministerio-levinho.png) | ![Louvor](docs/screenshots/15-ministerio-louvor.png) |
 | **Relatórios** | **Conteúdos** | **Usuários / Permissões** |
 | ![Relatórios](docs/screenshots/16-relatorios.png) | ![Conteúdos](docs/screenshots/17-conteudos.png) | ![Usuários](docs/screenshots/18-usuarios.png) |
 

@@ -11,7 +11,7 @@ Nomes esperados (referenciados pelo README principal):
 - `05-agenda.mp4`
 - `06-financeiro.mp4`
 - `07-ministerios.mp4`
-- `08-levinho.mp4`
+- `08-kids.mp4`
 - `09-conteudos-lms.mp4`
 - `10-relatorios-usuarios.mp4`
 
