@@ -1537,11 +1537,14 @@ async function carregarDisponibilidades() {
 async function renderDisponibilidades() {
   const grid = document.getElementById('disp-grid')
   grid.innerHTML = ''
+  const cta = document.getElementById('disp-demo-cta')
 
   if (!dispCache.length) {
     grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Nenhuma disponibilidade encontrada.</div>'
+    if (cta) cta.style.display = 'block'
     return
   }
+  if (cta) cta.style.display = 'none'
 
   const dispIds = dispCache.map(d => d.id)
   const { data: agends } = await _db
@@ -1607,6 +1610,8 @@ function gerarSlots(inicio, fim, intervalo) {
   return slots
 }
 
+let dispDatasSelecionadas = []  // ['2026-07-15', '2026-07-22', ...]
+
 function abrirModalDisponibilidade() {
   const selCons = document.getElementById('inp-disp-conselheiro')
   const lblCons = document.getElementById('lbl-inp-disp-conselheiro')
@@ -1619,10 +1624,17 @@ function abrirModalDisponibilidade() {
     selCons.style.display = ''
     if (lblCons) lblCons.style.display = ''
   }
-  document.getElementById('inp-disp-data').value        = ''
+  dispDatasSelecionadas = []
+  document.getElementById('inp-disp-data-nova').value   = ''
   document.getElementById('inp-disp-inicio').value      = ''
   document.getElementById('inp-disp-fim').value         = ''
   document.getElementById('inp-disp-intervalo').value   = '30'
+  document.getElementById('inp-disp-recorrente').checked = false
+  document.getElementById('inp-disp-repetir-ate').value  = ''
+  document.querySelectorAll('#disp-dias-semana input').forEach(c => c.checked = false)
+  document.getElementById('bloco-recorrencia-disp').style.display = 'none'
+  renderChipsDatasDisp()
+  atualizarPreviewDisp()
   document.getElementById('modal-disponibilidade').classList.add('active')
 }
 
@@ -1630,31 +1642,159 @@ function fecharModalDisponibilidade() {
   document.getElementById('modal-disponibilidade').classList.remove('active')
 }
 
+function adicionarDataDisp() {
+  const inp = document.getElementById('inp-disp-data-nova')
+  const d = inp.value
+  if (!d) return
+  if (dispDatasSelecionadas.includes(d)) { inp.value = ''; return }
+  dispDatasSelecionadas.push(d)
+  dispDatasSelecionadas.sort()
+  inp.value = ''
+  renderChipsDatasDisp()
+  atualizarPreviewDisp()
+}
+
+function removerDataDisp(d) {
+  dispDatasSelecionadas = dispDatasSelecionadas.filter(x => x !== d)
+  renderChipsDatasDisp()
+  atualizarPreviewDisp()
+}
+
+function renderChipsDatasDisp() {
+  const wrap = document.getElementById('disp-datas-chips')
+  wrap.innerHTML = dispDatasSelecionadas.map(d => {
+    const fmt = new Date(d + 'T00:00:00').toLocaleDateString('pt-BR', {
+      weekday: 'short', day: '2-digit', month: 'short'
+    })
+    return `<span class="disp-data-chip">${fmt}
+      <button type="button" title="Remover" onclick="removerDataDisp('${d}')">✕</button></span>`
+  }).join('')
+}
+
+function toggleRecorrenciaDisp() {
+  const on = document.getElementById('inp-disp-recorrente').checked
+  document.getElementById('bloco-recorrencia-disp').style.display = on ? 'block' : 'none'
+  document.querySelectorAll('#disp-dias-semana input').forEach(c => {
+    c.onchange = atualizarPreviewDisp
+  })
+  atualizarPreviewDisp()
+}
+
+function expandirDatasDisp() {
+  const base = [...dispDatasSelecionadas]
+  const recorrente = document.getElementById('inp-disp-recorrente').checked
+  if (!recorrente) return base
+
+  const ate = document.getElementById('inp-disp-repetir-ate').value
+  if (!ate) return base
+
+  const diasSel = Array.from(document.querySelectorAll('#disp-dias-semana input:checked'))
+    .map(c => Number(c.value))
+  if (!diasSel.length) return base
+
+  const inicio = base.length
+    ? base[0]
+    : new Date().toISOString().split('T')[0]
+
+  const set = new Set(base)
+  const cur = new Date(inicio + 'T00:00:00')
+  const fim = new Date(ate + 'T00:00:00')
+  while (cur <= fim) {
+    if (diasSel.includes(cur.getDay())) {
+      set.add(cur.toISOString().split('T')[0])
+    }
+    cur.setDate(cur.getDate() + 1)
+  }
+  return Array.from(set).sort()
+}
+
+function atualizarPreviewDisp() {
+  const el = document.getElementById('disp-preview')
+  const datas = expandirDatasDisp()
+  if (!datas.length) { el.style.display = 'none'; return }
+  el.style.display = 'block'
+  el.textContent = datas.length === 1
+    ? '1 disponibilidade será criada.'
+    : `${datas.length} disponibilidades serão criadas.`
+}
+
 async function salvarDisponibilidade() {
   const conselheiroId = document.getElementById('inp-disp-conselheiro').value
-  const data          = document.getElementById('inp-disp-data').value
   const inicio        = document.getElementById('inp-disp-inicio').value
   const fim           = document.getElementById('inp-disp-fim').value
   const intervalo     = parseInt(document.getElementById('inp-disp-intervalo').value)
 
-  if (!conselheiroId) { alert('Selecione o conselheiro.'); return }
-  if (!data)          { alert('Informe a data.'); return }
-  if (!inicio)        { alert('Informe a hora de início.'); return }
-  if (!fim)           { alert('Informe a hora de término.'); return }
-  if (fim <= inicio)  { alert('A hora de término deve ser após a de início.'); return }
+  const datas = expandirDatasDisp()
 
-  const { error } = await _db.from('pastoral_disponibilidade').insert([{
+  if (!conselheiroId)  { alert('Selecione o conselheiro.'); return }
+  if (!datas.length)   { alert('Adicione ao menos uma data (ou marque dias da semana na repetição).'); return }
+  if (!inicio)         { alert('Informe a hora de início.'); return }
+  if (!fim)            { alert('Informe a hora de término.'); return }
+  if (fim <= inicio)   { alert('A hora de término deve ser após a de início.'); return }
+
+  const rows = datas.map(d => ({
     conselheiro_id: conselheiroId,
-    data,
+    data:           d,
     hora_inicio:    inicio,
     hora_fim:       fim,
     intervalo_min:  intervalo,
-  }])
+  }))
+
+  const { error } = await _db.from('pastoral_disponibilidade').insert(rows)
 
   if (error) { alert('Erro ao salvar disponibilidade.'); console.error(error); return }
 
   fecharModalDisponibilidade()
-  toast('✅ Disponibilidade salva!')
+  toast(rows.length === 1
+    ? '✅ Disponibilidade salva!'
+    : `✅ ${rows.length} disponibilidades salvas!`)
+  await carregarDisponibilidades()
+}
+
+// ── Seed de demo: cria disponibilidades de exemplo para apresentação pública
+async function gerarDisponibilidadesDemo() {
+  if (!confirm('Gerar disponibilidades de demonstração para os próximos 14 dias?')) return
+
+  const consAtivos = (conselheirosCache || []).filter(c => c.ativo)
+  if (!consAtivos.length) { alert('Cadastre ao menos um conselheiro ativo primeiro.'); return }
+
+  const rows = []
+  const hoje = new Date()
+  // Turnos típicos por conselheiro
+  const turnos = [
+    { inicio: '09:00', fim: '11:00', intervalo: 30 },
+    { inicio: '14:00', fim: '16:00', intervalo: 30 },
+    { inicio: '19:00', fim: '20:30', intervalo: 30 },
+  ]
+
+  for (let i = 1; i <= 14; i++) {
+    const d = new Date(hoje)
+    d.setDate(hoje.getDate() + i)
+    const dow = d.getDay()
+    // Pula domingo
+    if (dow === 0) continue
+    const dataStr = d.toISOString().split('T')[0]
+    consAtivos.forEach((c, idx) => {
+      // Cada conselheiro cobre 1 turno por dia, alternando
+      const turno = turnos[(i + idx) % turnos.length]
+      // Só cadastra em dias específicos (~3 por semana por conselheiro)
+      if ((i + idx) % 2 === 0) return
+      rows.push({
+        conselheiro_id: c.id,
+        data:           dataStr,
+        hora_inicio:    turno.inicio,
+        hora_fim:       turno.fim,
+        intervalo_min:  turno.intervalo,
+      })
+    })
+  }
+
+  if (!rows.length) { alert('Nada a gerar.'); return }
+
+  const { error } = await _db.from('pastoral_disponibilidade').insert(rows)
+  if (error) { alert('Erro ao gerar demo.'); console.error(error); return }
+
+  toast(`🌱 ${rows.length} disponibilidades de demonstração criadas!`)
   await carregarDisponibilidades()
 }
 

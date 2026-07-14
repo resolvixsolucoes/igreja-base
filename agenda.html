@@ -710,6 +710,65 @@
       transform: translateX(-50%);
     }
 
+    /* ── DISPONIBILIDADE: chips de datas / dias da semana ── */
+    .disp-data-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 8px 5px 12px;
+      background: #eef5e2;
+      color: #4a6a35;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .disp-data-chip button {
+      background: transparent;
+      border: none;
+      color: #4a6a35;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 50%;
+      transition: background .15s;
+    }
+    .disp-data-chip button:hover { background: rgba(107,142,78,.2); }
+    .dia-sem-chip {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .dia-sem-chip input { display: none; }
+    .dia-sem-chip span {
+      padding: 5px 12px;
+      border: 1.5px solid #d0e8e6;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+      background: white;
+      transition: all .15s;
+    }
+    .dia-sem-chip input:checked + span {
+      background: #6b8e4e;
+      color: white;
+      border-color: #6b8e4e;
+    }
+    .btn-seed-demo {
+      background: transparent;
+      border: 1.5px dashed #c1d8a4;
+      color: #4a6a35;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-seed-demo:hover { background: #f7faee; border-color: #6b8e4e; }
+
     /* ── REPETIÇÃO — bloco e preview ────────────── */
     .repeticao-bloco {
       background: #f7faee;
@@ -1086,6 +1145,15 @@
         <div class="empty-state">Nenhuma disponibilidade cadastrada.</div>
       </div>
 
+      <div id="disp-demo-cta" style="display:none;text-align:center;margin:-8px 0 20px;">
+        <button class="btn-seed-demo" onclick="gerarDisponibilidadesDemo()">
+          🌱 Gerar disponibilidades de demonstração
+        </button>
+        <p style="font-size:11px;color:#aaa;margin:6px 0 0;">
+          Cria algumas disponibilidades de exemplo para os conselheiros ativos nas próximas semanas.
+        </p>
+      </div>
+
       <div class="section-title">📋 Agendamentos Recebidos</div>
 
       <div class="filtro-data-pastoral">
@@ -1273,7 +1341,7 @@
 
   <!-- ══ MODAL: DISPONIBILIDADE ══ -->
   <div class="modal-overlay" id="modal-disponibilidade">
-    <div class="modal">
+    <div class="modal" style="max-width:560px;">
       <h2>🗓️ Nova Disponibilidade</h2>
 
       <label id="lbl-inp-disp-conselheiro">Conselheiro *</label>
@@ -1281,10 +1349,44 @@
         <option value="">Selecione...</option>
       </select>
 
-      <label>Data *</label>
-      <input type="date" id="inp-disp-data" />
+      <label>Datas *</label>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <input type="date" id="inp-disp-data-nova" style="flex:1;min-width:160px;" />
+        <button type="button" class="btn btn-secondary" style="padding:8px 14px;font-size:13px;"
+          onclick="adicionarDataDisp()">+ Adicionar data</button>
+      </div>
+      <div id="disp-datas-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:4px;"></div>
+      <p style="font-size:11px;color:#aaa;margin:6px 0 0;">
+        Adicione uma ou mais datas. Cada data vira uma disponibilidade cadastrada.
+      </p>
 
-      <label>Hora de Início *</label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:700;color:#333;margin-top:14px;">
+        <input type="checkbox" id="inp-disp-recorrente" onchange="toggleRecorrenciaDisp()"
+          style="width:18px;height:18px;accent-color:#6b8e4e;cursor:pointer;" />
+        🔁 Repetir semanalmente
+      </label>
+
+      <div id="bloco-recorrencia-disp" style="display:none;background:#f7faee;border:1px solid #d0f0ee;border-radius:10px;padding:14px 16px;margin-top:8px;">
+        <label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:6px;">Dias da semana</label>
+        <div id="disp-dias-semana" style="display:flex;gap:6px;flex-wrap:wrap;">
+          <label class="dia-sem-chip"><input type="checkbox" value="0"><span>Dom</span></label>
+          <label class="dia-sem-chip"><input type="checkbox" value="1"><span>Seg</span></label>
+          <label class="dia-sem-chip"><input type="checkbox" value="2"><span>Ter</span></label>
+          <label class="dia-sem-chip"><input type="checkbox" value="3"><span>Qua</span></label>
+          <label class="dia-sem-chip"><input type="checkbox" value="4"><span>Qui</span></label>
+          <label class="dia-sem-chip"><input type="checkbox" value="5"><span>Sex</span></label>
+          <label class="dia-sem-chip"><input type="checkbox" value="6"><span>Sáb</span></label>
+        </div>
+        <label style="font-size:12px;font-weight:600;color:#555;display:block;margin:12px 0 4px;">Repetir até *</label>
+        <input type="date" id="inp-disp-repetir-ate" style="width:100%;box-sizing:border-box;" onchange="atualizarPreviewDisp()" />
+        <p style="font-size:11px;color:#888;margin:8px 0 0;">
+          As datas adicionadas acima são o ponto de partida — a repetição gera novas datas nos dias selecionados até a data final.
+        </p>
+      </div>
+
+      <div id="disp-preview" style="display:none;margin-top:10px;padding:10px 14px;background:#eef5e2;border:1px solid #6b8e4e;border-radius:8px;font-size:13px;color:#4a6a35;"></div>
+
+      <label style="margin-top:14px;">Hora de Início *</label>
       <input type="time" id="inp-disp-inicio" />
 
       <label>Hora de Término *</label>
