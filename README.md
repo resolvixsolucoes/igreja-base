@@ -72,11 +72,29 @@ Login pra explorar o painel administrativo:
 
 O demo roda em cima de dados fictícios do "Ministério Semente" — uma igreja imaginária com 10 membros, 6 ministérios, 5 eventos, 3 células, seed financeiro e 16 conteúdos (pregações + biblioteca).
 
-### Vídeo de navegação
+### Vídeos de navegação por módulo
 
-https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/demo.mp4
+Cada vídeo tem até 70 segundos e explora as principais funções de um módulo. Os roteiros usados na gravação estão em [`docs/roteiros-videos.md`](docs/roteiros-videos.md).
 
-> Percorre em ~1 minuto a home pública, pregações, downloads, agendamento pastoral, dashboard admin, membros, financeiro, agenda, mesas, central de voluntários, ministérios (Levinho e Louvor), relatórios, conteúdos e usuários.
+**Área pública (o que o visitante vê):**
+
+| # | Módulo | Vídeo |
+|---|--------|-------|
+| 01 | Site público — home, quem somos, o que cremos, pregações, downloads | [▶️ 01-site-publico.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/01-site-publico.mp4) |
+| 02 | Agendamento pastoral — fluxo em 3 passos, sem login | [▶️ 02-agendamento-pastoral.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/02-agendamento-pastoral.mp4) |
+
+**Painel administrativo (área de membros):**
+
+| # | Módulo | Vídeo |
+|---|--------|-------|
+| 03 | Login + Dashboard — KPIs, calendário, cascatas de menu | [▶️ 03-dashboard.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/03-dashboard.mp4) |
+| 04 | Pessoas — membros, visitantes, aniversariantes | [▶️ 04-pessoas.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/04-pessoas.mp4) |
+| 05 | Agenda — programações recorrentes + disponibilidades pastorais em massa | [▶️ 05-agenda.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/05-agenda.mp4) |
+| 06 | Financeiro — entradas, categorias hierárquicas, recorrências, fechamento | [▶️ 06-financeiro.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/06-financeiro.mp4) |
+| 07 | Ministérios + Voluntários — Louvor com repertório, check-in por QR | [▶️ 07-ministerios.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/07-ministerios.mp4) |
+| 08 | Levinho (infantil) — salas por faixa etária, check-in QR, responsáveis | [▶️ 08-levinho.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/08-levinho.mp4) |
+| 09 | Conteúdos + LMS — pregações, biblioteca, cursos, aulas, certificado | [▶️ 09-conteudos-lms.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/09-conteudos-lms.mp4) |
+| 10 | Relatórios + Permissões — frequência, PDF, matriz página × aba × ação | [▶️ 10-relatorios-usuarios.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/10-relatorios-usuarios.mp4) |
 
 ### Screenshots
 
