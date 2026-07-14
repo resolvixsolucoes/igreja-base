@@ -4,6 +4,7 @@ Coloque aqui os 10 vídeos MP4 gerados a partir dos roteiros em [`../roteiros-vi
 
 Nomes esperados (referenciados pelo README principal):
 
+- `00-completo.mp4` (concatenação dos 10, gerada via ffmpeg concat sem recodificar)
 - `01-site-publico.mp4`
 - `02-agendamento-pastoral.mp4`
 - `03-dashboard.mp4`

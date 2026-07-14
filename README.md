@@ -76,6 +76,8 @@ O demo roda em cima de dados fictícios do "Ministério Semente" — uma igreja 
 
 Cada vídeo tem até 70 segundos e explora as principais funções de um módulo. Os roteiros usados na gravação estão em [`docs/roteiros-videos.md`](docs/roteiros-videos.md).
 
+**🎬 Tour completo (5m30s):** [▶️ 00-completo.mp4](https://github.com/resolvixsolucoes/igreja-base/raw/main/docs/videos/00-completo.mp4) — os 10 vídeos abaixo concatenados em um só, com narração PT-BR contínua.
+
 **Área pública (o que o visitante vê):**
 
 | # | Módulo | Vídeo |
