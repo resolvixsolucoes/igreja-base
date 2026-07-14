@@ -116,7 +116,7 @@ Cada vídeo tem até 70 segundos e explora as principais funções de um módulo
 | **Agenda** | **Mesas** | **Central de Voluntários** |
 | ![Agenda](docs/screenshots/10-agenda.png) | ![Mesas](docs/screenshots/11-mesas.png) | ![Voluntários](docs/screenshots/12-central-voluntarios.png) |
 | **Ministérios** | **Kids (infantil)** | **Louvor / Música** |
-| ![Ministérios](docs/screenshots/13-ministerios.png) | ![Kids](docs/screenshots/14-ministerio-levinho.png) | ![Louvor](docs/screenshots/15-ministerio-louvor.png) |
+| ![Ministérios](docs/screenshots/13-ministerios.png) | ![Kids](docs/screenshots/14-ministerio-kids.png) | ![Louvor](docs/screenshots/15-ministerio-louvor.png) |
 | **Relatórios** | **Conteúdos** | **Usuários / Permissões** |
 | ![Relatórios](docs/screenshots/16-relatorios.png) | ![Conteúdos](docs/screenshots/17-conteudos.png) | ![Usuários](docs/screenshots/18-usuarios.png) |
 
